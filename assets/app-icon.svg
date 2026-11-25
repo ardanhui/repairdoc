@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="drop" cx="50%" cy="95%" r="80%">
+      <stop offset="0" stop-color="#8be9ff"/>
+      <stop offset="0.5" stop-color="#1ba3e6"/>
+      <stop offset="1" stop-color="#0a64a8"/>
+    </radialGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#bff4ff" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#bff4ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <path d="M32 2.5C32 2.5 10 27.5 10 42.5a22 22 0 0 0 44 0C54 27.5 32 2.5 32 2.5z" fill="url(#drop)" stroke="#ffffff" stroke-width="2.6"/>
+  <ellipse cx="32" cy="57" rx="12" ry="3.2" fill="url(#glow)"/>
+  <ellipse cx="23.5" cy="30" rx="6" ry="11.5" transform="rotate(24 23.5 30)" fill="url(#shine)"/>
+  <polyline points="16,44 24.5,44 28.2,35.5 34,52 38.6,39.5 41.6,44 48,44" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

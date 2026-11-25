@@ -1,0 +1,42 @@
+# Opsional: build RepairDoc.exe di server GitHub (Windows), tanpa perlu memasang
+# Visual Studio Build Tools di komputer sendiri. Hasilnya bisa diunduh di tab
+# Actions → run terakhir → bagian "Artifacts".
+name: Build Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Pasang paket frontend
+        run: npm ci
+
+      # Di Windows, tes ini juga menjalankan skrip PowerShell sungguhan.
+      - name: Tes logika diagnosa
+        working-directory: src-tauri
+        run: cargo test -p repairdoc-core -- --nocapture
+
+      - name: Build exe portable
+        run: npm run tauri build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RepairDoc-windows
+          path: src-tauri/target/release/repairdoc.exe

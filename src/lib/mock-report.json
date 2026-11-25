@@ -1,0 +1,744 @@
+{
+  "verdict": {
+    "status": "bermasalah",
+    "headline": "PC ini punya masalah yang perlu dibereskan",
+    "detail": "Ditemukan 6 masalah dan 13 hal yang perlu diperhatikan.",
+    "topPriority": "Yang paling penting: Drive C: hampir penuh.",
+    "problemCount": 6,
+    "attentionCount": 13,
+    "healthyCount": 10
+  },
+  "findings": [
+    {
+      "id": "storage.volume.C",
+      "category": "storage",
+      "status": "bermasalah",
+      "severity": "berat",
+      "title": "Drive C: hampir penuh",
+      "summary": "Sisa ruang hanya 1,8 GB dari 118 GB (2%).",
+      "why": "Drive C: adalah tempat Windows terpasang. Windows butuh ruang kosong untuk file sementara dan update. Kalau hampir penuh, PC jadi lambat dan update bisa gagal.",
+      "steps": [
+        "Kosongkan Recycle Bin.",
+        "Pindahkan foto, video, dan unduhan besar ke drive lain, flashdisk, atau hardisk eksternal.",
+        "Hapus program yang tidak pernah dipakai: buka Settings → Apps, pilih programnya, lalu Uninstall.",
+        "Jalankan Disk Cleanup: ketik \"Disk Cleanup\" di menu Start, pilih drive C:, centang semua, lalu OK."
+      ]
+    },
+    {
+      "id": "battery.health",
+      "category": "battery",
+      "status": "bermasalah",
+      "severity": "sedang",
+      "title": "Baterai sudah lemah",
+      "summary": "Kapasitasnya tinggal sekitar 46% dari saat baru. Saat ini terisi 64%.",
+      "why": "Baterai selemah ini cepat habis dan bisa membuat laptop mati mendadak. Baterai yang menggembung juga berbahaya — kalau casing terlihat menonjol, segera lepas dan ganti.",
+      "steps": [
+        "Rencanakan ganti baterai (tanya teknisi jenis yang cocok).",
+        "Sementara itu, pakai laptop dengan charger tercolok.",
+        "Simpan pekerjaan sesering mungkin."
+      ]
+    },
+    {
+      "id": "system.update",
+      "category": "system",
+      "status": "bermasalah",
+      "severity": "sedang",
+      "title": "Windows Update dimatikan",
+      "summary": "Layanan Windows Update di PC ini sengaja dimatikan. Update terakhir terpasang 11 Juni 2025 (lebih dari setahun lalu).",
+      "why": "Tanpa Windows Update, tambalan keamanan dan pembaruan antivirus bawaan (Windows Defender) ikut berhenti.",
+      "steps": [
+        "Ketik \"services\" di menu Start, buka Services, cari \"Windows Update\", klik dua kali, ubah Startup type ke Manual, lalu Start.",
+        "Kalau dimatikan karena update membuat PC lambat, lebih baik atur jam aktif (Active hours) di Settings → Windows Update daripada mematikannya."
+      ]
+    },
+    {
+      "id": "programs.startup",
+      "category": "programs",
+      "status": "bermasalah",
+      "severity": "sedang",
+      "title": "11 program ikut jalan saat PC menyala",
+      "summary": "Terlalu banyak untuk PC ini. Di antaranya: OneDrive, Spotify, Discord, Steam, WhatsApp, dan 6 lagi.",
+      "why": "Setiap program ini dimuat saat Windows menyala dan terus memakai memori di belakang layar walau tidak dipakai. Ini penyebab umum PC lambat menyala dan lemot sesudahnya.",
+      "steps": [
+        "Tekan Ctrl + Shift + Esc untuk membuka Task Manager, buka tab Startup (atau \"Startup apps\").",
+        "Klik kanan program yang tidak perlu jalan sendiri → Disable. Programnya tetap bisa dibuka manual kapan saja.",
+        "Biarkan antivirus, driver audio, dan touchpad tetap aktif kalau tidak yakin."
+      ]
+    },
+    {
+      "id": "cleanup.junk",
+      "category": "cleanup",
+      "status": "bermasalah",
+      "severity": "sedang",
+      "title": "Ada sekitar 3,2 GB file sampah yang bisa dibersihkan",
+      "summary": "File sementara, cache, dan isi Recycle Bin menumpuk. Rinciannya: file sementara 1,5 GB, cache browser & internet 890 MB, recycle bin 760 MB, sisa unduhan windows update 95 MB.",
+      "why": "Drive C: sudah hampir penuh, dan sampah sebanyak ini ikut menyita ruang yang dibutuhkan Windows. Membersihkannya aman — isinya hanya file sementara.",
+      "steps": [
+        "Jalankan Disk Cleanup: ketik \"Disk Cleanup\" di menu Start, pilih drive C:, centang semua, lalu OK.",
+        "Kosongkan Recycle Bin (klik kanan ikonnya di desktop → Empty Recycle Bin).",
+        "Bersihkan cache browser: di Chrome/Edge tekan Ctrl + Shift + Delete, pilih \"Cached images and files\", lalu Clear."
+      ]
+    },
+    {
+      "id": "security.suspicious",
+      "category": "security",
+      "status": "bermasalah",
+      "severity": "sedang",
+      "title": "Ada program terpasang yang sebaiknya dihapus",
+      "summary": "KMSpico 10.2.0 (aktivator bajakan — sering disusupi virus dan mematikan antivirus).",
+      "why": "Program jenis ini sering ikut terpasang tanpa disadari, memperlambat PC, memunculkan iklan atau peringatan palsu, dan sebagian membawa virus.",
+      "steps": [
+        "Buka Settings → Apps → Installed apps, cari namanya, lalu Uninstall.",
+        "Setelah itu jalankan scan virus penuh lewat Windows Security.",
+        "Kalau tidak yakin program itu apa, tanyakan ke teknisi sebelum menghapus."
+      ]
+    },
+    {
+      "id": "storage.system_hdd",
+      "category": "storage",
+      "status": "perhatian",
+      "severity": "sedang",
+      "title": "Windows masih di hardisk jenis lama (HDD)",
+      "summary": "Windows di PC ini berjalan dari hardisk piringan (HDD), bukan SSD (penyimpanan modern tanpa piringan berputar).",
+      "why": "HDD jauh lebih lambat dari SSD. Ini penyebab paling umum PC lama terasa lemot saat menyala dan membuka program — pengaturan apa pun tidak bisa menutup selisihnya.",
+      "steps": [
+        "Ganti ke SSD. Untuk PC lama, ini biasanya peningkatan yang paling terasa: menyala dan membuka program jadi jauh lebih cepat.",
+        "Minta teknisi memindahkan (clone) Windows dan data ke SSD baru, supaya tidak perlu install ulang.",
+        "Sambil menunggu, jaga Drive C: tetap lega dan hindari menjalankan banyak program sekaligus."
+      ]
+    },
+    {
+      "id": "system.version",
+      "category": "system",
+      "status": "perhatian",
+      "severity": "sedang",
+      "title": "Windows 10 sudah tidak mendapat pembaruan keamanan",
+      "summary": "Microsoft Windows 10 Home Single Language versi 22H2. Microsoft menghentikan update keamanan rutin Windows 10 pada 14 Oktober 2025.",
+      "why": "PC tetap bisa dipakai, tapi celah keamanan yang ditemukan setelah itu tidak akan ditambal. Risiko paling besar ada di browsing dan file unduhan.",
+      "steps": [
+        "Pastikan antivirus aktif dan rutin diperbarui — ini jadi pertahanan utama.",
+        "Ekstra hati-hati dengan lampiran email, unduhan, dan program bajakan.",
+        "Cek apakah PC ini bisa di-upgrade ke Windows 11 (gratis) lewat aplikasi \"PC Health Check\" dari Microsoft. Banyak PC lama tidak memenuhi syarat — itu wajar."
+      ]
+    },
+    {
+      "id": "system.drivers",
+      "category": "system",
+      "status": "perhatian",
+      "severity": "sedang",
+      "title": "Ada perangkat yang bermasalah di Device Manager",
+      "summary": "Unknown device (driver belum terpasang).",
+      "why": "Perangkat dengan tanda seru di Device Manager tidak bekerja dengan benar — bisa jadi Wi-Fi, suara, kartu grafis, atau port USB yang tidak jalan.",
+      "steps": [
+        "Sambungkan internet, buka Settings → Windows Update → Check for updates, lalu lihat \"Optional updates\" untuk driver.",
+        "Unduh driver dari situs resmi merek PC/laptop sesuai tipenya.",
+        "Kalau perangkatnya memang tidak dipakai (mis. modem lama), boleh diabaikan."
+      ]
+    },
+    {
+      "id": "cleanup.windows_old",
+      "category": "cleanup",
+      "status": "perhatian",
+      "severity": "sedang",
+      "title": "Ada sisa Windows lama sebesar 18 GB",
+      "summary": "Folder Windows.old berisi salinan Windows sebelum upgrade.",
+      "why": "Salinan ini hanya berguna kalau mau kembali ke Windows sebelumnya, dan Windows sendiri menghapusnya setelah 10 hari. Kalau PC berjalan normal, folder ini cuma memakan tempat.",
+      "steps": [
+        "Buka Settings → System → Storage → Temporary files, centang \"Previous Windows installation(s)\", lalu Remove files.",
+        "Jangan dihapus lewat File Explorer biasa — pakai cara di atas supaya bersih."
+      ]
+    },
+    {
+      "id": "cpu.weak",
+      "category": "cpu",
+      "status": "perhatian",
+      "severity": "ringan",
+      "title": "Prosesor tergolong lemah",
+      "summary": "Prosesor PC ini hanya bisa mengerjakan 2 tugas sekaligus. Untuk Windows 10/11, itu tergolong kecil.",
+      "why": "Ini bukan kerusakan, tapi batas kemampuan hardware. Pengaturan yang lebih ringan bisa membantu, tapi PC tidak akan secepat komputer baru.",
+      "steps": [
+        "Jalankan satu atau dua program saja dalam satu waktu.",
+        "Pilih aplikasi yang ringan, misalnya browser dengan sedikit tab.",
+        "Kalau sering dipakai untuk pekerjaan berat, pertimbangkan ganti PC (tanya teknisi)."
+      ]
+    },
+    {
+      "id": "memory.size",
+      "category": "memory",
+      "status": "perhatian",
+      "severity": "ringan",
+      "title": "RAM pas-pasan",
+      "summary": "PC ini punya RAM 4 GB. Cukup untuk pekerjaan ringan, tapi cepat penuh kalau membuka browser dengan banyak tab.",
+      "why": "RAM itu seperti meja kerja: kalau mejanya penuh, Windows terpaksa memakai disk yang jauh lebih lambat.",
+      "steps": [
+        "Tambah RAM. Semua slot sudah terisi, jadi keping lama perlu diganti dengan yang lebih besar. Tanya teknisi jenis yang cocok.",
+        "Biasakan menutup tab dan program yang sudah tidak dipakai."
+      ]
+    },
+    {
+      "id": "memory.usage",
+      "category": "memory",
+      "status": "perhatian",
+      "severity": "ringan",
+      "title": "Memori cukup penuh",
+      "summary": "Saat diperiksa, RAM terpakai 87% — sisanya 512 MB.",
+      "why": "Kalau ditambah satu-dua program lagi, PC bisa mulai tersendat.",
+      "steps": [
+        "Tutup program dan tab browser yang tidak dipakai.",
+        "Restart PC untuk mengosongkan memori."
+      ]
+    },
+    {
+      "id": "system.uptime",
+      "category": "system",
+      "status": "perhatian",
+      "severity": "ringan",
+      "title": "PC belum di-restart selama 12 hari",
+      "summary": "Windows sudah berjalan terus 12 hari tanpa restart yang sungguhan. Di PC ini \"Shut down\" tidak benar-benar mematikan Windows (fitur Fast Startup), jadi yang dihitung hanya Restart.",
+      "why": "Makin lama tanpa restart, memori makin penuh sisa-sisa program dan update tertunda menumpuk. PC jadi makin lambat.",
+      "steps": [
+        "Klik Start → Power → Restart. Biasakan restart seminggu sekali."
+      ]
+    },
+    {
+      "id": "system.power",
+      "category": "system",
+      "status": "perhatian",
+      "severity": "ringan",
+      "title": "Mode hemat daya aktif",
+      "summary": "Windows sedang memakai power plan \"Power saver\".",
+      "why": "Dalam mode ini Windows sengaja menahan kecepatan prosesor untuk menghemat baterai. Di PC yang sudah lambat, ini terasa sekali.",
+      "steps": [
+        "Ketik \"power plan\" di menu Start → Choose a power plan → pilih Balanced (atau High performance bila PC selalu tercolok listrik).",
+        "Untuk laptop yang sering lepas charger, Balanced adalah pilihan tengah yang baik."
+      ]
+    },
+    {
+      "id": "system.boot",
+      "category": "system",
+      "status": "perhatian",
+      "severity": "ringan",
+      "title": "Windows butuh 121 detik untuk menyala",
+      "summary": "Agak lama. Diukur saat PC menyala pada 13 November 2026.",
+      "why": "Sebagian besar waktu ini biasanya habis untuk program yang ikut jalan saat menyala.",
+      "steps": [
+        "Kurangi program startup (lihat bagian Program)."
+      ]
+    },
+    {
+      "id": "programs.heavy_mem",
+      "category": "programs",
+      "status": "perhatian",
+      "severity": "ringan",
+      "title": "Google Chrome memakai banyak memori",
+      "summary": "Saat diperiksa, Google Chrome memakai 1,7 GB (14 proses).",
+      "why": "Kalau satu program memakan sebagian besar RAM, program lain terpaksa pindah ke disk yang jauh lebih lambat.",
+      "steps": [
+        "Tutup tab yang tidak dipakai — tiap tab memakan memori walau tidak dibuka.",
+        "Matikan ekstensi browser yang tidak perlu.",
+        "Restart browsernya sesekali."
+      ]
+    },
+    {
+      "id": "security.signatures",
+      "category": "security",
+      "status": "perhatian",
+      "severity": "ringan",
+      "title": "Antivirus belum diperbarui 19 hari",
+      "summary": "Biasanya Windows Defender memperbarui diri tiap hari.",
+      "why": "PC yang jarang tersambung internet tidak bisa memperbarui daftar virusnya.",
+      "steps": [
+        "Sambungkan internet beberapa menit, lalu buka Windows Security → Virus & threat protection → Check for updates."
+      ]
+    },
+    {
+      "id": "network.wifi",
+      "category": "network",
+      "status": "perhatian",
+      "severity": "ringan",
+      "title": "Sinyal Wi-Fi lemah (32%)",
+      "summary": "Sinyal selemah ini membuat internet lambat dan sering putus, walau paketnya kencang.",
+      "why": "Tembok, jarak, dan lantai yang berbeda melemahkan sinyal Wi-Fi.",
+      "steps": [
+        "Dekatkan PC ke router, atau pindahkan router ke tempat yang lebih terbuka.",
+        "Kalau memungkinkan, pakai kabel LAN — lebih stabil dari Wi-Fi."
+      ]
+    },
+    {
+      "id": "cpu.usage",
+      "category": "cpu",
+      "status": "sehat",
+      "severity": null,
+      "title": "Prosesor bekerja normal",
+      "summary": "Prosesor tidak sedang kewalahan (terpakai sekitar 34%).",
+      "why": null,
+      "steps": []
+    },
+    {
+      "id": "cpu.temp",
+      "category": "cpu",
+      "status": "sehat",
+      "severity": null,
+      "title": "Suhu PC normal",
+      "summary": "Sensor suhu di dalam PC membaca sekitar 58°C — masih aman.",
+      "why": null,
+      "steps": []
+    },
+    {
+      "id": "storage.volume.D",
+      "category": "storage",
+      "status": "sehat",
+      "severity": null,
+      "title": "Drive D: masih lega",
+      "summary": "Sisa ruang 312 GB dari 347 GB (90%).",
+      "why": null,
+      "steps": []
+    },
+    {
+      "id": "storage.disk0.health",
+      "category": "storage",
+      "status": "sehat",
+      "severity": null,
+      "title": "Disk utama (C:, D:) dalam kondisi baik",
+      "summary": "Windows tidak menemukan tanda kerusakan pada disk ini.",
+      "why": null,
+      "steps": []
+    },
+    {
+      "id": "gpu.adapter0",
+      "category": "gpu",
+      "status": "sehat",
+      "severity": null,
+      "title": "Kartu grafis bekerja normal",
+      "summary": "Intel(R) HD Graphics 500 dengan driver yang terpasang.",
+      "why": null,
+      "steps": []
+    },
+    {
+      "id": "security.antivirus",
+      "category": "security",
+      "status": "sehat",
+      "severity": null,
+      "title": "Windows Defender aktif",
+      "summary": "Perlindungan virus bawaan Windows berjalan.",
+      "why": null,
+      "steps": []
+    },
+    {
+      "id": "security.firewall",
+      "category": "security",
+      "status": "sehat",
+      "severity": null,
+      "title": "Firewall aktif",
+      "summary": "Firewall Windows menyala untuk jaringan privat dan publik.",
+      "why": null,
+      "steps": []
+    },
+    {
+      "id": "security.uac",
+      "category": "security",
+      "status": "sehat",
+      "severity": null,
+      "title": "Peringatan izin (UAC) aktif",
+      "summary": "Windows bertanya dulu sebelum program mengubah sistem.",
+      "why": null,
+      "steps": []
+    },
+    {
+      "id": "network.internet",
+      "category": "network",
+      "status": "sehat",
+      "severity": null,
+      "title": "Internet tersambung",
+      "summary": "Lewat Wi-Fi \"Rumah\".",
+      "why": null,
+      "steps": []
+    },
+    {
+      "id": "network.speed",
+      "category": "network",
+      "status": "sehat",
+      "severity": null,
+      "title": "Kecepatan unduh sekitar 4,2 Mbps",
+      "summary": "Cukup untuk video dan update.",
+      "why": null,
+      "steps": []
+    }
+  ],
+  "tech": [
+    {
+      "title": "Tentang pemeriksaan ini",
+      "items": [
+        {
+          "label": "Versi RepairDoc",
+          "value": "0.1.0"
+        },
+        {
+          "label": "Sistem operasi",
+          "value": "Windows 10 Home 22H2 (contoh)"
+        },
+        {
+          "label": "Izin administrator",
+          "value": "Tidak"
+        },
+        {
+          "label": "Dijalankan dari",
+          "value": "Drive E: (dilewati saat diagnosa)"
+        }
+      ]
+    },
+    {
+      "title": "Prosesor",
+      "items": [
+        {
+          "label": "Model",
+          "value": "Intel(R) Celeron(R) CPU N3350 @ 1.10GHz"
+        },
+        {
+          "label": "Inti / utas",
+          "value": "2 inti fisik, 2 utas"
+        },
+        {
+          "label": "Pemakaian (±2 detik)",
+          "value": "rata-rata 34%, puncak 58%"
+        },
+        {
+          "label": "Suhu zona termal",
+          "value": "58°C via thermal zone (perf counter)"
+        }
+      ]
+    },
+    {
+      "title": "Memori (RAM)",
+      "items": [
+        {
+          "label": "Terpasang",
+          "value": "4 GB"
+        },
+        {
+          "label": "Bisa dipakai Windows",
+          "value": "3,9 GB"
+        },
+        {
+          "label": "Terpakai / tersedia",
+          "value": "3,4 GB / 512 MB"
+        },
+        {
+          "label": "Page file (memori virtual)",
+          "value": "2,6 GB dari 4 GB terpakai"
+        },
+        {
+          "label": "Slot RAM",
+          "value": "1 dari 1 terisi (menurut data motherboard)"
+        },
+        {
+          "label": "ChannelA-DIMM0",
+          "value": "4 GB · 1600 MHz · Samsung"
+        },
+        {
+          "label": "Windows Memory Diagnostic",
+          "value": "Belum pernah dijalankan (atau log sudah terhapus)"
+        }
+      ]
+    },
+    {
+      "title": "Penyimpanan",
+      "items": [
+        {
+          "label": "Drive C:",
+          "value": "1,8 GB kosong dari 118 GB · HDD · NTFS"
+        },
+        {
+          "label": "Drive D: \"DATA\"",
+          "value": "312 GB kosong dari 347 GB · HDD · NTFS"
+        },
+        {
+          "label": "Drive E: \"REPAIRDOC\"",
+          "value": "21 GB kosong dari 29 GB · jenis tidak diketahui · NTFS · removable · tempat RepairDoc, dilewati"
+        },
+        {
+          "label": "WDC WD5000LPCX-24VHAT0 [C: D:]",
+          "value": "HDD · SATA · Healthy · 466 GB"
+        },
+        {
+          "label": "SanDisk Cruzer Blade [E:]",
+          "value": "jenis tidak diketahui · USB · Healthy · 29 GB"
+        },
+        {
+          "label": "Sumber data disk",
+          "value": "MSFT_PhysicalDisk (lengkap)"
+        }
+      ]
+    },
+    {
+      "title": "Kartu grafis",
+      "items": [
+        {
+          "label": "Intel(R) HD Graphics 500",
+          "value": "VRAM 1 GB (menurut Windows, maks. terbaca 4 GB) · driver 27.20.100.9466 · tanggal driver 2021-03-04 · 1366×768"
+        },
+        {
+          "label": "Suhu",
+          "value": "Tidak tersedia (hanya bisa dibaca untuk NVIDIA lewat nvidia-smi)"
+        }
+      ]
+    },
+    {
+      "title": "Baterai",
+      "items": [
+        {
+          "label": "Jenis casing (SMBIOS)",
+          "value": "laptop (kode 10)"
+        },
+        {
+          "label": "Baterai",
+          "value": "terdeteksi"
+        },
+        {
+          "label": "Terisi",
+          "value": "64%"
+        },
+        {
+          "label": "Sumber daya",
+          "value": "listrik (charger)"
+        },
+        {
+          "label": "Kapasitas penuh / awal",
+          "value": "16900 / 36600 mWh"
+        },
+        {
+          "label": "Siklus pengisian",
+          "value": "612"
+        }
+      ]
+    },
+    {
+      "title": "Windows",
+      "items": [
+        {
+          "label": "Versi",
+          "value": "Microsoft Windows 10 Home Single Language · 22H2 · build 19045.5131 · 64-bit"
+        },
+        {
+          "label": "Windows dipasang",
+          "value": "2 Mei 2021"
+        },
+        {
+          "label": "Menyala sejak",
+          "value": "2026-11-13 07:12"
+        },
+        {
+          "label": "Model PC",
+          "value": "ASUSTeK COMPUTER INC. X441NA"
+        },
+        {
+          "label": "Update terakhir (registry / hotfix / event log)",
+          "value": "2025-06-11 / 2025-06-11 / -"
+        },
+        {
+          "label": "Layanan Windows Update",
+          "value": "Disabled"
+        },
+        {
+          "label": "Menunggu restart",
+          "value": "tidak"
+        },
+        {
+          "label": "Power plan (GUID)",
+          "value": "a1841308-3541-4fab-bc81-f71556f20b4a"
+        },
+        {
+          "label": "Fast Startup",
+          "value": "aktif"
+        },
+        {
+          "label": "Page file",
+          "value": "diatur otomatis oleh Windows"
+        },
+        {
+          "label": "Uptime",
+          "value": "293 jam"
+        },
+        {
+          "label": "Device Manager: Unknown device",
+          "value": "kode 28 (driver belum terpasang) · Unknown"
+        },
+        {
+          "label": "Boot terakhir (event 100)",
+          "value": "2026-11-13 · total 176 dtk · jalur utama 121 dtk · setelah login 55 dtk"
+        }
+      ]
+    },
+    {
+      "title": "Program",
+      "items": [
+        {
+          "label": "Startup",
+          "value": "11 aktif, 1 dinonaktifkan"
+        },
+        {
+          "label": "Startup: OneDrive",
+          "value": "\"C:\\Program Files\\OneDrive\\OneDrive.exe\" /background · HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+        {
+          "label": "Startup: Spotify",
+          "value": "\"C:\\Program Files\\Spotify\\Spotify.exe\" /background · HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+        {
+          "label": "Startup: Discord",
+          "value": "\"C:\\Program Files\\Discord\\Discord.exe\" /background · HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+        {
+          "label": "Startup: Steam",
+          "value": "\"C:\\Program Files\\Steam\\Steam.exe\" /background · HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+        {
+          "label": "Startup: WhatsApp",
+          "value": "\"C:\\Program Files\\WhatsApp\\WhatsApp.exe\" /background · HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+        {
+          "label": "Startup: Skype",
+          "value": "\"C:\\Program Files\\Skype\\Skype.exe\" /background · HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+        {
+          "label": "Startup: CCleaner64",
+          "value": "\"C:\\Program Files\\CCleaner64\\CCleaner64.exe\" /background · HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+        {
+          "label": "Startup: Epic Games Launcher",
+          "value": "\"C:\\Program Files\\Epic Games Launcher\\Epic Games Launcher.exe\" /background · HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+        {
+          "label": "Startup: iTunesHelper",
+          "value": "\"C:\\Program Files\\iTunesHelper\\iTunesHelper.exe\" /background · HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+        {
+          "label": "Startup: Adobe Updater",
+          "value": "\"C:\\Program Files\\Adobe Updater\\Adobe Updater.exe\" /background · HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+        {
+          "label": "Startup: uTorrent",
+          "value": "\"C:\\Program Files\\uTorrent\\uTorrent.exe\" /background · HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+        {
+          "label": "Proses teratas (CPU)",
+          "value": "chrome.exe 11% · msmpeng.exe 8% · explorer.exe 2% · onedrive.exe 1%"
+        },
+        {
+          "label": "Proses teratas (RAM)",
+          "value": "chrome.exe 1,7 GB · msmpeng.exe 210 MB · explorer.exe 120 MB · onedrive.exe 95 MB"
+        }
+      ]
+    },
+    {
+      "title": "Kebersihan",
+      "items": [
+        {
+          "label": "File sementara: C:\\Users\\Budi\\AppData\\Local\\Temp",
+          "value": "1,3 GB · 4812 file"
+        },
+        {
+          "label": "File sementara: C:\\Windows\\Temp",
+          "value": "210 MB · 311 file"
+        },
+        {
+          "label": "Cache browser & internet: C:\\Users\\Budi\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cache",
+          "value": "890 MB · 9104 file"
+        },
+        {
+          "label": "Recycle Bin: C:\\$Recycle.Bin",
+          "value": "760 MB · 58 file"
+        },
+        {
+          "label": "Sisa unduhan Windows Update: C:\\Windows\\SoftwareDistribution\\Download",
+          "value": "95 MB · 40 file"
+        },
+        {
+          "label": "Sisa Windows lama (Windows.old): C:\\Windows.old",
+          "value": "18 GB · 102331 file"
+        },
+        {
+          "label": "hiberfil.sys (file hibernasi, bukan sampah)",
+          "value": "1,6 GB"
+        },
+        {
+          "label": "pagefile.sys (memori virtual, bukan sampah)",
+          "value": "4 GB"
+        }
+      ]
+    },
+    {
+      "title": "Keamanan",
+      "items": [
+        {
+          "label": "Windows Defender",
+          "value": "layanan aktif · antivirus aktif · real-time aktif"
+        },
+        {
+          "label": "Definisi virus",
+          "value": "2026-11-06 (19 hari lalu)"
+        },
+        {
+          "label": "Scan cepat / penuh terakhir",
+          "value": "2 hari lalu / belum pernah"
+        },
+        {
+          "label": "Security Center: Windows Defender",
+          "value": "aktif · definisi lama"
+        },
+        {
+          "label": "Firewall (domain / privat / publik)",
+          "value": "aktif / aktif / aktif"
+        },
+        {
+          "label": "UAC",
+          "value": "aktif"
+        },
+        {
+          "label": "Program terpasang",
+          "value": "4 entri"
+        }
+      ]
+    },
+    {
+      "title": "Jaringan",
+      "items": [
+        {
+          "label": "Profil: Rumah",
+          "value": "Wi-Fi · IPv4 Internet · Private"
+        },
+        {
+          "label": "Adapter: Wi-Fi",
+          "value": "Qualcomm Atheros QCA9377 Wireless Network Adapter · 72.2 Mbps · Wi-Fi"
+        },
+        {
+          "label": "SSID",
+          "value": "Rumah · sinyal 32%"
+        },
+        {
+          "label": "Server DNS",
+          "value": "192.168.1.1"
+        },
+        {
+          "label": "Tes DNS",
+          "value": "www.google.com 61 ms · www.microsoft.com 88 ms · www.detik.com 70 ms"
+        },
+        {
+          "label": "Cek internet (msftconnecttest)",
+          "value": "tersambung"
+        },
+        {
+          "label": "Tes unduh",
+          "value": "http://speedtest.tele2.net/10MB.zip · 4200000 byte dalam 8000 ms · 4,2 Mbps"
+        }
+      ]
+    }
+  ],
+  "isAdmin": false,
+  "needsAdmin": [
+    "umur SSD, suhu disk, dan riwayat error disk",
+    "sampah milik pengguna lain dan folder sistem"
+  ],
+  "finishedAtMs": 1795586399920,
+  "durationMs": 31400
+}

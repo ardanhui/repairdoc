@@ -1,0 +1,26 @@
+[package]
+name = "repairdoc"
+version = "0.1.0"
+description = "RepairDoc — dokter PC portable"
+edition = "2021"
+rust-version = "1.90"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+repairdoc-core = { path = "core" }
+
+# Crate `core` berisi logika diagnosa dan bisa dites tanpa jendela aplikasi.
+[workspace]
+members = ["core"]
+
+# Exe sekecil mungkin supaya ringan dijalankan dari flashdisk.
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

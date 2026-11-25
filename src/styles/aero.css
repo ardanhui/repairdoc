@@ -1,0 +1,226 @@
+/* RepairDoc — tema Frutiger Aero.
+ *
+ * Prinsip:
+ * - Keterbacaan dulu: teks selalu di atas langit terang atau kaca putih yang cukup pekat.
+ * - Ringan untuk PC kentang: tidak ada backdrop-filter (blur) dan tidak ada animasi
+ *   latar yang terus berjalan. Efek kaca dibuat dari gradasi dan garis tepi saja.
+ * - Animasi mati otomatis bila Windows di-set "tanpa animasi" (prefers-reduced-motion).
+ */
+
+:root {
+  /* Langit & air */
+  --sky-1: #1e8fe0;
+  --sky-2: #5bbdf2;
+  --sky-3: #b4e5fb;
+  --sky-4: #e2f7ff;
+  --aqua: #129bdb;
+  --aqua-deep: #0a6cae;
+  --aqua-ink: #08588f;
+  /* Daun */
+  --leaf: #62c143;
+  --leaf-deep: #2e8f2a;
+  /* Teks: biru laut tua, bukan hitam */
+  --ink: #0d3858;
+  --ink-soft: #3a5e7c;
+  /* Status */
+  --ok: #34a33b;
+  --ok-soft: #e3f5dc;
+  --ok-ink: #1d621f;
+  --warn: #f0a10e;
+  --warn-soft: #fff2cf;
+  --warn-ink: #774400;
+  --bad: #df443e;
+  --bad-soft: #ffe3df;
+  --bad-ink: #981d16;
+
+  --font: "Segoe UI", "Segoe UI Variable Text", Selawik, Tahoma, system-ui, sans-serif;
+  --radius-window: 22px;
+  --radius-card: 16px;
+
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--sky-4);
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ol,
+ul,
+dl,
+dd {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--aqua-ink);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Kaca ---------- */
+
+.glass {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.86) 45%, rgba(238, 249, 255, 0.86) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-card);
+  box-shadow:
+    0 0 0 1px rgba(64, 150, 205, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 14px 30px -16px rgba(9, 76, 130, 0.45);
+}
+
+/* Kaca "jendela" Aero: kilap melengkung di bagian atas. Dipakai hemat (panel utama saja). */
+.glass-window {
+  border-radius: var(--radius-window);
+  overflow: hidden;
+}
+
+.glass-window::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 96px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+  border-radius: var(--radius-window) var(--radius-window) 50% 50% / var(--radius-window) var(--radius-window) 28px 28px;
+  pointer-events: none;
+}
+
+/* ---------- Tombol kaca ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1px solid #7fc3e8;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.7) 49%, rgba(255, 255, 255, 0) 50%),
+    linear-gradient(180deg, #eaf8ff, #c7ebfc);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -3px 6px rgba(120, 200, 245, 0.35),
+    0 3px 8px -3px rgba(9, 90, 150, 0.4);
+  color: var(--aqua-ink);
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s, transform 0.1s;
+}
+
+.btn:hover {
+  filter: brightness(1.04) saturate(1.1);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.btn svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+/* ---------- Bola status (glossy orb) ---------- */
+
+.orb-status {
+  --c1: #9be779;
+  --c2: var(--ok);
+  --c3: #1f7a25;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 115%, var(--c1) 0%, var(--c2) 48%, var(--c3) 100%);
+  box-shadow:
+    inset 0 -3px 6px rgba(255, 255, 255, 0.35),
+    0 3px 8px -2px rgba(10, 60, 100, 0.35),
+    0 0 0 2px rgba(255, 255, 255, 0.85);
+  color: #fff;
+}
+
+.orb-status::before {
+  content: "";
+  position: absolute;
+  top: 6%;
+  left: 16%;
+  width: 68%;
+  height: 46%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.05));
+}
+
+.orb-status svg {
+  position: relative;
+  width: 52%;
+  height: 52%;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
+
+.orb-status.perhatian {
+  --c1: #ffe08a;
+  --c2: var(--warn);
+  --c3: #c46f00;
+}
+
+.orb-status.bermasalah {
+  --c1: #ff9f94;
+  --c2: var(--bad);
+  --c3: #a8231c;
+}
+
+/* ---------- Gerak ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

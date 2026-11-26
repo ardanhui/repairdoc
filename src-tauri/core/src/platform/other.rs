@@ -6,6 +6,10 @@ pub fn run_powershell(_script: &str, _timeout: Duration) -> Result<String, Strin
     Err("PowerShell hanya tersedia di Windows".to_string())
 }
 
+pub fn run_powershell_script(_script: &str, _args: &str, _env: &[(&str, &str)], _timeout: Duration) -> Result<String, String> {
+    Err("PowerShell hanya tersedia di Windows".to_string())
+}
+
 pub fn is_elevated() -> bool {
     false
 }

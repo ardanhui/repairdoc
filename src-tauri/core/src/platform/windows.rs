@@ -40,6 +40,27 @@ pub fn run_powershell(script: &str, timeout: Duration) -> Result<String, String>
     super::wait_with_timeout(child, timeout, "PowerShell")
 }
 
+/// Jalankan skrip `.ps1` beserta parameternya (mis. `-DryRun`). Data besar
+/// (daftar perubahan) dikirim lewat variabel lingkungan `env`, bukan baris
+/// perintah, supaya tidak melewati batas panjang baris perintah Windows.
+pub fn run_powershell_script(script: &str, args: &str, env: &[(&str, &str)], timeout: Duration) -> Result<String, String> {
+    let encoded = super::encode_command(&super::script_call(script, args));
+    if encoded.len() > super::MAX_ENCODED_COMMAND {
+        return Err(format!("skrip terlalu panjang untuk baris perintah ({} karakter)", encoded.len()));
+    }
+    let mut cmd = Command::new(system32(r"WindowsPowerShell\v1.0\powershell.exe"));
+    cmd.args(["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-EncodedCommand", &encoded])
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .creation_flags(CREATE_NO_WINDOW);
+    for (k, v) in env {
+        cmd.env(k, v);
+    }
+    let child = cmd.spawn().map_err(|e| format!("PowerShell tidak bisa dijalankan: {e}"))?;
+    super::wait_with_timeout(child, timeout, "PowerShell")
+}
+
 /// Apakah RepairDoc berjalan dengan izin Administrator?
 /// Dicek dari tingkat integritas proses (High = S-1-16-12288, System = S-1-16-16384).
 pub fn is_elevated() -> bool {

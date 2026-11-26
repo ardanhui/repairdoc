@@ -49,6 +49,42 @@ pub fn drive_letter_of(path: &str) -> Option<char> {
     }
 }
 
+/// Batas aman panjang `-EncodedCommand`. Baris perintah Windows maksimal 32.767
+/// karakter; sisanya untuk path powershell.exe dan opsi lain.
+pub const MAX_ENCODED_COMMAND: usize = 30_000;
+
+/// Buang baris komentar (`# ...`) dan baris kosong dari skrip sebelum dikirim.
+/// Komentar tetap ada di file `.ps1` supaya bisa dibaca teknisi; yang dikirim ke
+/// PowerShell versi ringkasnya supaya muat di batas panjang baris perintah.
+/// Skrip yang memakai ini tidak boleh punya here-string atau komentar blok `<# #>`.
+pub fn compact_script(script: &str) -> String {
+    script
+        .lines()
+        .filter(|l| {
+            let t = l.trim_start();
+            !t.is_empty() && !t.starts_with('#')
+        })
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+/// Teks perintah lengkap untuk menjalankan skrip dengan parameter, mis.
+/// `& { param([switch]$DryRun) ... } -DryRun`.
+pub fn script_call(script: &str, args: &str) -> String {
+    format!(
+        "$ErrorActionPreference='SilentlyContinue'\n$ProgressPreference='SilentlyContinue'\n\
+         [Console]::OutputEncoding=[System.Text.Encoding]::UTF8\n& {{\n{}\n}} {args}",
+        compact_script(script)
+    )
+}
+
+/// Bentuk `-EncodedCommand`: UTF-16LE lalu base64.
+pub fn encode_command(text: &str) -> String {
+    use base64::Engine;
+    let utf16: Vec<u8> = text.encode_utf16().flat_map(|u| u.to_le_bytes()).collect();
+    base64::engine::general_purpose::STANDARD.encode(utf16)
+}
+
 /// Tunggu proses selesai paling lama `timeout`; kalau lewat, proses dihentikan.
 /// Mengembalikan stdout (UTF-8) bila proses keluar dengan sukses.
 #[cfg_attr(not(windows), allow(dead_code))]
@@ -101,6 +137,19 @@ fn first_line(s: &str) -> &str {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn compacts_scripts_and_keeps_code() {
+        let s = "# komentar\nparam([switch]$DryRun)\n\n  # lagi\n$x = 1 # akhir baris tetap\n";
+        assert_eq!(compact_script(s), "param([switch]$DryRun)\n$x = 1 # akhir baris tetap");
+        let call = script_call(s, "-DryRun");
+        assert!(call.contains("& {\nparam([switch]$DryRun)") && call.ends_with("} -DryRun"));
+    }
+
+    #[test]
+    fn encodes_utf16_base64() {
+        assert_eq!(encode_command("a"), "YQA=");
+    }
 
     #[test]
     fn parses_drive_letters() {

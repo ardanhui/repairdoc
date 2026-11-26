@@ -50,6 +50,8 @@ impl FakeBackend {
                 app("Microsoft.Windows.ShellExperienceHost", "Microsoft.Windows.ShellExperienceHost_cw5n1h2txyewy", None, "System"),
             ],
             global_bg_disabled: None,
+            startup_files: Vec::new(),
+            logon_tasks: Vec::new(),
         };
         let mut v = HashMap::new();
         let r = |p: &str, n: &str| Target::reg(Hive::Hkcu, p, n);
@@ -89,15 +91,85 @@ impl FakeBackend {
         }
     }
 
+    /// Laptop kentang yang sama, ditambah sumber startup tahap 4: shortcut di folder
+    /// Startup, tugas terjadwal saat logon, dan aplikasi tambahan vendor hardware.
+    pub fn potato_pc_lengkap() -> Self {
+        let mut b = Self::potato_pc();
+        b.base.startup.extend([
+            startup("HKLM", "RtHDVCpl", r#""C:\Program Files\Realtek\Audio\HDA\RtkNGUI64.exe" -s"#),
+            startup("HKLM32", "NvBackend", r#""C:\Program Files (x86)\NVIDIA Corporation\Update Core\NvBackend.exe""#),
+            startup("HKLM", "SynTPEnh", r"%ProgramFiles%\Synaptics\SynTP\SynTPEnh.exe"),
+            startup("HKCU", "Avast Antivirus", r#""C:\Program Files\Avast Software\Avast\AvastUI.exe" /nogui"#),
+        ]);
+        b.base.startup_files = vec![
+            sfile("user", "Zoom.lnk", r"C:\Users\Budi\AppData\Roaming\Zoom\bin\Zoom.exe --autostart"),
+            sfile("user", "Send to OneNote.lnk", r"C:\Program Files\Microsoft Office\root\Office16\ONENOTEM.EXE"),
+            sfile("user", "Telegram.lnk", r"C:\Users\Budi\AppData\Roaming\Telegram Desktop\Telegram.exe -autostart"),
+            sfile("common", "ATK Hotkey.lnk", r"C:\Program Files (x86)\ASUS\ATK Package\ATK Hotkey\HControl.exe"),
+        ];
+        // Telegram sudah dimatikan lewat Task Manager → bukan kandidat.
+        b.base.startup_files[2].approved_hex = Some("030000001122334455667788".into());
+        b.base.logon_tasks = vec![
+            task(r"\", "GoogleUpdateTaskMachineCore{6A2B}", "Ready", "", r"C:\Program Files (x86)\Google\Update\GoogleUpdate.exe", "/c"),
+            task(r"\", "Opera scheduled assistant Autoupdate 1700000000", "Ready", "", r"C:\Users\Budi\AppData\Local\Programs\Opera\launcher.exe", "--scheduledautoupdate"),
+            task(r"\", "MicrosoftEdgeUpdateTaskMachineCore", "Ready", "", r"C:\Program Files (x86)\Microsoft\EdgeUpdate\MicrosoftEdgeUpdate.exe", "/c"),
+            task(r"\Microsoft\Windows\Shell\", "FamilySafetyMonitor", "Ready", "Microsoft Corporation", r"C:\Windows\System32\WpcTsk.exe", ""),
+            task(r"\", "Avast Emergency Update", "Ready", "Avast Software", r"C:\Program Files\Avast Software\Avast\AvEmUpdate.exe", ""),
+            task(r"\", "CCleanerSkipUAC - Budi", "Disabled", "", r"C:\Program Files\CCleaner\CCleaner.exe", "$(Arg0)"),
+            task(r"\", "BantuanCetak", "Ready", "", r"C:\Windows\System32\cmd.exe", "/c start printer.exe"),
+        ];
+        {
+            let mut v = b.values.borrow_mut();
+            for f in &b.base.startup_files {
+                v.insert(file_key(&f.scope, &f.name), Value::Shortcut { location: FileLocation::Startup });
+            }
+            for t in &b.base.logon_tasks {
+                v.insert(Target::ScheduledTask { path: t.path.clone(), name: t.name.clone() }, Value::Task { enabled: t.state != "Disabled" });
+            }
+        }
+        b
+    }
+
     /// Nilai sebuah target saat ini (registry yang belum ada = "tidak ada").
     pub fn read(&self, t: &Target) -> Value {
+        if let Target::StartupFile { scope, name, backup } = t {
+            let values = self.values.borrow();
+            return if values.contains_key(&file_key(scope, name)) {
+                Value::Shortcut { location: FileLocation::Startup }
+            } else if values.contains_key(&backup_key(backup)) {
+                Value::Shortcut { location: FileLocation::Backup }
+            } else {
+                Value::Missing
+            };
+        }
         if let Some(v) = self.values.borrow().get(t) {
             return v.clone();
         }
         match t {
             Target::Registry { .. } => Value::absent(),
-            Target::Service { .. } => Value::Missing,
+            Target::Service { .. } | Target::ScheduledTask { .. } | Target::StartupFile { .. } => Value::Missing,
             Target::PowerPlan => Value::power(SCHEME_BALANCED),
+        }
+    }
+
+    /// Tulis satu nilai seperti eksekutor sungguhan (shortcut = pindah file).
+    fn write(&self, target: &Target, value: &Value) {
+        let mut values = self.values.borrow_mut();
+        match (target, value) {
+            (Target::StartupFile { scope, name, backup }, Value::Shortcut { location }) => {
+                let (from, to) = match location {
+                    FileLocation::Backup => (file_key(scope, name), backup_key(backup)),
+                    FileLocation::Startup => (backup_key(backup), file_key(scope, name)),
+                };
+                values.remove(&from);
+                values.insert(to, Value::Shortcut { location: *location });
+            }
+            (_, Value::Absent { .. }) => {
+                values.remove(target);
+            }
+            (t, v) => {
+                values.insert(t.clone(), v.clone());
+            }
         }
     }
 
@@ -109,6 +181,24 @@ impl FakeBackend {
 
 fn startup(source: &str, name: &str, command: &str) -> StartupItem {
     StartupItem { source: source.into(), name: name.into(), command: command.into(), approved_hex: None }
+}
+
+fn sfile(scope: &str, name: &str, target: &str) -> StartupFile {
+    StartupFile { scope: scope.into(), name: name.into(), target: target.into(), approved_hex: None }
+}
+
+fn task(path: &str, name: &str, state: &str, author: &str, exe: &str, args: &str) -> LogonTask {
+    LogonTask { path: path.into(), name: name.into(), state: state.into(), author: author.into(), actions: vec![exe.into()], arguments: vec![args.into()] }
+}
+
+/// Kunci "file di folder Startup" di peta nilai tiruan.
+fn file_key(scope: &str, name: &str) -> Target {
+    Target::StartupFile { scope: scope.into(), name: name.into(), backup: String::new() }
+}
+
+/// Kunci "file di folder cadangan" di peta nilai tiruan.
+fn backup_key(backup: &str) -> Target {
+    Target::StartupFile { scope: "cadangan".into(), name: backup.into(), backup: String::new() }
 }
 
 fn app(name: &str, family: &str, display: Option<&str>, kind: &str) -> AppItem {
@@ -159,6 +249,20 @@ impl Backend for FakeBackend {
             Value::Dword { value } => Some(value),
             _ => None,
         };
+        // Shortcut yang sudah dipindah ke cadangan tidak terlihat lagi di folder Startup.
+        let values = self.values.borrow();
+        inv.startup_files.retain(|f| values.contains_key(&file_key(&f.scope, &f.name)));
+        inv.logon_tasks.retain_mut(|t| match values.get(&Target::ScheduledTask { path: t.path.clone(), name: t.name.clone() }) {
+            Some(Value::Task { enabled }) => {
+                if !enabled {
+                    t.state = "Disabled".into();
+                } else if t.state == "Disabled" {
+                    t.state = "Ready".into();
+                }
+                true
+            }
+            _ => false,
+        });
         Ok(inv)
     }
 
@@ -186,15 +290,7 @@ impl Backend for FakeBackend {
             } else if self.fail_keys.borrow().contains(&op.key) {
                 r.error = Some("Gagal ditulis (simulasi tes)".into());
             } else {
-                let mut values = self.values.borrow_mut();
-                match &op.value {
-                    Value::Absent { .. } => {
-                        values.remove(&op.target);
-                    }
-                    v => {
-                        values.insert(op.target.clone(), v.clone());
-                    }
-                }
+                self.write(&op.target, &op.value);
                 written += 1;
                 r.after = Some(op.value.clone());
                 r.status = OpStatus::Changed;

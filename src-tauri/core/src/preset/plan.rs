@@ -2,7 +2,8 @@
 //! perubahan (`PlannedOp`). Logika murni — tidak menyentuh sistem, bisa dites di mana saja.
 
 use super::model::*;
-use super::tweaks::{self, has_protected_word, TweakDef, TweakKind, KEY_BACKGROUND_APPS, SCHEME_BALANCED};
+use super::tweaks::{self, has_hardware_word, has_protected_word, startup_effect_note, TweakDef, TweakKind, KEY_BACKGROUND_APPS, SCHEME_BALANCED, STARTUP_BACKUP_DIR};
+use crate::dates;
 
 /// Satu perubahan dalam rencana, lengkap dengan konteks untuk tampilan & catatan.
 #[derive(Clone, Debug, PartialEq)]
@@ -13,7 +14,17 @@ pub struct PlannedOp {
     pub item_key: String,
     pub label: String,
     pub optional: bool,
+    /// Sumber program startup ("Registry", "Folder Startup", "Tugas Terjadwal"); tahap 4.
+    pub source: Option<String>,
+    /// Perintah / jalur program, untuk pratinjau.
+    pub detail: Option<String>,
+    /// Efek mematikan item ini (pembantu hardware, pembaru), untuk pratinjau.
+    pub effect: Option<String>,
 }
+
+pub const SOURCE_REGISTRY: &str = "Registry";
+pub const SOURCE_FOLDER: &str = "Folder Startup";
+pub const SOURCE_TASK: &str = "Tugas Terjadwal";
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct PlanOptions {
@@ -61,8 +72,107 @@ pub fn startup_protected(item: &StartupItem) -> bool {
 }
 
 /// Program startup yang akan dimatikan oleh tweak `startup-off`.
+/// Hanya tiga kunci Run (HKCU, HKLM, HKLM 32-bit): sumber lain seperti `RunOnce`,
+/// `Winlogon`/`Userinit`/`Shell` tidak pernah dibaca, dan sumber yang tidak dikenal
+/// tidak punya `approved_target` sehingga tidak pernah jadi kandidat.
 pub fn startup_candidates(inv: &Inventory) -> Vec<&StartupItem> {
     inv.startup.iter().filter(|i| startup_enabled(i) && !startup_protected(i) && approved_target(i).is_some()).collect()
+}
+
+// ---------------------------------------------------------------- folder Startup (tahap 4)
+
+/// Nama program dari nama shortcut: "Spotify.lnk" → "Spotify".
+pub fn shortcut_label(name: &str) -> String {
+    let n = name.trim();
+    if n.len() > 4 && n.to_ascii_lowercase().ends_with(".lnk") {
+        n[..n.len() - 4].to_string()
+    } else {
+        n.to_string()
+    }
+}
+
+/// Shortcut yang aktif: belum dimatikan lewat Task Manager (`StartupApproved\StartupFolder`
+/// tidak ada, atau byte pertamanya genap).
+pub fn startup_file_enabled(f: &StartupFile) -> bool {
+    match &f.approved_hex {
+        None => true,
+        Some(hex) => Value::Binary { hex: hex.clone() }.first_byte().map(|b| b % 2 == 0).unwrap_or(true),
+    }
+}
+
+pub fn startup_file_protected(f: &StartupFile) -> bool {
+    has_protected_word(&shortcut_label(&f.name)) || has_protected_word(&f.target)
+}
+
+/// Shortcut startup yang akan dipindah ke folder cadangan.
+pub fn startup_file_candidates(inv: &Inventory) -> Vec<&StartupFile> {
+    inv.startup_files
+        .iter()
+        .filter(|f| (f.scope == "user" || f.scope == "common") && f.name.to_ascii_lowercase().ends_with(".lnk"))
+        .filter(|f| startup_file_enabled(f) && !startup_file_protected(f))
+        .collect()
+}
+
+/// Nama folder yang aman untuk dipakai sebagai nama folder: huruf, angka, '-', '_'.
+fn safe_dir_name(s: &str) -> String {
+    let t: String = s.chars().map(|c| if c.is_ascii_alphanumeric() || c == '-' || c == '_' { c } else { '_' }).collect();
+    if t.trim_matches('_').is_empty() {
+        "PC".into()
+    } else {
+        t
+    }
+}
+
+/// Lokasi cadangan shortcut, relatif terhadap `RepairDoc-data`:
+/// `startup-cadangan/<nama-pc>/<tanggal-jam UTC>/<pengguna|semua-pengguna>/<nama>.lnk`.
+/// Folder bertanggal per penerapan, supaya cadangan lama tidak pernah tertimpa.
+pub fn backup_rel(computer_name: &str, scope: &str, name: &str, now_ms: u64) -> String {
+    let secs = now_ms / 1000;
+    let (y, m, d) = dates::civil_from_days((secs / 86_400) as i64);
+    let t = secs % 86_400;
+    let stamp = format!("{y:04}-{m:02}-{d:02}_{:02}{:02}{:02}", t / 3600, (t / 60) % 60, t % 60);
+    let who = if scope == "common" { "semua-pengguna" } else { "pengguna" };
+    format!("{STARTUP_BACKUP_DIR}/{}/{stamp}/{who}/{name}", safe_dir_name(computer_name))
+}
+
+// ---------------------------------------------------------------- tugas terjadwal (tahap 4)
+
+/// Jalur program pihak ketiga: di Program Files atau AppData pengguna, dan bukan di
+/// folder Windows. Jalur relatif (mis. "cmd.exe") tidak dianggap pihak ketiga.
+pub fn is_third_party_path(path: &str) -> bool {
+    let p = path.trim().trim_matches('"').replace('/', "\\").to_ascii_lowercase();
+    let in_allowed = p.contains(":\\program files\\") || p.contains(":\\program files (x86)\\") || p.contains("\\appdata\\local\\") || p.contains("\\appdata\\roaming\\");
+    in_allowed && !p.contains(":\\windows\\")
+}
+
+pub fn task_protected(t: &LogonTask) -> bool {
+    has_protected_word(&t.name)
+        || has_protected_word(&t.path)
+        || has_protected_word(&t.author)
+        || t.actions.iter().any(|a| has_protected_word(a))
+        || t.arguments.iter().any(|a| has_protected_word(a))
+}
+
+/// Tugas terjadwal yang akan dinonaktifkan: aktif (Ready/Running), punya pemicu logon
+/// (inventaris hanya mengirim yang begitu), SEMUA aksinya menjalankan program pihak
+/// ketiga, tidak di folder `\Microsoft\`, dan tidak mengandung kata terlindung.
+pub fn task_candidates(inv: &Inventory) -> Vec<&LogonTask> {
+    inv.logon_tasks
+        .iter()
+        .filter(|t| t.state.eq_ignore_ascii_case("Ready") || t.state.eq_ignore_ascii_case("Running"))
+        .filter(|t| !t.actions.is_empty() && t.actions.iter().all(|a| is_third_party_path(a)))
+        .filter(|t| tweaks::validate_target(&Target::ScheduledTask { path: t.path.clone(), name: t.name.clone() }).is_ok())
+        .filter(|t| !task_protected(t))
+        .collect()
+}
+
+fn task_detail(t: &LogonTask) -> String {
+    t.actions
+        .iter()
+        .zip(t.arguments.iter().chain(std::iter::repeat(&String::new())))
+        .map(|(a, g)| if g.trim().is_empty() { a.clone() } else { format!("{a} {}", g.trim()) })
+        .collect::<Vec<_>>()
+        .join(" ; ")
 }
 
 /// Data StartupApproved "dimatikan" seperti yang ditulis Task Manager:
@@ -81,6 +191,8 @@ pub fn startup_disabled_hex(now_ms: u64) -> String {
 pub fn app_is_candidate(app: &AppItem) -> bool {
     let name = app.name.to_ascii_lowercase();
     let display = app.display_name.clone().unwrap_or_default();
+    // Pembantu hardware tetap terlindung di sini, sama seperti tahap 3 — pelonggaran
+    // tahap 4 hanya berlaku untuk program startup.
     app.signature_kind.eq_ignore_ascii_case("Store")
         && !app.non_removable
         && !name.starts_with("microsoft")
@@ -88,6 +200,8 @@ pub fn app_is_candidate(app: &AppItem) -> bool {
         && !name.starts_with("appup.") // Intel Graphics Command Center, dsb.
         && !has_protected_word(&app.name)
         && !has_protected_word(&display)
+        && !has_hardware_word(&app.name)
+        && !has_hardware_word(&display)
 }
 
 pub fn app_disabled(app: &AppItem) -> bool {
@@ -110,7 +224,14 @@ fn bg_target(app: &AppItem, value_name: &str) -> Target {
 // ---------------------------------------------------------------- penyusun rencana
 
 fn planned(op: Op, tweak_id: &str, item_key: &str, label: String, optional: bool) -> PlannedOp {
-    PlannedOp { op, tweak_id: tweak_id.to_string(), item_key: item_key.to_string(), label, optional }
+    PlannedOp { op, tweak_id: tweak_id.to_string(), item_key: item_key.to_string(), label, optional, source: None, detail: None, effect: None }
+}
+
+/// Item startup dengan sumber, perintah, dan catatan efek untuk pratinjau.
+fn startup_op(op: Op, tweak_id: &str, label: String, source: &str, detail: &str) -> PlannedOp {
+    let key = op.key.clone();
+    let effect = startup_effect_note(&label, detail).map(|e| e.to_string());
+    PlannedOp { source: Some(source.to_string()), detail: Some(detail.to_string()).filter(|d| !d.trim().is_empty()), effect, ..planned(op, tweak_id, &key, label, true) }
 }
 
 /// Perubahan yang dibuat satu tweak untuk mencapai nilai tujuannya.
@@ -126,14 +247,32 @@ pub fn ops_for_tweak(def: &TweakDef, inv: &Inventory, now_ms: u64) -> Vec<Planne
             .collect(),
         TweakKind::Startup => {
             let hex = startup_disabled_hex(now_ms);
-            startup_candidates(inv)
+            // 1) Kunci Run: lewat StartupApproved (tidak berubah dari tahap 3).
+            let mut out: Vec<PlannedOp> = startup_candidates(inv)
                 .into_iter()
                 .filter_map(|item| {
                     let target = approved_target(item)?;
                     let key = format!("startup:{}:{}", item.source, item.name);
-                    Some(planned(Op { key: key.clone(), target, value: Value::Binary { hex: hex.clone() } }, id, &key, item.name.clone(), true))
+                    Some(startup_op(Op { key, target, value: Value::Binary { hex: hex.clone() } }, id, item.name.clone(), SOURCE_REGISTRY, &item.command))
                 })
-                .collect()
+                .collect();
+            // 2) Folder Startup: shortcut DIPINDAH ke folder cadangan (bukan dihapus).
+            for f in startup_file_candidates(inv) {
+                let target = Target::StartupFile {
+                    scope: f.scope.clone(),
+                    name: f.name.clone(),
+                    backup: backup_rel(&inv.machine.computer_name, &f.scope, &f.name, now_ms),
+                };
+                let key = format!("startup:folder:{}:{}", f.scope, f.name);
+                out.push(startup_op(Op { key, target, value: Value::Shortcut { location: FileLocation::Backup } }, id, shortcut_label(&f.name), SOURCE_FOLDER, &f.target));
+            }
+            // 3) Tugas terjadwal: DINONAKTIFKAN (bukan dihapus).
+            for t in task_candidates(inv) {
+                let key = format!("startup:task:{}{}", t.path, t.name);
+                let target = Target::ScheduledTask { path: t.path.clone(), name: t.name.clone() };
+                out.push(startup_op(Op { key, target, value: Value::Task { enabled: false } }, id, t.name.clone(), SOURCE_TASK, &task_detail(t)));
+            }
+            out
         }
         TweakKind::BackgroundApps => inv
             .apps
@@ -321,6 +460,7 @@ mod tests {
                 AppItem { name: "5319275A.WhatsAppDesktop".into(), family_name: "5319275A.WhatsAppDesktop_cv1g1gvanyjgm".into(), signature_kind: "Store".into(), disabled: Some(1), disabled_by_user: Some(1), ..Default::default() },
             ],
             global_bg_disabled: None,
+            ..Default::default()
         }
     }
 

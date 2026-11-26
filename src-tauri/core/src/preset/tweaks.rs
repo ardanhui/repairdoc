@@ -9,7 +9,7 @@
 
 use serde::Serialize;
 
-use super::model::{Hive, Mode, Target, Value};
+use super::model::{FileLocation, Hive, Mode, Target, Value};
 
 /// Nilai registry di definisi (bentuk statis dari `Value`).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -112,6 +112,14 @@ pub const KEY_STARTUP_APPROVED_RUN32: &str = r"Software\Microsoft\Windows\Curren
 /// Kunci khusus tes otomatis. Tidak pernah dipakai tweak sungguhan.
 pub const KEY_TEST_ROOT: &str = r"Software\RepairDocTest";
 
+/// Folder cadangan shortcut startup, di dalam `RepairDoc-data` (tahap 4).
+pub const STARTUP_BACKUP_DIR: &str = "startup-cadangan";
+/// Tugas terjadwal di folder ini (dan anak-anaknya) tidak pernah diubah — milik Windows.
+/// Daftar yang sama ada di `scripts/preset.ps1` — dicek tes.
+pub const TASK_PATH_FORBIDDEN: &str = r"\Microsoft\";
+/// Folder tugas khusus tes otomatis (dibuat & dihapus oleh tesnya sendiri).
+pub const TASK_TEST_PATH: &str = r"\RepairDocTest\";
+
 /// Isi `UserPreferencesMask` untuk "Adjust for best performance" (semua animasi menu,
 /// tooltip, bayangan kursor, dsb. mati). Nilai yang sama dipakai WinUtil.
 pub const USER_PREFERENCES_BEST_PERFORMANCE: &[u8] = &[0x90, 0x12, 0x03, 0x80, 0x10, 0x00, 0x00, 0x00];
@@ -153,11 +161,11 @@ pub fn is_protected_service(name: &str) -> bool {
     PROTECTED_SERVICES.iter().any(|p| p.eq_ignore_ascii_case(name))
 }
 
-/// Kata yang membuat sebuah program startup / aplikasi latar TIDAK PERNAH dimatikan:
-/// Microsoft, Windows, keamanan/antivirus, dan pembantu hardware (audio, touchpad,
-/// grafis, Bluetooth, tombol Fn) supaya suara, touchpad, dan tombol laptop tetap jalan.
+/// Kata yang membuat sebuah program startup TIDAK PERNAH dimatikan ("aplikasi penting"
+/// menurut pemilik, tahap 4): Microsoft, Windows, keamanan, dan antivirus.
+/// Dicek pada nama DAN perintah/jalur program, jadi program yang file-nya ada di folder
+/// `C:\Windows` juga ikut terlindung (jalurnya mengandung "windows").
 pub const PROTECTED_WORDS: &[&str] = &[
-    // Wajib menurut spesifikasi
     "microsoft",
     "windows",
     "security",
@@ -181,7 +189,18 @@ pub const PROTECTED_WORDS: &[&str] = &[
     "panda",
     "comodo",
     "360 total",
-    // Pembantu hardware
+];
+
+/// Aplikasi tambahan vendor hardware (audio, touchpad, grafis, Bluetooth, tombol Fn).
+/// Tahap 3 melindunginya; sejak tahap 4 aplikasi ini BOLEH jadi kandidat startup yang
+/// dimatikan (keputusan pemilik), karena yang dimatikan hanya APLIKASI PEMBUKA / ikon
+/// tray-nya, bukan drivernya: driver audio, touchpad, dan kartu grafis tetap jalan
+/// sebagai driver/service Windows. Efeknya ditampilkan di pratinjau
+/// (`startup_effect_note`) dan tiap item bisa dibatalkan centangnya.
+///
+/// Daftar ini TETAP dipakai untuk aplikasi latar (tweak `background-apps-off`), supaya
+/// perilaku tahap 3 di sana tidak berubah.
+pub const HARDWARE_HELPER_WORDS: &[&str] = &[
     "realtek",
     "rtkaud",
     "rtkngui",
@@ -212,6 +231,74 @@ pub const PROTECTED_WORDS: &[&str] = &[
     "onekey",
     "dptf",
 ];
+
+pub fn has_hardware_word(text: &str) -> bool {
+    let t = text.to_ascii_lowercase();
+    HARDWARE_HELPER_WORDS.iter().any(|w| t.contains(w))
+}
+
+/// Ada kata `word` yang berdiri di awal kata (huruf/angka sebelumnya tidak ada).
+/// `whole` = setelahnya juga tidak boleh huruf (supaya "intel" tidak cocok dengan "IntelliJ").
+fn has_word(text: &str, word: &str, whole: bool) -> bool {
+    let t = text.to_ascii_lowercase();
+    let b = t.as_bytes();
+    let mut from = 0;
+    while let Some(pos) = t[from..].find(word) {
+        let i = from + pos;
+        let before_ok = i == 0 || !b[i - 1].is_ascii_alphanumeric();
+        let j = i + word.len();
+        let after_ok = !whole || j >= b.len() || !b[j].is_ascii_alphabetic();
+        if before_ok && after_ok {
+            return true;
+        }
+        from = i + 1;
+    }
+    false
+}
+
+/// Efek mematikan program startup, untuk ditampilkan di pratinjau. Hanya untuk yang
+/// efeknya diketahui; pembantu hardware yang efeknya tidak jelas ditulis apa adanya
+/// ("efeknya tidak diketahui"). `None` = program biasa (efeknya: tidak ikut menyala).
+///
+/// `label` = nama program, `detail` = perintah/jalurnya. Vendor dikenali dari keduanya;
+/// "pembaru otomatis" hanya dari nama (perintah seperti `Discord\Update.exe --processStart`
+/// hanya peluncur, bukan pembaru).
+pub fn startup_effect_note(label: &str, detail: &str) -> Option<&'static str> {
+    let both = format!("{label} {detail}");
+    let text = both.as_str();
+    let any = |words: &[&str]| words.iter().any(|w| has_word(text, w, false));
+    if any(&["realtek", "rtkaud", "rtkngui", "ravcpl", "waves", "maxxaudio", "dolby", "conexant"]) {
+        return Some("Aplikasi pengatur suara dari vendor. Suara tetap keluar karena drivernya tetap jalan, tapi efek suara tambahan (equalizer, Dolby/MaxxAudio) atau pemberitahuan saat headset dicolok bisa tidak jalan.");
+    }
+    if any(&["synaptics", "syntp", "etdctrl", "touchpad"]) || has_word(text, "elan", true) || has_word(text, "alps", true) {
+        return Some("Aplikasi pembantu touchpad. Gerak kursor dan klik tetap jalan, tapi gestur lanjutan (mis. scroll dua jari, zoom) bisa mati sampai dikembalikan.");
+    }
+    if any(&["nvidia", "nvcpl", "geforce"]) {
+        return Some("Aplikasi tambahan NVIDIA (mis. GeForce Experience). Driver kartu grafis tetap jalan, tampilan tidak terpengaruh.");
+    }
+    if any(&["radeon"]) || has_word(text, "amd", false) {
+        return Some("Aplikasi tambahan AMD (mis. Radeon Software). Driver kartu grafis tetap jalan, tampilan tidak terpengaruh.");
+    }
+    if any(&["igfx", "hkcmd", "persistence"]) {
+        return Some("Aplikasi tambahan grafis Intel. Driver kartu grafis tetap jalan; tombol pintas grafis Intel (mis. memutar layar) bisa tidak jalan.");
+    }
+    if any(&["dptf"]) {
+        return Some("Bagian dari pengatur suhu Intel (DPTF). Efeknya tidak diketahui.");
+    }
+    if has_word(text, "intel", true) {
+        return Some("Aplikasi tambahan Intel. Drivernya tetap jalan; efek lainnya tidak diketahui.");
+    }
+    if any(&["bluetooth", "btray"]) {
+        return Some("Aplikasi Bluetooth tambahan dari vendor. Bluetooth bawaan Windows tetap jalan; efek lainnya tidak diketahui.");
+    }
+    if any(&["hotkey", "atkkey", "fnkey", "onekey"]) {
+        return Some("Pembantu tombol Fn / tombol pintas laptop. Tombol Fn (kecerahan, volume, Wi-Fi) bisa tidak berfungsi sampai dikembalikan.");
+    }
+    if label.to_ascii_lowercase().contains("update") {
+        return Some("Pembaru otomatis. Kalau dimatikan, programnya bisa telat mendapat perbaikan keamanan.");
+    }
+    None
+}
 
 pub fn has_protected_word(text: &str) -> bool {
     let t = text.to_ascii_lowercase();
@@ -261,6 +348,32 @@ pub fn validate_target(t: &Target) -> Result<(), String> {
             }
         }
         Target::PowerPlan => Ok(()),
+        Target::StartupFile { scope, name, backup } => {
+            let bad_name = name.is_empty() || name.contains(['\\', '/', ':']) || name.starts_with('.') || !name.to_ascii_lowercase().ends_with(".lnk");
+            let rel = backup.replace('\\', "/");
+            let bad_backup = !rel.starts_with(&format!("{STARTUP_BACKUP_DIR}/"))
+                || rel.split('/').any(|c| c.is_empty() || c == "." || c == "..")
+                || rel.contains(':');
+            if scope != "user" && scope != "common" {
+                Err(format!("folder Startup '{scope}' tidak dikenal"))
+            } else if bad_name {
+                Err(format!("'{name}' bukan shortcut (.lnk) yang boleh dipindah"))
+            } else if bad_backup {
+                Err(format!("lokasi cadangan '{backup}' tidak sah"))
+            } else {
+                Ok(())
+            }
+        }
+        Target::ScheduledTask { path, name } => {
+            let p = path.to_ascii_lowercase();
+            if name.is_empty() || !path.starts_with('\\') || !path.ends_with('\\') {
+                Err(format!("tugas terjadwal '{path}{name}' tidak sah"))
+            } else if p.starts_with(&TASK_PATH_FORBIDDEN.to_ascii_lowercase()) {
+                Err(format!("tugas terjadwal {path}{name} milik Windows dan tidak boleh diubah"))
+            } else {
+                Ok(())
+            }
+        }
     }
 }
 
@@ -426,8 +539,8 @@ pub static TWEAKS: &[TweakDef] = &[
         modes: &[Mode::Kentang],
         kind: TweakKind::Startup,
         effect: Effect::SetelahRestart,
-        read_how: "Status tiap program dibaca dari StartupApproved (sama dengan tab Startup di Task Manager).",
-        revert_how: "Data StartupApproved lama ditulis ulang persis (atau dihapus bila dulu tidak ada). Entri Run tidak pernah dihapus.",
+        read_how: "Tiga sumber: kunci Run (status dari StartupApproved, sama dengan tab Startup Task Manager), shortcut di folder Startup pengguna & semua pengguna, dan tugas terjadwal pihak lain yang jalan saat masuk Windows.",
+        revert_how: "Kunci Run: data StartupApproved lama ditulis ulang (entri Run tidak pernah dihapus). Folder Startup: shortcut dipindah balik dari RepairDoc-data\\startup-cadangan. Tugas terjadwal: diaktifkan lagi dengan Enable-ScheduledTask (tidak pernah dihapus).",
     },
     TweakDef {
         id: "services-manual",
@@ -563,6 +676,10 @@ pub fn value_text(target: &Target, v: &Value) -> String {
                 "Setelan khusus".into()
             }
         }
+        Value::Shortcut { location: FileLocation::Startup } => "Nyala saat masuk Windows".into(),
+        Value::Shortcut { location: FileLocation::Backup } => "Tidak ikut menyala (shortcut di folder cadangan)".into(),
+        Value::Task { enabled: true } => "Nyala saat masuk Windows".into(),
+        Value::Task { enabled: false } => "Dinonaktifkan".into(),
         Value::Service { start } => match start.as_str() {
             "auto" => "Otomatis".into(),
             "delayed-auto" => "Otomatis (tertunda)".into(),

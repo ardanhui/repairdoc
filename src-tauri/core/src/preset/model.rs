@@ -54,6 +54,14 @@ pub enum Target {
     Service { name: String },
     /// Power plan yang aktif (lewat `powercfg`).
     PowerPlan,
+    /// Shortcut di folder Startup (tahap 4). Dimatikan dengan DIPINDAH ke folder
+    /// cadangan, bukan dihapus. `scope` = "user" (folder Startup pengguna) atau
+    /// "common" (folder Startup semua pengguna); `backup` = lokasi cadangan, relatif
+    /// terhadap folder `RepairDoc-data` (huruf drive flashdisk bisa berubah).
+    StartupFile { scope: String, name: String, backup: String },
+    /// Tugas terjadwal (Task Scheduler) yang jalan saat masuk Windows (tahap 4).
+    /// Dimatikan dengan `Disable-ScheduledTask`, tidak pernah dihapus.
+    ScheduledTask { path: String, name: String },
 }
 
 impl Target {
@@ -67,8 +75,29 @@ impl Target {
             Target::Registry { hive, path, name } => format!("{}\\{path} → {name}", hive.short()),
             Target::Service { name } => format!("Service {name}"),
             Target::PowerPlan => "Power plan aktif".to_string(),
+            Target::StartupFile { scope, name, .. } => format!("{}\\{name}", startup_folder_text(scope)),
+            Target::ScheduledTask { path, name } => format!("Tugas terjadwal {path}{name}"),
         }
     }
+}
+
+/// Nama folder Startup dalam kata-kata.
+pub fn startup_folder_text(scope: &str) -> &'static str {
+    if scope == "common" {
+        "Folder Startup (semua pengguna)"
+    } else {
+        "Folder Startup (pengguna)"
+    }
+}
+
+/// Di mana shortcut startup berada.
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[serde(rename_all = "camelCase")]
+pub enum FileLocation {
+    /// Di folder Startup asalnya (ikut jalan saat masuk Windows).
+    Startup,
+    /// Di folder cadangan RepairDoc (tidak ikut jalan).
+    Backup,
 }
 
 fn yes() -> bool {
@@ -103,7 +132,15 @@ pub enum Value {
     Power {
         guid: String,
     },
-    /// Service / power plan tidak ada di PC ini.
+    /// Letak shortcut startup (tahap 4).
+    Shortcut {
+        location: FileLocation,
+    },
+    /// Tugas terjadwal aktif atau dinonaktifkan (tahap 4).
+    Task {
+        enabled: bool,
+    },
+    /// Service / power plan / shortcut / tugas tidak ada di PC ini.
     Missing,
     /// Jenis nilai registry yang tidak ditangani RepairDoc (tidak akan diubah).
     Unsupported {
@@ -147,6 +184,8 @@ impl Value {
             (Value::Binary { hex: a }, Value::Binary { hex: b }) => a.eq_ignore_ascii_case(b),
             (Value::Service { start: a }, Value::Service { start: b }) => a == b,
             (Value::Power { guid: a }, Value::Power { guid: b }) => a.eq_ignore_ascii_case(b),
+            (Value::Shortcut { location: a }, Value::Shortcut { location: b }) => a == b,
+            (Value::Task { enabled: a }, Value::Task { enabled: b }) => a == b,
             (Value::Missing, Value::Missing) => true,
             _ => false,
         }
@@ -242,6 +281,37 @@ pub struct AppItem {
     pub disabled_by_user: Option<u32>,
 }
 
+/// Satu shortcut di folder Startup (tahap 4).
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct StartupFile {
+    /// "user" atau "common".
+    pub scope: String,
+    /// Nama file, mis. "Spotify.lnk".
+    pub name: String,
+    /// Program yang dibuka shortcut (jalur + argumen), bila terbaca.
+    pub target: String,
+    /// Data `StartupApproved\StartupFolder` (dimatikan lewat Task Manager) bila ada.
+    pub approved_hex: Option<String>,
+}
+
+/// Satu tugas terjadwal yang punya pemicu "saat masuk Windows" (tahap 4).
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct LogonTask {
+    /// Folder tugas, selalu diakhiri garis miring terbalik, mis. `\` atau `\Mozilla\`.
+    pub path: String,
+    pub name: String,
+    /// "Ready", "Running", "Disabled", …
+    pub state: String,
+    pub author: String,
+    /// Program yang dijalankan tiap aksi (variabel lingkungan sudah diurai).
+    /// Aksi selain "jalankan program" ditulis sebagai teks kosong.
+    pub actions: Vec<String>,
+    /// Argumen tiap aksi (untuk ditampilkan saja).
+    pub arguments: Vec<String>,
+}
+
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Inventory {
@@ -250,6 +320,12 @@ pub struct Inventory {
     pub apps: Vec<AppItem>,
     /// Nilai `GlobalUserDisabled` (dipasang alat lain); hanya dipakai Mode Normal.
     pub global_bg_disabled: Option<u32>,
+    /// Shortcut di kedua folder Startup (tahap 4).
+    #[serde(default)]
+    pub startup_files: Vec<StartupFile>,
+    /// Tugas terjadwal dengan pemicu logon (tahap 4).
+    #[serde(default)]
+    pub logon_tasks: Vec<LogonTask>,
 }
 
 // ---------------------------------------------------------------- catatan (log)
@@ -416,6 +492,12 @@ pub struct PreviewChange {
     /// Bisa dikecualikan satu per satu oleh pengguna.
     pub optional: bool,
     pub note: Option<String>,
+    /// Sumber program startup: "Registry", "Folder Startup", "Tugas Terjadwal" (tahap 4).
+    pub source: Option<String>,
+    /// Perintah / jalur program (tahap 4).
+    pub detail: Option<String>,
+    /// Efek mematikan item ini, untuk pembantu hardware & pembaru (tahap 4).
+    pub effect: Option<String>,
 }
 
 #[derive(Serialize, Clone, Debug, PartialEq)]

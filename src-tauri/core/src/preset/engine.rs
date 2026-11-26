@@ -200,6 +200,9 @@ pub fn preview(backend: &dyn Backend, log_path: &Path, mode: Mode, opts: &PlanOp
             will_change,
             optional: p.optional,
             note,
+            source: p.source.clone(),
+            detail: p.detail.clone(),
+            effect: p.effect.clone(),
         });
     }
     for (p, why) in &plan.user_skipped {
@@ -213,6 +216,9 @@ pub fn preview(backend: &dyn Backend, log_path: &Path, mode: Mode, opts: &PlanOp
             will_change: false,
             optional: p.optional,
             note: Some(why.clone()),
+            source: p.source.clone(),
+            detail: p.detail.clone(),
+            effect: p.effect.clone(),
         });
     }
 

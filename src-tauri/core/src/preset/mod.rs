@@ -10,6 +10,12 @@
 //!
 //! Prinsip: tidak ada perubahan tanpa pengaman. Scan (modul `probe`) tetap hanya membaca;
 //! semua penulisan ada di sini.
+//!
+//! Tahap 4 memperluas tweak `startup-off` ke empat sumber: kunci Run (HKCU, HKLM,
+//! HKLM 32-bit) lewat StartupApproved, shortcut di folder Startup pengguna & semua
+//! pengguna (dipindah ke `RepairDoc-data\startup-cadangan`), dan tugas terjadwal pihak
+//! ketiga dengan pemicu logon (dinonaktifkan). Daftar lindung dipersempit ke
+//! Microsoft/Windows/keamanan/antivirus (`tweaks::PROTECTED_WORDS`).
 
 pub mod engine;
 pub mod exec;
@@ -451,5 +457,210 @@ mod tests {
         assert_eq!(infos.iter().map(|m| m.level.as_str()).collect::<Vec<_>>(), vec!["Low", "Medium", "High"]);
         assert_eq!(infos[0].tweak_ids.len(), 8);
         assert_eq!(infos[1].tweak_ids.len(), 4);
+    }
+
+    // ------------------------------------------------------------ tahap 4: startup lebih ganas
+
+    use super::plan::{startup_candidates, startup_file_candidates, task_candidates, SOURCE_FOLDER, SOURCE_REGISTRY, SOURCE_TASK};
+
+    #[test]
+    fn protected_list_is_exactly_the_owners_list() {
+        let owner = [
+            "microsoft", "windows", "security", "defender", "antivirus", "anti-virus", "virus", "smadav", "avast", "avg", "kaspersky", "eset", "mcafee",
+            "norton", "bitdefender", "avira", "sophos", "malwarebytes", "trend micro", "panda", "comodo", "360 total",
+        ];
+        assert_eq!(PROTECTED_WORDS, owner);
+        let hardware = [
+            "realtek", "rtkaud", "rtkngui", "ravcpl", "waves", "maxxaudio", "dolby", "conexant", "synaptics", "syntp", "elan", "etdctrl", "alps",
+            "touchpad", "igfx", "hkcmd", "persistence", "intel", "nvidia", "nvcpl", "amd", "radeon", "bluetooth", "btray", "hotkey", "atkkey", "fnkey",
+            "onekey", "dptf",
+        ];
+        assert_eq!(HARDWARE_HELPER_WORDS, hardware);
+        assert!(!PROTECTED_WORDS.iter().any(|w| HARDWARE_HELPER_WORDS.contains(w)));
+    }
+
+    /// Inventaris berisi program "penting" di keempat sumber.
+    fn important_everywhere() -> Inventory {
+        let names = ["Windows Defender notification", "SecurityHealth", "Microsoft Teams", "Avast Antivirus", "Kaspersky", "ESET GUI", "McAfee", "Norton", "Bitdefender Agent", "Malwarebytes Tray", "Trend Micro", "360 Total Security", "SMADAV", "AVG UI", "Panda Dome", "Comodo", "Sophos", "Avira"];
+        let mut inv = Inventory { machine: MachineInfo { machine_id: "M".into(), computer_name: "PC".into() }, ..Default::default() };
+        for (i, n) in names.iter().enumerate() {
+            let exe = format!(r"C:\Program Files\Vendor{i}\app.exe");
+            for src in ["HKCU", "HKLM", "HKLM32"] {
+                inv.startup.push(StartupItem { source: src.into(), name: n.to_string(), command: exe.clone(), approved_hex: None });
+            }
+            inv.startup_files.push(StartupFile { scope: "user".into(), name: format!("{n}.lnk"), target: exe.clone(), approved_hex: None });
+            inv.logon_tasks.push(LogonTask { path: "\\".into(), name: n.to_string(), state: "Ready".into(), author: String::new(), actions: vec![exe.clone()], arguments: vec![String::new()] });
+        }
+        // Nama biasa, tapi program/penulisnya milik Microsoft atau ada di folder Windows.
+        inv.startup.push(StartupItem { source: "HKCU".into(), name: "OneDrive".into(), command: r"C:\Users\b\AppData\Local\Microsoft\OneDrive\OneDrive.exe".into(), approved_hex: None });
+        inv.startup.push(StartupItem { source: "HKLM".into(), name: "RtkAudUService".into(), command: r"C:\Windows\System32\RtkAudUService64.exe".into(), approved_hex: None });
+        inv.startup_files.push(StartupFile { scope: "common".into(), name: "Send to OneNote.lnk".into(), target: r"C:\Program Files\Microsoft Office\ONENOTEM.EXE".into(), approved_hex: None });
+        inv.logon_tasks.push(LogonTask { path: "\\".into(), name: "Helper".into(), state: "Ready".into(), author: "Microsoft Corporation".into(), actions: vec![r"C:\Program Files\Helper\h.exe".into()], arguments: vec![String::new()] });
+        inv.logon_tasks.push(LogonTask { path: "\\Microsoft\\Windows\\Shell\\".into(), name: "Lain".into(), state: "Ready".into(), author: String::new(), actions: vec![r"C:\Program Files\Lain\l.exe".into()], arguments: vec![String::new()] });
+        inv
+    }
+
+    #[test]
+    fn important_apps_are_never_startup_candidates() {
+        let inv = important_everywhere();
+        assert!(startup_candidates(&inv).is_empty(), "{:?}", startup_candidates(&inv));
+        assert!(startup_file_candidates(&inv).is_empty(), "{:?}", startup_file_candidates(&inv));
+        assert!(task_candidates(&inv).is_empty(), "{:?}", task_candidates(&inv));
+        assert!(plan::ops_for_tweak(tweak("startup-off").unwrap(), &inv, T0).is_empty());
+    }
+
+    #[test]
+    fn hardware_vendor_apps_become_candidates_with_effect_notes() {
+        let b = FakeBackend::potato_pc_lengkap();
+        let inv = b.inventory().unwrap();
+        let ops = plan::ops_for_tweak(tweak("startup-off").unwrap(), &inv, T0);
+        let find = |label: &str| ops.iter().find(|p| p.label == label).unwrap_or_else(|| panic!("{label} harus jadi kandidat"));
+        // GeForce Experience (NvBackend), Realtek (RtkNGUI64), Synaptics, tombol Fn ASUS.
+        assert!(find("NvBackend").effect.as_deref().unwrap().contains("NVIDIA"));
+        assert!(find("RtHDVCpl").effect.as_deref().unwrap().contains("Suara tetap keluar"));
+        assert!(find("SynTPEnh").effect.as_deref().unwrap().contains("touchpad"));
+        assert!(find("ATK Hotkey").effect.as_deref().unwrap().contains("Tombol Fn"));
+        // Program biasa tidak diberi catatan karangan; peluncur Discord bukan "pembaru".
+        assert_eq!(find("Spotify").effect, None);
+        assert_eq!(startup_effect_note("Discord", r"C:\Users\Budi\AppData\Local\Discord\Update.exe --processStart Discord.exe"), None);
+        assert!(find("GoogleUpdateTaskMachineCore{6A2B}").effect.as_deref().unwrap().contains("Pembaru otomatis"));
+        // Pembantu hardware yang file-nya di folder Windows tetap terlindung (jalurnya mengandung "windows").
+        assert!(!ops.iter().any(|p| p.label == "RtkAudUService"));
+        // Kata pendek tidak salah tangkap: IntelliJ bukan Intel, "command" bukan AMD.
+        assert_eq!(startup_effect_note("IntelliJ IDEA Toolbox", r"C:\Users\b\AppData\Local\JetBrains\Toolbox\bin\jetbrains-toolbox.exe"), None);
+        assert_eq!(startup_effect_note("Commander", r"C:\Program Files\Commander\commander.exe --command"), None);
+        assert!(startup_effect_note("Intel(R) Graphics", r"C:\Program Files\Intel\x.exe").is_some());
+    }
+
+    #[test]
+    fn every_startup_item_says_its_source_and_command() {
+        let b = FakeBackend::potato_pc_lengkap();
+        let ops = plan::ops_for_tweak(tweak("startup-off").unwrap(), &b.inventory().unwrap(), T0);
+        let by = |src: &str| ops.iter().filter(|p| p.source.as_deref() == Some(src)).map(|p| p.label.as_str()).collect::<Vec<_>>();
+        assert_eq!(by(SOURCE_REGISTRY), vec!["Spotify", "Steam", "uTorrent", "RtHDVCpl", "NvBackend", "SynTPEnh"], "Discord sudah mati, OneDrive/SecurityHealth/RtkAudUService/SMADAV/Avast terlindung");
+        assert_eq!(by(SOURCE_FOLDER), vec!["Zoom", "ATK Hotkey"], "OneNote (Microsoft) dan Telegram (sudah mati) tidak ikut");
+        assert_eq!(by(SOURCE_TASK), vec!["GoogleUpdateTaskMachineCore{6A2B}", "Opera scheduled assistant Autoupdate 1700000000"]);
+        assert!(ops.iter().all(|p| p.optional && p.detail.is_some() && p.tweak_id == "startup-off"));
+    }
+
+    #[test]
+    fn runonce_winlogon_and_services_are_never_startup_sources() {
+        let mut inv = Inventory { machine: MachineInfo { machine_id: "M".into(), computer_name: "PC".into() }, ..Default::default() };
+        for src in ["RunOnce", "HKCU-RunOnce", "Winlogon", "Userinit", "Shell", "Service", ""] {
+            inv.startup.push(StartupItem { source: src.into(), name: format!("Prog{src}"), command: r"C:\Program Files\Prog\p.exe".into(), approved_hex: None });
+        }
+        assert!(startup_candidates(&inv).is_empty());
+        // Skrip inventaris memang tidak membaca sumber itu (komentar diabaikan).
+        let code = crate::platform::compact_script(include_str!("../scripts/preset_inventory.ps1")).to_ascii_lowercase();
+        for banned in ["runonce", "winlogon", "userinit", "get-service", "win32_service"] {
+            assert!(!code.contains(banned), "preset_inventory.ps1 tidak boleh membaca {banned}");
+        }
+    }
+
+    #[test]
+    fn startup_folder_and_task_targets_are_guarded() {
+        let ok = Target::StartupFile { scope: "user".into(), name: "Zoom.lnk".into(), backup: plan::backup_rel("LAPTOP BUDI", "user", "Zoom.lnk", T0) };
+        assert!(validate_target(&ok).is_ok(), "{:?}", validate_target(&ok));
+        assert_eq!(plan::backup_rel("LAPTOP BUDI", "common", "ATK Hotkey.lnk", T0), "startup-cadangan/LAPTOP_BUDI/2025-11-26_065000/semua-pengguna/ATK Hotkey.lnk");
+        for bad in [
+            Target::StartupFile { scope: "user".into(), name: "app.exe".into(), backup: "startup-cadangan/x/app.exe".into() },
+            Target::StartupFile { scope: "user".into(), name: "Zoom.lnk".into(), backup: "lain/Zoom.lnk".into() },
+            Target::StartupFile { scope: "user".into(), name: "Zoom.lnk".into(), backup: "startup-cadangan/../Zoom.lnk".into() },
+            Target::ScheduledTask { path: "\\Microsoft\\Windows\\Defrag\\".into(), name: "ScheduledDefrag".into() },
+            Target::ScheduledTask { path: "\\microsoft\\".into(), name: "x".into() },
+            Target::ScheduledTask { path: "tanpa-garis".into(), name: "x".into() },
+        ] {
+            assert!(validate_target(&bad).is_err(), "{bad:?}");
+        }
+        // Daftar larangan yang sama tertulis di preset.ps1.
+        let script = include_str!("../scripts/preset.ps1");
+        assert!(script.contains(&format!("$TaskForbidden = @('{TASK_PATH_FORBIDDEN}')")));
+    }
+
+    #[test]
+    fn kentang_handles_all_startup_sources_and_revert_restores_exactly() {
+        let b = FakeBackend::potato_pc_lengkap();
+        let l = temp_log("empat-sumber");
+        let before = b.snapshot();
+        let o = run_apply(&b, &l, Mode::Kentang, &PlanOptions::default(), T0);
+        assert!(o.ok, "{:?}", o.error);
+        assert_eq!(o.failed, 0, "{:?}", o.failures);
+
+        let zoom = Target::StartupFile { scope: "user".into(), name: "Zoom.lnk".into(), backup: plan::backup_rel("LAPTOP-BUDI", "user", "Zoom.lnk", T0) };
+        assert_eq!(b.read(&zoom), Value::Shortcut { location: FileLocation::Backup }, "shortcut dipindah ke cadangan, bukan dihapus");
+        let google = Target::ScheduledTask { path: "\\".into(), name: "GoogleUpdateTaskMachineCore{6A2B}".into() };
+        assert_eq!(b.read(&google), Value::Task { enabled: false }, "tugas dinonaktifkan, bukan dihapus");
+        assert_eq!(b.read(&Target::ScheduledTask { path: "\\".into(), name: "MicrosoftEdgeUpdateTaskMachineCore".into() }), Value::Task { enabled: true });
+        assert_eq!(b.read(&Target::ScheduledTask { path: "\\".into(), name: "Avast Emergency Update".into() }), Value::Task { enabled: true });
+        let one_note = Target::StartupFile { scope: "user".into(), name: "Send to OneNote.lnk".into(), backup: String::new() };
+        assert_eq!(b.read(&one_note), Value::Shortcut { location: FileLocation::Startup });
+        assert!(b.read(&Target::reg(Hive::Hklm, KEY_STARTUP_APPROVED_RUN, "RtHDVCpl")).first_byte() == Some(3));
+
+        let entry = o.entry.unwrap();
+        for label in ["Zoom", "ATK Hotkey", "GoogleUpdateTaskMachineCore{6A2B}"] {
+            let c = entry.perubahan.iter().find(|c| c.label == label).unwrap();
+            assert_eq!(c.status, ChangeStatus::Berhasil);
+            assert!(c.nilai_lama.is_some(), "nilai lama {label} harus tercatat");
+        }
+
+        let r = run_revert(&b, &l, T0 + 1);
+        assert!(r.ok, "{:?}", r.error);
+        assert_eq!(r.failed, 0);
+        assert_eq!(b.snapshot(), before, "ketiga jenis sumber harus kembali persis seperti semula");
+    }
+
+    #[test]
+    fn new_sources_are_idempotent_and_preview_changes_nothing() {
+        let b = FakeBackend::potato_pc_lengkap();
+        let l = temp_log("dua-kali-t4");
+        let before = b.snapshot();
+        let p = preview(&b, &l.0, Mode::Kentang, &PlanOptions::default(), T0).unwrap();
+        assert_eq!(b.snapshot(), before, "pratinjau tidak mengubah apa pun");
+        let g = p.groups.iter().find(|g| g.tweak_id == "startup-off").unwrap();
+        for src in [SOURCE_REGISTRY, SOURCE_FOLDER, SOURCE_TASK] {
+            assert!(g.changes.iter().any(|c| c.source.as_deref() == Some(src) && c.will_change && c.detail.is_some()), "{src}");
+        }
+        assert!(g.changes.iter().any(|c| c.label == "NvBackend" && c.effect.is_some()));
+
+        assert!(run_apply(&b, &l, Mode::Kentang, &PlanOptions::default(), T0).ok);
+        let o2 = run_apply(&b, &l, Mode::Kentang, &PlanOptions::default(), T0 + 5);
+        assert_eq!(o2.changed, 0, "terapkan dua kali → perubahan kedua nol");
+        assert_eq!(b.writes.borrow().len(), 1);
+    }
+
+    #[test]
+    fn unchecked_folder_and_task_items_are_skipped_and_logged() {
+        let b = FakeBackend::potato_pc_lengkap();
+        let l = temp_log("centang-t4");
+        let opts = PlanOptions { disabled_tweaks: vec![], skip_items: vec!["startup:folder:user:Zoom.lnk".into(), "startup:task:\\GoogleUpdateTaskMachineCore{6A2B}".into()] };
+        let o = run_apply(&b, &l, Mode::Kentang, &opts, T0);
+        assert!(o.ok);
+        let zoom = Target::StartupFile { scope: "user".into(), name: "Zoom.lnk".into(), backup: plan::backup_rel("LAPTOP-BUDI", "user", "Zoom.lnk", T0) };
+        assert_eq!(b.read(&zoom), Value::Shortcut { location: FileLocation::Startup });
+        assert_eq!(b.read(&Target::ScheduledTask { path: "\\".into(), name: "GoogleUpdateTaskMachineCore{6A2B}".into() }), Value::Task { enabled: true });
+        let e = o.entry.unwrap();
+        for label in ["Zoom", "GoogleUpdateTaskMachineCore{6A2B}"] {
+            let c = e.perubahan.iter().find(|c| c.label == label).unwrap();
+            assert_eq!(c.status, ChangeStatus::Dilewati);
+            assert_eq!(c.keterangan.as_deref(), Some("Tidak dicentang pengguna"));
+        }
+    }
+
+    #[test]
+    fn seimbang_and_normal_defaults_never_touch_startup() {
+        let b = FakeBackend::potato_pc_lengkap();
+        let l = temp_log("seimbang-t4");
+        let s = preview(&b, &l.0, Mode::Seimbang, &PlanOptions::default(), T0).unwrap();
+        assert!(!s.groups.iter().any(|g| g.tweak_id == "startup-off" || g.tweak_id == "services-manual"));
+        let n = preview(&b, &l.0, Mode::Normal, &PlanOptions::default(), T0).unwrap();
+        assert!(!n.groups.iter().any(|g| g.tweak_id == "startup-off"));
+    }
+
+    #[test]
+    fn background_apps_keep_hardware_protection_from_tahap_3() {
+        let b = FakeBackend::potato_pc_lengkap();
+        let inv = b.inventory().unwrap();
+        let realtek = inv.apps.iter().find(|a| a.name.starts_with("RealtekSemiconductorCorp")).unwrap();
+        assert!(!plan::app_is_candidate(realtek), "pelonggaran tahap 4 hanya untuk startup");
     }
 }

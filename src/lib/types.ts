@@ -131,6 +131,12 @@ export interface PreviewChange {
   willChange: boolean
   optional: boolean
   note: string | null
+  /** Sumber program startup: "Registry", "Folder Startup", "Tugas Terjadwal" (tahap 4). */
+  source: string | null
+  /** Perintah / jalur program (tahap 4). */
+  detail: string | null
+  /** Efek mematikan item ini, untuk pembantu hardware & pembaru (tahap 4). */
+  effect: string | null
 }
 
 export interface PreviewGroup {
@@ -177,4 +183,87 @@ export type PresetEvent = { step: 'reading' } | { step: 'restorePoint' } | { ste
 export interface PresetRequest {
   disabledTweaks: string[]
   skipItems: string[]
+}
+
+// ---------------------------------------------------------------- Bersihkan File Sampah (tahap 4)
+
+export type CleanJenis = 'temp' | 'browserCache' | 'updateCache' | 'recycleBin' | 'windowsOld'
+
+export interface KindPreview {
+  jenis: CleanJenis
+  label: string
+  description: string
+  bytes: number
+  files: number
+  approximate: boolean
+  locations: string[]
+  selectedByDefault: boolean
+  notes: string[]
+}
+
+export interface WindowsOldPreview {
+  bytes: number
+  files: number
+  approximate: boolean
+  location: string
+  createdMs: number | null
+  warning: string
+}
+
+export interface CleanPreview {
+  kinds: KindPreview[]
+  windowsOld: WindowsOldPreview | null
+  hiberfil: number | null
+  pagefile: number | null
+  runningBrowsers: string[]
+  notes: string[]
+}
+
+export interface CleanRequest {
+  kinds: CleanJenis[]
+  windowsOld: boolean
+}
+
+export type KindStatus = 'berhasil' | 'sebagian' | 'gagal'
+
+export interface KindRecord {
+  jenis: CleanJenis
+  label: string
+  lokasi: string[]
+  fileTerhapus: number
+  byteDibebaskan: number
+  dilewati: number
+  status: KindStatus
+  catatan: string[]
+}
+
+export interface CleanEntry {
+  id: string
+  mesin: string
+  namaPc: string
+  waktu: number
+  jenis: KindRecord[]
+}
+
+export interface CleanOutcome {
+  ok: boolean
+  error: PresetError | null
+  entry: CleanEntry | null
+  freedBytes: number
+  deletedFiles: number
+  skippedFiles: number
+  failures: { label: string; reason: string }[]
+}
+
+export type CleanEvent =
+  | { step: 'preparing' }
+  | { step: 'cleaning'; jenis: CleanJenis; label: string; index: number; total: number }
+  | { step: 'saving' }
+
+export interface CleanStatus {
+  isWindows: boolean
+  isAdmin: boolean
+  last: CleanEntry | null
+  logPath: string
+  error: string | null
 }

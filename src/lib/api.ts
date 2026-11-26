@@ -3,6 +3,7 @@
 // tanpa harus build Rust.
 import type { AppInfo, Category, ScanEvent, ScanReport } from './types'
 import type { Outcome, PresetError, PresetEvent, PresetMode, PresetRequest, PresetStatus, Preview } from './types'
+import type { CleanEntry, CleanEvent, CleanJenis, CleanOutcome, CleanPreview, CleanRequest, CleanStatus, KindRecord } from './types'
 import mockReport from './mock-report.json'
 
 export const isTauri = (): boolean => typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window
@@ -113,6 +114,7 @@ type PresetData = {
   preview: Record<PresetMode, Preview>
   after: Record<PresetMode, MockAfter>
   restoreFailed: Outcome
+  cleanup: { status: CleanStatus; preview: CleanPreview; records: Record<CleanJenis, KindRecord>; entryTemplate: CleanEntry }
 }
 // Dimuat hanya di mode pratinjau (file terpisah), supaya tidak ikut membebani aplikasi Windows.
 let presetData: PresetData
@@ -120,6 +122,7 @@ async function loadMock() {
   if (!presetData) {
     presetData = (await import('./mock-preset.json')).default as unknown as PresetData
     mockStatus = presetData.status
+    mockCleanStatus = presetData.cleanup.status
   }
 }
 /** Mode yang "sedang diterapkan" di PC tiruan; null = belum ada perubahan. */
@@ -218,3 +221,74 @@ async function mockPresetRevert(onEvent: (e: PresetEvent) => void): Promise<Outc
   mockApplied = null
   return structuredClone(r.revert)
 }
+
+// ---------------------------------------------------------------- Bersihkan File Sampah (tahap 4)
+
+export async function cleanupStatus(): Promise<CleanStatus> {
+  if (isTauri()) {
+    const { invoke } = await import('@tauri-apps/api/core')
+    return invoke<CleanStatus>('cleanup_status')
+  }
+  await loadMock()
+  return structuredClone(mockCleanStatus)
+}
+
+export async function cleanupPreview(): Promise<{ preview: CleanPreview | null; error: PresetError | null }> {
+  if (isTauri()) {
+    const { invoke } = await import('@tauri-apps/api/core')
+    return invoke('cleanup_preview')
+  }
+  await loadMock()
+  await sleep(1400)
+  const p = structuredClone(presetData.cleanup.preview)
+  // Setelah dibersihkan, angka jenis yang sudah dibersihkan ikut turun.
+  for (const k of p.kinds) {
+    if (mockCleaned.has(k.jenis)) {
+      k.bytes = Math.round(k.bytes * 0.06)
+      k.files = Math.round(k.files * 0.18)
+    }
+  }
+  if (mockCleaned.has('windowsOld')) p.windowsOld = null
+  return { preview: p, error: null }
+}
+
+export async function cleanupApply(request: CleanRequest, onEvent: (e: CleanEvent) => void): Promise<CleanOutcome> {
+  if (isTauri()) {
+    const { invoke, Channel } = await import('@tauri-apps/api/core')
+    const channel = new Channel<CleanEvent>()
+    channel.onmessage = onEvent
+    return invoke<CleanOutcome>('cleanup_apply', { request, onEvent: channel })
+  }
+  await loadMock()
+  // Urutan & aturan sama dengan Rust: Windows.old hanya lewat centangnya sendiri.
+  const order: CleanJenis[] = ['temp', 'browserCache', 'updateCache', 'recycleBin']
+  const chosen = order.filter((j) => request.kinds.includes(j))
+  if (request.windowsOld) chosen.push('windowsOld')
+  onEvent({ step: 'preparing' })
+  await sleep(500)
+  const records: KindRecord[] = []
+  for (const [i, j] of chosen.entries()) {
+    const r = structuredClone(presetData.cleanup.records[j])
+    onEvent({ step: 'cleaning', jenis: j, label: r.label, index: i, total: chosen.length })
+    await sleep(j === 'windowsOld' ? 2600 : 1100)
+    records.push(r)
+    mockCleaned.add(j)
+  }
+  onEvent({ step: 'saving' })
+  await sleep(300)
+  const entry: CleanEntry = { ...structuredClone(presetData.cleanup.entryTemplate), jenis: records }
+  mockCleanStatus = { ...mockCleanStatus, last: entry }
+  const sum = (f: (r: KindRecord) => number) => records.reduce((a, r) => a + f(r), 0)
+  return {
+    ok: true,
+    error: null,
+    entry,
+    freedBytes: sum((r) => r.byteDibebaskan),
+    deletedFiles: sum((r) => r.fileTerhapus),
+    skippedFiles: sum((r) => r.dilewati),
+    failures: [],
+  }
+}
+
+let mockCleanStatus: CleanStatus
+const mockCleaned = new Set<CleanJenis>()

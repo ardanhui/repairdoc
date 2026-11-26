@@ -2,7 +2,7 @@
   "after": {
     "kentang": {
       "outcome": {
-        "changed": 19,
+        "changed": 26,
         "entry": {
           "dikembalikan": false,
           "hasilPengembalian": [],
@@ -454,6 +454,158 @@
               "tweakId": "startup-off"
             },
             {
+              "itemKey": "startup:HKLM:RtHDVCpl",
+              "keterangan": null,
+              "label": "RtHDVCpl",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "RtHDVCpl",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → RtHDVCpl",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:HKLM32:NvBackend",
+              "keterangan": null,
+              "label": "NvBackend",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "NvBackend",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32 → NvBackend",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:HKLM:SynTPEnh",
+              "keterangan": null,
+              "label": "SynTPEnh",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "SynTPEnh",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → SynTPEnh",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:folder:user:Zoom.lnk",
+              "keterangan": null,
+              "label": "Zoom",
+              "nilaiBaru": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/pengguna/Zoom.lnk",
+                "kind": "startupFile",
+                "name": "Zoom.lnk",
+                "scope": "user"
+              },
+              "targetTeks": "Folder Startup (pengguna)\\Zoom.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:folder:common:ATK Hotkey.lnk",
+              "keterangan": null,
+              "label": "ATK Hotkey",
+              "nilaiBaru": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/semua-pengguna/ATK Hotkey.lnk",
+                "kind": "startupFile",
+                "name": "ATK Hotkey.lnk",
+                "scope": "common"
+              },
+              "targetTeks": "Folder Startup (semua pengguna)\\ATK Hotkey.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:task:\\GoogleUpdateTaskMachineCore{6A2B}",
+              "keterangan": null,
+              "label": "GoogleUpdateTaskMachineCore{6A2B}",
+              "nilaiBaru": {
+                "enabled": false,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": true,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "GoogleUpdateTaskMachineCore{6A2B}",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\GoogleUpdateTaskMachineCore{6A2B}",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:task:\\Opera scheduled assistant Autoupdate 1700000000",
+              "keterangan": null,
+              "label": "Opera scheduled assistant Autoupdate 1700000000",
+              "nilaiBaru": {
+                "enabled": false,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": true,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "Opera scheduled assistant Autoupdate 1700000000",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\Opera scheduled assistant Autoupdate 1700000000",
+              "tweakId": "startup-off"
+            },
+            {
               "itemKey": "service:XblGameSave",
               "keterangan": "Sudah sesuai",
               "label": "Penyimpanan game Xbox (XblGameSave)",
@@ -646,18 +798,21 @@
         "skipped": 7
       },
       "previewNormal": {
-        "changeCount": 19,
+        "changeCount": 26,
         "groups": [
           {
             "changes": [
               {
                 "current": "High performance",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:power",
-                "key": "revert:1795675800000-mode-kentang:28",
+                "key": "revert:1795675800000-mode-kentang:35",
                 "label": "Power plan aktif",
                 "new": "Power saver",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "Power plan aktif",
                 "willChange": true
               }
@@ -671,12 +826,15 @@
             "changes": [
               {
                 "current": "Manual",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:service:MapsBroker",
-                "key": "revert:1795675800000-mode-kentang:26",
+                "key": "revert:1795675800000-mode-kentang:33",
                 "label": "Peta offline (Downloaded Maps Manager) (MapsBroker)",
                 "new": "Otomatis (tertunda)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "Service MapsBroker",
                 "willChange": true
               }
@@ -689,35 +847,142 @@
           {
             "changes": [
               {
+                "current": "Dinonaktifkan",
+                "detail": null,
+                "effect": null,
+                "itemKey": "revert:startup:task:\\Opera scheduled assistant Autoupdate 1700000000",
+                "key": "revert:1795675800000-mode-kentang:26",
+                "label": "Opera scheduled assistant Autoupdate 1700000000",
+                "new": "Nyala saat masuk Windows",
+                "note": null,
+                "optional": false,
+                "source": null,
+                "targetText": "Tugas terjadwal \\Opera scheduled assistant Autoupdate 1700000000",
+                "willChange": true
+              },
+              {
+                "current": "Dinonaktifkan",
+                "detail": null,
+                "effect": null,
+                "itemKey": "revert:startup:task:\\GoogleUpdateTaskMachineCore{6A2B}",
+                "key": "revert:1795675800000-mode-kentang:25",
+                "label": "GoogleUpdateTaskMachineCore{6A2B}",
+                "new": "Nyala saat masuk Windows",
+                "note": null,
+                "optional": false,
+                "source": null,
+                "targetText": "Tugas terjadwal \\GoogleUpdateTaskMachineCore{6A2B}",
+                "willChange": true
+              },
+              {
+                "current": "Tidak ikut menyala (shortcut di folder cadangan)",
+                "detail": null,
+                "effect": null,
+                "itemKey": "revert:startup:folder:common:ATK Hotkey.lnk",
+                "key": "revert:1795675800000-mode-kentang:24",
+                "label": "ATK Hotkey",
+                "new": "Nyala saat masuk Windows",
+                "note": null,
+                "optional": false,
+                "source": null,
+                "targetText": "Folder Startup (semua pengguna)\\ATK Hotkey.lnk",
+                "willChange": true
+              },
+              {
+                "current": "Tidak ikut menyala (shortcut di folder cadangan)",
+                "detail": null,
+                "effect": null,
+                "itemKey": "revert:startup:folder:user:Zoom.lnk",
+                "key": "revert:1795675800000-mode-kentang:23",
+                "label": "Zoom",
+                "new": "Nyala saat masuk Windows",
+                "note": null,
+                "optional": false,
+                "source": null,
+                "targetText": "Folder Startup (pengguna)\\Zoom.lnk",
+                "willChange": true
+              },
+              {
                 "current": "Tidak ikut menyala",
+                "detail": null,
+                "effect": null,
+                "itemKey": "revert:startup:HKLM:SynTPEnh",
+                "key": "revert:1795675800000-mode-kentang:22",
+                "label": "SynTPEnh",
+                "new": "Nyala saat PC menyala",
+                "note": null,
+                "optional": false,
+                "source": null,
+                "targetText": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → SynTPEnh",
+                "willChange": true
+              },
+              {
+                "current": "Tidak ikut menyala",
+                "detail": null,
+                "effect": null,
+                "itemKey": "revert:startup:HKLM32:NvBackend",
+                "key": "revert:1795675800000-mode-kentang:21",
+                "label": "NvBackend",
+                "new": "Nyala saat PC menyala",
+                "note": null,
+                "optional": false,
+                "source": null,
+                "targetText": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32 → NvBackend",
+                "willChange": true
+              },
+              {
+                "current": "Tidak ikut menyala",
+                "detail": null,
+                "effect": null,
+                "itemKey": "revert:startup:HKLM:RtHDVCpl",
+                "key": "revert:1795675800000-mode-kentang:20",
+                "label": "RtHDVCpl",
+                "new": "Nyala saat PC menyala",
+                "note": null,
+                "optional": false,
+                "source": null,
+                "targetText": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → RtHDVCpl",
+                "willChange": true
+              },
+              {
+                "current": "Tidak ikut menyala",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:startup:HKLM32:uTorrent",
                 "key": "revert:1795675800000-mode-kentang:19",
                 "label": "uTorrent",
                 "new": "Nyala saat PC menyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32 → uTorrent",
                 "willChange": true
               },
               {
                 "current": "Tidak ikut menyala",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:startup:HKCU:Steam",
                 "key": "revert:1795675800000-mode-kentang:18",
                 "label": "Steam",
                 "new": "Nyala saat PC menyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → Steam",
                 "willChange": true
               },
               {
                 "current": "Tidak ikut menyala",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:startup:HKCU:Spotify",
                 "key": "revert:1795675800000-mode-kentang:17",
                 "label": "Spotify",
                 "new": "Nyala saat PC menyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → Spotify",
                 "willChange": true
               }
@@ -731,67 +996,85 @@
             "changes": [
               {
                 "current": "Tidak boleh jalan di latar",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:bg:king.com.CandyCrushSaga_kgqvnymyfvs32",
                 "key": "revert:1795675800000-mode-kentang:16",
                 "label": "Candy Crush Saga",
                 "new": "Boleh jalan di latar (bawaan)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\king.com.CandyCrushSaga_kgqvnymyfvs32 → DisabledByUser",
                 "willChange": true
               },
               {
                 "current": "Tidak boleh jalan di latar",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:bg:king.com.CandyCrushSaga_kgqvnymyfvs32",
                 "key": "revert:1795675800000-mode-kentang:15",
                 "label": "Candy Crush Saga",
                 "new": "Boleh jalan di latar (bawaan)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\king.com.CandyCrushSaga_kgqvnymyfvs32 → Disabled",
                 "willChange": true
               },
               {
                 "current": "Tidak boleh jalan di latar",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:bg:5319275A.WhatsAppDesktop_cv1g1gvanyjgm",
                 "key": "revert:1795675800000-mode-kentang:14",
                 "label": "WhatsApp",
                 "new": "Boleh jalan di latar (bawaan)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm → DisabledByUser",
                 "willChange": true
               },
               {
                 "current": "Tidak boleh jalan di latar",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:bg:5319275A.WhatsAppDesktop_cv1g1gvanyjgm",
                 "key": "revert:1795675800000-mode-kentang:13",
                 "label": "WhatsApp",
                 "new": "Boleh jalan di latar (bawaan)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm → Disabled",
                 "willChange": true
               },
               {
                 "current": "Tidak boleh jalan di latar",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:bg:SpotifyAB.SpotifyMusic_zpdnekdrzrea0",
                 "key": "revert:1795675800000-mode-kentang:12",
                 "label": "Spotify",
                 "new": "Boleh jalan di latar (bawaan)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\SpotifyAB.SpotifyMusic_zpdnekdrzrea0 → DisabledByUser",
                 "willChange": true
               },
               {
                 "current": "Tidak boleh jalan di latar",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:bg:SpotifyAB.SpotifyMusic_zpdnekdrzrea0",
                 "key": "revert:1795675800000-mode-kentang:11",
                 "label": "Spotify",
                 "new": "Boleh jalan di latar (bawaan)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\SpotifyAB.SpotifyMusic_zpdnekdrzrea0 → Disabled",
                 "willChange": true
               }
@@ -805,34 +1088,43 @@
             "changes": [
               {
                 "current": "Dilarang",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:game-dvr-off:AllowGameDVR",
                 "key": "revert:1795675800000-mode-kentang:10",
                 "label": "Kebijakan Game DVR untuk semua pengguna PC",
                 "new": "Tidak diatur (bawaan)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR → AllowGameDVR",
                 "willChange": true
               },
               {
                 "current": "Mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:game-dvr-off:AppCaptureEnabled",
                 "key": "revert:1795675800000-mode-kentang:9",
                 "label": "Rekam klip & screenshot lewat Game Bar",
                 "new": "Belum diatur (bawaan Windows)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR → AppCaptureEnabled",
                 "willChange": true
               },
               {
                 "current": "Mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:game-dvr-off:GameDVR_Enabled",
                 "key": "revert:1795675800000-mode-kentang:8",
                 "label": "Perekam game (Game DVR)",
                 "new": "Nyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\System\\GameConfigStore → GameDVR_Enabled",
                 "willChange": true
               }
@@ -846,12 +1138,15 @@
             "changes": [
               {
                 "current": "Mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:animations-off:MinAnimate",
                 "key": "revert:1795675800000-mode-kentang:7",
                 "label": "Animasi jendela saat dikecilkan/dibesarkan",
                 "new": "Nyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Control Panel\\Desktop\\WindowMetrics → MinAnimate",
                 "willChange": true
               }
@@ -865,12 +1160,15 @@
             "changes": [
               {
                 "current": "Mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:transparency-off:EnableTransparency",
                 "key": "revert:1795675800000-mode-kentang:6",
                 "label": "Efek transparan taskbar & menu Start",
                 "new": "Nyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize → EnableTransparency",
                 "willChange": true
               }
@@ -884,67 +1182,85 @@
             "changes": [
               {
                 "current": "Mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:visual-best-performance:DragFullWindows",
                 "key": "revert:1795675800000-mode-kentang:5",
                 "label": "Isi jendela saat digeser",
                 "new": "Nyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Control Panel\\Desktop → DragFullWindows",
                 "willChange": true
               },
               {
                 "current": "Mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:visual-best-performance:ListviewShadow",
                 "key": "revert:1795675800000-mode-kentang:4",
                 "label": "Bayangan teks ikon desktop",
                 "new": "Nyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced → ListviewShadow",
                 "willChange": true
               },
               {
                 "current": "Mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:visual-best-performance:ListviewAlphaSelect",
                 "key": "revert:1795675800000-mode-kentang:3",
                 "label": "Kotak pilih transparan di File Explorer",
                 "new": "Nyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced → ListviewAlphaSelect",
                 "willChange": true
               },
               {
                 "current": "Mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:visual-best-performance:TaskbarAnimations",
                 "key": "revert:1795675800000-mode-kentang:2",
                 "label": "Animasi taskbar",
                 "new": "Belum diatur (bawaan Windows)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced → TaskbarAnimations",
                 "willChange": true
               },
               {
                 "current": "Semua efek mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:visual-best-performance:UserPreferencesMask",
                 "key": "revert:1795675800000-mode-kentang:1",
                 "label": "Animasi menu, tooltip, dan bayangan",
                 "new": "Sebagian efek nyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Control Panel\\Desktop → UserPreferencesMask",
                 "willChange": true
               },
               {
                 "current": "Performa terbaik",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:visual-best-performance:VisualFXSetting",
                 "key": "revert:1795675800000-mode-kentang:0",
                 "label": "Pilihan di Performance Options: \"Adjust for best performance\"",
                 "new": "Biar Windows yang memilih",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects → VisualFXSetting",
                 "willChange": true
               }
@@ -965,7 +1281,7 @@
         "sameCount": 0
       },
       "revert": {
-        "changed": 19,
+        "changed": 26,
         "entry": {
           "dikembalikan": true,
           "hasilPengembalian": [
@@ -1007,6 +1323,158 @@
               },
               "targetTeks": "Service MapsBroker",
               "tweakId": "services-manual"
+            },
+            {
+              "itemKey": "revert:startup:task:\\Opera scheduled assistant Autoupdate 1700000000",
+              "keterangan": null,
+              "label": "Opera scheduled assistant Autoupdate 1700000000",
+              "nilaiBaru": {
+                "enabled": true,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": false,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "Opera scheduled assistant Autoupdate 1700000000",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\Opera scheduled assistant Autoupdate 1700000000",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "revert:startup:task:\\GoogleUpdateTaskMachineCore{6A2B}",
+              "keterangan": null,
+              "label": "GoogleUpdateTaskMachineCore{6A2B}",
+              "nilaiBaru": {
+                "enabled": true,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": false,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "GoogleUpdateTaskMachineCore{6A2B}",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\GoogleUpdateTaskMachineCore{6A2B}",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "revert:startup:folder:common:ATK Hotkey.lnk",
+              "keterangan": null,
+              "label": "ATK Hotkey",
+              "nilaiBaru": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/semua-pengguna/ATK Hotkey.lnk",
+                "kind": "startupFile",
+                "name": "ATK Hotkey.lnk",
+                "scope": "common"
+              },
+              "targetTeks": "Folder Startup (semua pengguna)\\ATK Hotkey.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "revert:startup:folder:user:Zoom.lnk",
+              "keterangan": null,
+              "label": "Zoom",
+              "nilaiBaru": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/pengguna/Zoom.lnk",
+                "kind": "startupFile",
+                "name": "Zoom.lnk",
+                "scope": "user"
+              },
+              "targetTeks": "Folder Startup (pengguna)\\Zoom.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "revert:startup:HKLM:SynTPEnh",
+              "keterangan": null,
+              "label": "SynTPEnh",
+              "nilaiBaru": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "nilaiLama": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "SynTPEnh",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → SynTPEnh",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "revert:startup:HKLM32:NvBackend",
+              "keterangan": null,
+              "label": "NvBackend",
+              "nilaiBaru": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "nilaiLama": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "NvBackend",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32 → NvBackend",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "revert:startup:HKLM:RtHDVCpl",
+              "keterangan": null,
+              "label": "RtHDVCpl",
+              "nilaiBaru": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "nilaiLama": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "RtHDVCpl",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → RtHDVCpl",
+              "tweakId": "startup-off"
             },
             {
               "itemKey": "revert:startup:HKLM32:uTorrent",
@@ -1897,6 +2365,158 @@
               "tweakId": "startup-off"
             },
             {
+              "itemKey": "startup:HKLM:RtHDVCpl",
+              "keterangan": null,
+              "label": "RtHDVCpl",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "RtHDVCpl",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → RtHDVCpl",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:HKLM32:NvBackend",
+              "keterangan": null,
+              "label": "NvBackend",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "NvBackend",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32 → NvBackend",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:HKLM:SynTPEnh",
+              "keterangan": null,
+              "label": "SynTPEnh",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "SynTPEnh",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → SynTPEnh",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:folder:user:Zoom.lnk",
+              "keterangan": null,
+              "label": "Zoom",
+              "nilaiBaru": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/pengguna/Zoom.lnk",
+                "kind": "startupFile",
+                "name": "Zoom.lnk",
+                "scope": "user"
+              },
+              "targetTeks": "Folder Startup (pengguna)\\Zoom.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:folder:common:ATK Hotkey.lnk",
+              "keterangan": null,
+              "label": "ATK Hotkey",
+              "nilaiBaru": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/semua-pengguna/ATK Hotkey.lnk",
+                "kind": "startupFile",
+                "name": "ATK Hotkey.lnk",
+                "scope": "common"
+              },
+              "targetTeks": "Folder Startup (semua pengguna)\\ATK Hotkey.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:task:\\GoogleUpdateTaskMachineCore{6A2B}",
+              "keterangan": null,
+              "label": "GoogleUpdateTaskMachineCore{6A2B}",
+              "nilaiBaru": {
+                "enabled": false,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": true,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "GoogleUpdateTaskMachineCore{6A2B}",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\GoogleUpdateTaskMachineCore{6A2B}",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:task:\\Opera scheduled assistant Autoupdate 1700000000",
+              "keterangan": null,
+              "label": "Opera scheduled assistant Autoupdate 1700000000",
+              "nilaiBaru": {
+                "enabled": false,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": true,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "Opera scheduled assistant Autoupdate 1700000000",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\Opera scheduled assistant Autoupdate 1700000000",
+              "tweakId": "startup-off"
+            },
+            {
               "itemKey": "service:XblGameSave",
               "keterangan": "Sudah sesuai",
               "label": "Penyimpanan game Xbox (XblGameSave)",
@@ -2542,6 +3162,158 @@
                 "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32"
               },
               "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32 → uTorrent",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:HKLM:RtHDVCpl",
+              "keterangan": null,
+              "label": "RtHDVCpl",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "RtHDVCpl",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → RtHDVCpl",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:HKLM32:NvBackend",
+              "keterangan": null,
+              "label": "NvBackend",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "NvBackend",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32 → NvBackend",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:HKLM:SynTPEnh",
+              "keterangan": null,
+              "label": "SynTPEnh",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "SynTPEnh",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → SynTPEnh",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:folder:user:Zoom.lnk",
+              "keterangan": null,
+              "label": "Zoom",
+              "nilaiBaru": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/pengguna/Zoom.lnk",
+                "kind": "startupFile",
+                "name": "Zoom.lnk",
+                "scope": "user"
+              },
+              "targetTeks": "Folder Startup (pengguna)\\Zoom.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:folder:common:ATK Hotkey.lnk",
+              "keterangan": null,
+              "label": "ATK Hotkey",
+              "nilaiBaru": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/semua-pengguna/ATK Hotkey.lnk",
+                "kind": "startupFile",
+                "name": "ATK Hotkey.lnk",
+                "scope": "common"
+              },
+              "targetTeks": "Folder Startup (semua pengguna)\\ATK Hotkey.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:task:\\GoogleUpdateTaskMachineCore{6A2B}",
+              "keterangan": null,
+              "label": "GoogleUpdateTaskMachineCore{6A2B}",
+              "nilaiBaru": {
+                "enabled": false,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": true,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "GoogleUpdateTaskMachineCore{6A2B}",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\GoogleUpdateTaskMachineCore{6A2B}",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:task:\\Opera scheduled assistant Autoupdate 1700000000",
+              "keterangan": null,
+              "label": "Opera scheduled assistant Autoupdate 1700000000",
+              "nilaiBaru": {
+                "enabled": false,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": true,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "Opera scheduled assistant Autoupdate 1700000000",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\Opera scheduled assistant Autoupdate 1700000000",
               "tweakId": "startup-off"
             },
             {
@@ -3240,6 +4012,158 @@
               "tweakId": "startup-off"
             },
             {
+              "itemKey": "startup:HKLM:RtHDVCpl",
+              "keterangan": null,
+              "label": "RtHDVCpl",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "RtHDVCpl",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → RtHDVCpl",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:HKLM32:NvBackend",
+              "keterangan": null,
+              "label": "NvBackend",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "NvBackend",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32 → NvBackend",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:HKLM:SynTPEnh",
+              "keterangan": null,
+              "label": "SynTPEnh",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "SynTPEnh",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → SynTPEnh",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:folder:user:Zoom.lnk",
+              "keterangan": null,
+              "label": "Zoom",
+              "nilaiBaru": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/pengguna/Zoom.lnk",
+                "kind": "startupFile",
+                "name": "Zoom.lnk",
+                "scope": "user"
+              },
+              "targetTeks": "Folder Startup (pengguna)\\Zoom.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:folder:common:ATK Hotkey.lnk",
+              "keterangan": null,
+              "label": "ATK Hotkey",
+              "nilaiBaru": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/semua-pengguna/ATK Hotkey.lnk",
+                "kind": "startupFile",
+                "name": "ATK Hotkey.lnk",
+                "scope": "common"
+              },
+              "targetTeks": "Folder Startup (semua pengguna)\\ATK Hotkey.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:task:\\GoogleUpdateTaskMachineCore{6A2B}",
+              "keterangan": null,
+              "label": "GoogleUpdateTaskMachineCore{6A2B}",
+              "nilaiBaru": {
+                "enabled": false,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": true,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "GoogleUpdateTaskMachineCore{6A2B}",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\GoogleUpdateTaskMachineCore{6A2B}",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:task:\\Opera scheduled assistant Autoupdate 1700000000",
+              "keterangan": null,
+              "label": "Opera scheduled assistant Autoupdate 1700000000",
+              "nilaiBaru": {
+                "enabled": false,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": true,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "Opera scheduled assistant Autoupdate 1700000000",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\Opera scheduled assistant Autoupdate 1700000000",
+              "tweakId": "startup-off"
+            },
+            {
               "itemKey": "service:XblGameSave",
               "keterangan": "Sudah sesuai",
               "label": "Penyimpanan game Xbox (XblGameSave)",
@@ -3556,6 +4480,158 @@
               },
               "targetTeks": "Service MapsBroker",
               "tweakId": "services-manual"
+            },
+            {
+              "itemKey": "revert:startup:task:\\Opera scheduled assistant Autoupdate 1700000000",
+              "keterangan": null,
+              "label": "Opera scheduled assistant Autoupdate 1700000000",
+              "nilaiBaru": {
+                "enabled": true,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": false,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "Opera scheduled assistant Autoupdate 1700000000",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\Opera scheduled assistant Autoupdate 1700000000",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "revert:startup:task:\\GoogleUpdateTaskMachineCore{6A2B}",
+              "keterangan": null,
+              "label": "GoogleUpdateTaskMachineCore{6A2B}",
+              "nilaiBaru": {
+                "enabled": true,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": false,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "GoogleUpdateTaskMachineCore{6A2B}",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\GoogleUpdateTaskMachineCore{6A2B}",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "revert:startup:folder:common:ATK Hotkey.lnk",
+              "keterangan": null,
+              "label": "ATK Hotkey",
+              "nilaiBaru": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/semua-pengguna/ATK Hotkey.lnk",
+                "kind": "startupFile",
+                "name": "ATK Hotkey.lnk",
+                "scope": "common"
+              },
+              "targetTeks": "Folder Startup (semua pengguna)\\ATK Hotkey.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "revert:startup:folder:user:Zoom.lnk",
+              "keterangan": null,
+              "label": "Zoom",
+              "nilaiBaru": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/pengguna/Zoom.lnk",
+                "kind": "startupFile",
+                "name": "Zoom.lnk",
+                "scope": "user"
+              },
+              "targetTeks": "Folder Startup (pengguna)\\Zoom.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "revert:startup:HKLM:SynTPEnh",
+              "keterangan": null,
+              "label": "SynTPEnh",
+              "nilaiBaru": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "nilaiLama": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "SynTPEnh",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → SynTPEnh",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "revert:startup:HKLM32:NvBackend",
+              "keterangan": null,
+              "label": "NvBackend",
+              "nilaiBaru": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "nilaiLama": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "NvBackend",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32 → NvBackend",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "revert:startup:HKLM:RtHDVCpl",
+              "keterangan": null,
+              "label": "RtHDVCpl",
+              "nilaiBaru": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "nilaiLama": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "RtHDVCpl",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → RtHDVCpl",
+              "tweakId": "startup-off"
             },
             {
               "itemKey": "revert:startup:HKLM32:uTorrent",
@@ -4446,6 +5522,158 @@
               "tweakId": "startup-off"
             },
             {
+              "itemKey": "startup:HKLM:RtHDVCpl",
+              "keterangan": null,
+              "label": "RtHDVCpl",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "RtHDVCpl",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → RtHDVCpl",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:HKLM32:NvBackend",
+              "keterangan": null,
+              "label": "NvBackend",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "NvBackend",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32 → NvBackend",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:HKLM:SynTPEnh",
+              "keterangan": null,
+              "label": "SynTPEnh",
+              "nilaiBaru": {
+                "hex": "0300000000dc265b727ddd01",
+                "type": "binary"
+              },
+              "nilaiLama": {
+                "keyExisted": true,
+                "type": "absent"
+              },
+              "status": "berhasil",
+              "target": {
+                "hive": "HKLM",
+                "kind": "registry",
+                "name": "SynTPEnh",
+                "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+              },
+              "targetTeks": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → SynTPEnh",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:folder:user:Zoom.lnk",
+              "keterangan": null,
+              "label": "Zoom",
+              "nilaiBaru": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/pengguna/Zoom.lnk",
+                "kind": "startupFile",
+                "name": "Zoom.lnk",
+                "scope": "user"
+              },
+              "targetTeks": "Folder Startup (pengguna)\\Zoom.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:folder:common:ATK Hotkey.lnk",
+              "keterangan": null,
+              "label": "ATK Hotkey",
+              "nilaiBaru": {
+                "location": "backup",
+                "type": "shortcut"
+              },
+              "nilaiLama": {
+                "location": "startup",
+                "type": "shortcut"
+              },
+              "status": "berhasil",
+              "target": {
+                "backup": "startup-cadangan/LAPTOP-BUDI/2026-11-26_065000/semua-pengguna/ATK Hotkey.lnk",
+                "kind": "startupFile",
+                "name": "ATK Hotkey.lnk",
+                "scope": "common"
+              },
+              "targetTeks": "Folder Startup (semua pengguna)\\ATK Hotkey.lnk",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:task:\\GoogleUpdateTaskMachineCore{6A2B}",
+              "keterangan": null,
+              "label": "GoogleUpdateTaskMachineCore{6A2B}",
+              "nilaiBaru": {
+                "enabled": false,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": true,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "GoogleUpdateTaskMachineCore{6A2B}",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\GoogleUpdateTaskMachineCore{6A2B}",
+              "tweakId": "startup-off"
+            },
+            {
+              "itemKey": "startup:task:\\Opera scheduled assistant Autoupdate 1700000000",
+              "keterangan": null,
+              "label": "Opera scheduled assistant Autoupdate 1700000000",
+              "nilaiBaru": {
+                "enabled": false,
+                "type": "task"
+              },
+              "nilaiLama": {
+                "enabled": true,
+                "type": "task"
+              },
+              "status": "berhasil",
+              "target": {
+                "kind": "scheduledTask",
+                "name": "Opera scheduled assistant Autoupdate 1700000000",
+                "path": "\\"
+              },
+              "targetTeks": "Tugas terjadwal \\Opera scheduled assistant Autoupdate 1700000000",
+              "tweakId": "startup-off"
+            },
+            {
               "itemKey": "service:XblGameSave",
               "keterangan": "Sudah sesuai",
               "label": "Penyimpanan game Xbox (XblGameSave)",
@@ -4964,12 +6192,15 @@
             "changes": [
               {
                 "current": "Balanced",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:default:power",
                 "key": "revert:1795675800000-mode-normal:6",
                 "label": "Power plan aktif",
                 "new": "Power saver",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "Power plan aktif",
                 "willChange": true
               }
@@ -4983,12 +6214,15 @@
             "changes": [
               {
                 "current": "Nyala",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:default:game-dvr-off:AppCaptureEnabled",
                 "key": "revert:1795675800000-mode-normal:4",
                 "label": "Rekam klip & screenshot lewat Game Bar",
                 "new": "Belum diatur (bawaan Windows)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR → AppCaptureEnabled",
                 "willChange": true
               }
@@ -6241,12 +7475,15 @@
             "changes": [
               {
                 "current": "Balanced",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:power",
                 "key": "revert:1795675800000-mode-seimbang:5",
                 "label": "Power plan aktif",
                 "new": "Power saver",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "Power plan aktif",
                 "willChange": true
               }
@@ -6260,34 +7497,43 @@
             "changes": [
               {
                 "current": "Dilarang",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:game-dvr-off:AllowGameDVR",
                 "key": "revert:1795675800000-mode-seimbang:4",
                 "label": "Kebijakan Game DVR untuk semua pengguna PC",
                 "new": "Tidak diatur (bawaan)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR → AllowGameDVR",
                 "willChange": true
               },
               {
                 "current": "Mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:game-dvr-off:AppCaptureEnabled",
                 "key": "revert:1795675800000-mode-seimbang:3",
                 "label": "Rekam klip & screenshot lewat Game Bar",
                 "new": "Belum diatur (bawaan Windows)",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR → AppCaptureEnabled",
                 "willChange": true
               },
               {
                 "current": "Mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:game-dvr-off:GameDVR_Enabled",
                 "key": "revert:1795675800000-mode-seimbang:2",
                 "label": "Perekam game (Game DVR)",
                 "new": "Nyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\System\\GameConfigStore → GameDVR_Enabled",
                 "willChange": true
               }
@@ -6301,12 +7547,15 @@
             "changes": [
               {
                 "current": "Mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:animations-off:MinAnimate",
                 "key": "revert:1795675800000-mode-seimbang:1",
                 "label": "Animasi jendela saat dikecilkan/dibesarkan",
                 "new": "Nyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Control Panel\\Desktop\\WindowMetrics → MinAnimate",
                 "willChange": true
               }
@@ -6320,12 +7569,15 @@
             "changes": [
               {
                 "current": "Mati",
+                "detail": null,
+                "effect": null,
                 "itemKey": "revert:transparency-off:EnableTransparency",
                 "key": "revert:1795675800000-mode-seimbang:0",
                 "label": "Efek transparan taskbar & menu Start",
                 "new": "Nyala",
                 "note": null,
                 "optional": false,
+                "source": null,
                 "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize → EnableTransparency",
                 "willChange": true
               }
@@ -7505,75 +8757,272 @@
       }
     }
   },
+  "cleanup": {
+    "entryTemplate": {
+      "id": "1795675800000-bersihkan",
+      "jenis": [],
+      "mesin": "0b3c5e2a-1111-4c1d-9e0f-REPAIRDOC",
+      "namaPc": "LAPTOP-BUDI",
+      "waktu": 1795675800000
+    },
+    "preview": {
+      "hiberfil": 3436183552,
+      "kinds": [
+        {
+          "approximate": false,
+          "bytes": 1658847232,
+          "description": "File yang ditinggalkan program dan installer setelah selesai dipakai.",
+          "files": 9615,
+          "jenis": "temp",
+          "label": "File sementara",
+          "locations": [
+            "C:\\Users\\Budi\\AppData\\Local\\Temp",
+            "C:\\Windows\\Temp"
+          ],
+          "notes": [
+            "File yang dibuat atau diubah 24 jam terakhir dilewati, karena mungkin masih dipakai program atau installer.",
+            "File yang sedang dipakai program dilewati — itu normal, bukan galat."
+          ],
+          "selectedByDefault": true
+        },
+        {
+          "approximate": false,
+          "bytes": 1191182336,
+          "description": "Salinan gambar dan halaman web yang disimpan browser. Akan dibuat ulang otomatis saat browsing.",
+          "files": 7834,
+          "jenis": "browserCache",
+          "label": "Cache browser & internet",
+          "locations": [
+            "C:\\Users\\Budi\\AppData\\Local\\Microsoft\\Windows\\INetCache",
+            "C:\\Users\\Budi\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cache",
+            "C:\\Users\\Budi\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Code Cache",
+            "C:\\Users\\Budi\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Cache"
+          ],
+          "notes": [
+            "Edge sedang terbuka, jadi cache-nya dilewati. Tutup dulu browsernya kalau ingin ikut dibersihkan.",
+            "File yang sedang dipakai program dilewati — itu normal, bukan galat."
+          ],
+          "selectedByDefault": true
+        },
+        {
+          "approximate": false,
+          "bytes": 2040528896,
+          "description": "Unduhan Windows Update yang sudah dipasang. Kalau masih dibutuhkan, Windows mengunduhnya lagi.",
+          "files": 213,
+          "jenis": "updateCache",
+          "label": "Sisa unduhan Windows Update",
+          "locations": [
+            "C:\\Windows\\SoftwareDistribution\\Download"
+          ],
+          "notes": [
+            "File yang sedang dipakai Windows Update dilewati."
+          ],
+          "selectedByDefault": true
+        },
+        {
+          "approximate": false,
+          "bytes": 2899312640,
+          "description": "File yang sudah kamu hapus dan masih menunggu di Recycle Bin.",
+          "files": 59,
+          "jenis": "recycleBin",
+          "label": "Recycle Bin",
+          "locations": [
+            "C:\\$Recycle.Bin",
+            "D:\\$Recycle.Bin"
+          ],
+          "notes": [
+            "Isi Recycle Bin terhapus permanen. Periksa dulu kalau ada file yang masih ingin dikembalikan."
+          ],
+          "selectedByDefault": false
+        }
+      ],
+      "notes": [
+        "File yang dihapus tidak bisa dikembalikan. Catatan pembersihan hanya untuk riwayat, bukan tombol undo.",
+        "hiberfil.sys dan pagefile.sys adalah file sistem Windows, bukan sampah — hanya ditampilkan, tidak pernah dihapus."
+      ],
+      "pagefile": 2684354560,
+      "runningBrowsers": [
+        "Edge"
+      ],
+      "windowsOld": {
+        "approximate": false,
+        "bytes": 19971178496,
+        "createdMs": 1795157400000,
+        "files": 104522,
+        "location": "C:\\Windows.old",
+        "warning": "Windows.old dibutuhkan untuk kembali ke Windows lama dalam 10 hari setelah upgrade; menghapusnya tidak bisa dibatalkan."
+      }
+    },
+    "records": {
+      "browserCache": {
+        "byteDibebaskan": 878706688,
+        "catatan": [
+          "Cache Edge dilewati karena browsernya sedang terbuka.",
+          "103 file dilewati karena sedang dipakai."
+        ],
+        "dilewati": 1647,
+        "fileTerhapus": 6187,
+        "jenis": "browserCache",
+        "label": "Cache browser & internet",
+        "lokasi": [
+          "C:\\Users\\Budi\\AppData\\Local\\Microsoft\\Windows\\INetCache",
+          "C:\\Users\\Budi\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cache",
+          "C:\\Users\\Budi\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Code Cache",
+          "C:\\Users\\Budi\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Cache"
+        ],
+        "status": "sebagian"
+      },
+      "recycleBin": {
+        "byteDibebaskan": 2899312640,
+        "catatan": [],
+        "dilewati": 0,
+        "fileTerhapus": 59,
+        "jenis": "recycleBin",
+        "label": "Recycle Bin",
+        "lokasi": [
+          "C:\\$Recycle.Bin",
+          "D:\\$Recycle.Bin"
+        ],
+        "status": "berhasil"
+      },
+      "temp": {
+        "byteDibebaskan": 1486880768,
+        "catatan": [
+          "96 file dilewati karena sedang dipakai.",
+          "1.615 file dilewati karena masih baru (24 jam terakhir)."
+        ],
+        "dilewati": 1711,
+        "fileTerhapus": 7904,
+        "jenis": "temp",
+        "label": "File sementara",
+        "lokasi": [
+          "C:\\Users\\Budi\\AppData\\Local\\Temp",
+          "C:\\Windows\\Temp"
+        ],
+        "status": "sebagian"
+      },
+      "updateCache": {
+        "byteDibebaskan": 2024800256,
+        "catatan": [
+          "2 file dilewati karena sedang dipakai."
+        ],
+        "dilewati": 2,
+        "fileTerhapus": 211,
+        "jenis": "updateCache",
+        "label": "Sisa unduhan Windows Update",
+        "lokasi": [
+          "C:\\Windows\\SoftwareDistribution\\Download"
+        ],
+        "status": "sebagian"
+      },
+      "windowsOld": {
+        "byteDibebaskan": 19971178496,
+        "catatan": [],
+        "dilewati": 0,
+        "fileTerhapus": 104522,
+        "jenis": "windowsOld",
+        "label": "Sisa Windows lama (Windows.old)",
+        "lokasi": [
+          "C:\\Windows.old"
+        ],
+        "status": "berhasil"
+      }
+    },
+    "status": {
+      "error": null,
+      "isAdmin": true,
+      "isWindows": true,
+      "last": null,
+      "logPath": "E:\\RepairDoc\\RepairDoc-data\\cleanup-log.json"
+    }
+  },
   "preview": {
     "kentang": {
-      "changeCount": 19,
+      "changeCount": 26,
       "groups": [
         {
           "changes": [
             {
               "current": "Biar Windows yang memilih",
+              "detail": null,
+              "effect": null,
               "itemKey": "visual-best-performance:VisualFXSetting",
               "key": "visual-best-performance:VisualFXSetting",
               "label": "Pilihan di Performance Options: \"Adjust for best performance\"",
               "new": "Performa terbaik",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects → VisualFXSetting",
               "willChange": true
             },
             {
               "current": "Sebagian efek nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "visual-best-performance:UserPreferencesMask",
               "key": "visual-best-performance:UserPreferencesMask",
               "label": "Animasi menu, tooltip, dan bayangan",
               "new": "Semua efek mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Control Panel\\Desktop → UserPreferencesMask",
               "willChange": true
             },
             {
               "current": "Belum diatur (bawaan Windows)",
+              "detail": null,
+              "effect": null,
               "itemKey": "visual-best-performance:TaskbarAnimations",
               "key": "visual-best-performance:TaskbarAnimations",
               "label": "Animasi taskbar",
               "new": "Mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced → TaskbarAnimations",
               "willChange": true
             },
             {
               "current": "Nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "visual-best-performance:ListviewAlphaSelect",
               "key": "visual-best-performance:ListviewAlphaSelect",
               "label": "Kotak pilih transparan di File Explorer",
               "new": "Mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced → ListviewAlphaSelect",
               "willChange": true
             },
             {
               "current": "Nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "visual-best-performance:ListviewShadow",
               "key": "visual-best-performance:ListviewShadow",
               "label": "Bayangan teks ikon desktop",
               "new": "Mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced → ListviewShadow",
               "willChange": true
             },
             {
               "current": "Nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "visual-best-performance:DragFullWindows",
               "key": "visual-best-performance:DragFullWindows",
               "label": "Isi jendela saat digeser",
               "new": "Mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Control Panel\\Desktop → DragFullWindows",
               "willChange": true
             }
@@ -7587,12 +9036,15 @@
           "changes": [
             {
               "current": "Nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "transparency-off:EnableTransparency",
               "key": "transparency-off:EnableTransparency",
               "label": "Efek transparan taskbar & menu Start",
               "new": "Mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize → EnableTransparency",
               "willChange": true
             }
@@ -7606,12 +9058,15 @@
           "changes": [
             {
               "current": "Nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "animations-off:MinAnimate",
               "key": "animations-off:MinAnimate",
               "label": "Animasi jendela saat dikecilkan/dibesarkan",
               "new": "Mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Control Panel\\Desktop\\WindowMetrics → MinAnimate",
               "willChange": true
             }
@@ -7625,34 +9080,43 @@
           "changes": [
             {
               "current": "Nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "game-dvr-off:GameDVR_Enabled",
               "key": "game-dvr-off:GameDVR_Enabled",
               "label": "Perekam game (Game DVR)",
               "new": "Mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\System\\GameConfigStore → GameDVR_Enabled",
               "willChange": true
             },
             {
               "current": "Belum diatur (bawaan Windows)",
+              "detail": null,
+              "effect": null,
               "itemKey": "game-dvr-off:AppCaptureEnabled",
               "key": "game-dvr-off:AppCaptureEnabled",
               "label": "Rekam klip & screenshot lewat Game Bar",
               "new": "Mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR → AppCaptureEnabled",
               "willChange": true
             },
             {
               "current": "Tidak diatur (bawaan)",
+              "detail": null,
+              "effect": null,
               "itemKey": "game-dvr-off:AllowGameDVR",
               "key": "game-dvr-off:AllowGameDVR",
               "label": "Kebijakan Game DVR untuk semua pengguna PC",
               "new": "Dilarang",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR → AllowGameDVR",
               "willChange": true
             }
@@ -7666,67 +9130,85 @@
           "changes": [
             {
               "current": "Boleh jalan di latar (bawaan)",
+              "detail": null,
+              "effect": null,
               "itemKey": "bg:SpotifyAB.SpotifyMusic_zpdnekdrzrea0",
               "key": "bg:SpotifyAB.SpotifyMusic_zpdnekdrzrea0:Disabled",
               "label": "Spotify",
               "new": "Tidak boleh jalan di latar",
               "note": null,
               "optional": true,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\SpotifyAB.SpotifyMusic_zpdnekdrzrea0 → Disabled",
               "willChange": true
             },
             {
               "current": "Boleh jalan di latar (bawaan)",
+              "detail": null,
+              "effect": null,
               "itemKey": "bg:SpotifyAB.SpotifyMusic_zpdnekdrzrea0",
               "key": "bg:SpotifyAB.SpotifyMusic_zpdnekdrzrea0:DisabledByUser",
               "label": "Spotify",
               "new": "Tidak boleh jalan di latar",
               "note": null,
               "optional": true,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\SpotifyAB.SpotifyMusic_zpdnekdrzrea0 → DisabledByUser",
               "willChange": true
             },
             {
               "current": "Boleh jalan di latar (bawaan)",
+              "detail": null,
+              "effect": null,
               "itemKey": "bg:5319275A.WhatsAppDesktop_cv1g1gvanyjgm",
               "key": "bg:5319275A.WhatsAppDesktop_cv1g1gvanyjgm:Disabled",
               "label": "WhatsApp",
               "new": "Tidak boleh jalan di latar",
               "note": null,
               "optional": true,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm → Disabled",
               "willChange": true
             },
             {
               "current": "Boleh jalan di latar (bawaan)",
+              "detail": null,
+              "effect": null,
               "itemKey": "bg:5319275A.WhatsAppDesktop_cv1g1gvanyjgm",
               "key": "bg:5319275A.WhatsAppDesktop_cv1g1gvanyjgm:DisabledByUser",
               "label": "WhatsApp",
               "new": "Tidak boleh jalan di latar",
               "note": null,
               "optional": true,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm → DisabledByUser",
               "willChange": true
             },
             {
               "current": "Boleh jalan di latar (bawaan)",
+              "detail": null,
+              "effect": null,
               "itemKey": "bg:king.com.CandyCrushSaga_kgqvnymyfvs32",
               "key": "bg:king.com.CandyCrushSaga_kgqvnymyfvs32:Disabled",
               "label": "Candy Crush Saga",
               "new": "Tidak boleh jalan di latar",
               "note": null,
               "optional": true,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\king.com.CandyCrushSaga_kgqvnymyfvs32 → Disabled",
               "willChange": true
             },
             {
               "current": "Boleh jalan di latar (bawaan)",
+              "detail": null,
+              "effect": null,
               "itemKey": "bg:king.com.CandyCrushSaga_kgqvnymyfvs32",
               "key": "bg:king.com.CandyCrushSaga_kgqvnymyfvs32:DisabledByUser",
               "label": "Candy Crush Saga",
               "new": "Tidak boleh jalan di latar",
               "note": null,
               "optional": true,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\king.com.CandyCrushSaga_kgqvnymyfvs32 → DisabledByUser",
               "willChange": true
             }
@@ -7740,35 +9222,142 @@
           "changes": [
             {
               "current": "Nyala saat PC menyala",
+              "detail": "C:\\Users\\Budi\\AppData\\Roaming\\Spotify\\Spotify.exe /minimized",
+              "effect": null,
               "itemKey": "startup:HKCU:Spotify",
               "key": "startup:HKCU:Spotify",
               "label": "Spotify",
               "new": "Tidak ikut menyala",
               "note": null,
               "optional": true,
+              "source": "Registry",
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → Spotify",
               "willChange": true
             },
             {
               "current": "Nyala saat PC menyala",
+              "detail": "\"C:\\Program Files (x86)\\Steam\\steam.exe\" -silent",
+              "effect": null,
               "itemKey": "startup:HKCU:Steam",
               "key": "startup:HKCU:Steam",
               "label": "Steam",
               "new": "Tidak ikut menyala",
               "note": null,
               "optional": true,
+              "source": "Registry",
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → Steam",
               "willChange": true
             },
             {
               "current": "Nyala saat PC menyala",
+              "detail": "\"C:\\Program Files (x86)\\uTorrent\\uTorrent.exe\" /MINIMIZED",
+              "effect": null,
               "itemKey": "startup:HKLM32:uTorrent",
               "key": "startup:HKLM32:uTorrent",
               "label": "uTorrent",
               "new": "Tidak ikut menyala",
               "note": null,
               "optional": true,
+              "source": "Registry",
               "targetText": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32 → uTorrent",
+              "willChange": true
+            },
+            {
+              "current": "Nyala saat PC menyala",
+              "detail": "\"C:\\Program Files\\Realtek\\Audio\\HDA\\RtkNGUI64.exe\" -s",
+              "effect": "Aplikasi pengatur suara dari vendor. Suara tetap keluar karena drivernya tetap jalan, tapi efek suara tambahan (equalizer, Dolby/MaxxAudio) atau pemberitahuan saat headset dicolok bisa tidak jalan.",
+              "itemKey": "startup:HKLM:RtHDVCpl",
+              "key": "startup:HKLM:RtHDVCpl",
+              "label": "RtHDVCpl",
+              "new": "Tidak ikut menyala",
+              "note": null,
+              "optional": true,
+              "source": "Registry",
+              "targetText": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → RtHDVCpl",
+              "willChange": true
+            },
+            {
+              "current": "Nyala saat PC menyala",
+              "detail": "\"C:\\Program Files (x86)\\NVIDIA Corporation\\Update Core\\NvBackend.exe\"",
+              "effect": "Aplikasi tambahan NVIDIA (mis. GeForce Experience). Driver kartu grafis tetap jalan, tampilan tidak terpengaruh.",
+              "itemKey": "startup:HKLM32:NvBackend",
+              "key": "startup:HKLM32:NvBackend",
+              "label": "NvBackend",
+              "new": "Tidak ikut menyala",
+              "note": null,
+              "optional": true,
+              "source": "Registry",
+              "targetText": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run32 → NvBackend",
+              "willChange": true
+            },
+            {
+              "current": "Nyala saat PC menyala",
+              "detail": "%ProgramFiles%\\Synaptics\\SynTP\\SynTPEnh.exe",
+              "effect": "Aplikasi pembantu touchpad. Gerak kursor dan klik tetap jalan, tapi gestur lanjutan (mis. scroll dua jari, zoom) bisa mati sampai dikembalikan.",
+              "itemKey": "startup:HKLM:SynTPEnh",
+              "key": "startup:HKLM:SynTPEnh",
+              "label": "SynTPEnh",
+              "new": "Tidak ikut menyala",
+              "note": null,
+              "optional": true,
+              "source": "Registry",
+              "targetText": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run → SynTPEnh",
+              "willChange": true
+            },
+            {
+              "current": "Nyala saat masuk Windows",
+              "detail": "C:\\Users\\Budi\\AppData\\Roaming\\Zoom\\bin\\Zoom.exe --autostart",
+              "effect": null,
+              "itemKey": "startup:folder:user:Zoom.lnk",
+              "key": "startup:folder:user:Zoom.lnk",
+              "label": "Zoom",
+              "new": "Tidak ikut menyala (shortcut di folder cadangan)",
+              "note": null,
+              "optional": true,
+              "source": "Folder Startup",
+              "targetText": "Folder Startup (pengguna)\\Zoom.lnk",
+              "willChange": true
+            },
+            {
+              "current": "Nyala saat masuk Windows",
+              "detail": "C:\\Program Files (x86)\\ASUS\\ATK Package\\ATK Hotkey\\HControl.exe",
+              "effect": "Pembantu tombol Fn / tombol pintas laptop. Tombol Fn (kecerahan, volume, Wi-Fi) bisa tidak berfungsi sampai dikembalikan.",
+              "itemKey": "startup:folder:common:ATK Hotkey.lnk",
+              "key": "startup:folder:common:ATK Hotkey.lnk",
+              "label": "ATK Hotkey",
+              "new": "Tidak ikut menyala (shortcut di folder cadangan)",
+              "note": null,
+              "optional": true,
+              "source": "Folder Startup",
+              "targetText": "Folder Startup (semua pengguna)\\ATK Hotkey.lnk",
+              "willChange": true
+            },
+            {
+              "current": "Nyala saat masuk Windows",
+              "detail": "C:\\Program Files (x86)\\Google\\Update\\GoogleUpdate.exe /c",
+              "effect": "Pembaru otomatis. Kalau dimatikan, programnya bisa telat mendapat perbaikan keamanan.",
+              "itemKey": "startup:task:\\GoogleUpdateTaskMachineCore{6A2B}",
+              "key": "startup:task:\\GoogleUpdateTaskMachineCore{6A2B}",
+              "label": "GoogleUpdateTaskMachineCore{6A2B}",
+              "new": "Dinonaktifkan",
+              "note": null,
+              "optional": true,
+              "source": "Tugas Terjadwal",
+              "targetText": "Tugas terjadwal \\GoogleUpdateTaskMachineCore{6A2B}",
+              "willChange": true
+            },
+            {
+              "current": "Nyala saat masuk Windows",
+              "detail": "C:\\Users\\Budi\\AppData\\Local\\Programs\\Opera\\launcher.exe --scheduledautoupdate",
+              "effect": "Pembaru otomatis. Kalau dimatikan, programnya bisa telat mendapat perbaikan keamanan.",
+              "itemKey": "startup:task:\\Opera scheduled assistant Autoupdate 1700000000",
+              "key": "startup:task:\\Opera scheduled assistant Autoupdate 1700000000",
+              "label": "Opera scheduled assistant Autoupdate 1700000000",
+              "new": "Dinonaktifkan",
+              "note": null,
+              "optional": true,
+              "source": "Tugas Terjadwal",
+              "targetText": "Tugas terjadwal \\Opera scheduled assistant Autoupdate 1700000000",
               "willChange": true
             }
           ],
@@ -7781,89 +9370,113 @@
           "changes": [
             {
               "current": "Manual",
+              "detail": null,
+              "effect": null,
               "itemKey": "service:XblGameSave",
               "key": "service:XblGameSave",
               "label": "Penyimpanan game Xbox (XblGameSave)",
               "new": "Manual",
               "note": "Sudah sesuai",
               "optional": false,
+              "source": null,
               "targetText": "Service XblGameSave",
               "willChange": false
             },
             {
               "current": "Manual",
+              "detail": null,
+              "effect": null,
               "itemKey": "service:XboxGipSvc",
               "key": "service:XboxGipSvc",
               "label": "Aksesori Xbox (XboxGipSvc)",
               "new": "Manual",
               "note": "Sudah sesuai",
               "optional": false,
+              "source": null,
               "targetText": "Service XboxGipSvc",
               "willChange": false
             },
             {
               "current": "Manual",
+              "detail": null,
+              "effect": null,
               "itemKey": "service:XboxNetApiSvc",
               "key": "service:XboxNetApiSvc",
               "label": "Jaringan Xbox Live (XboxNetApiSvc)",
               "new": "Manual",
               "note": "Sudah sesuai",
               "optional": false,
+              "source": null,
               "targetText": "Service XboxNetApiSvc",
               "willChange": false
             },
             {
               "current": "Manual",
+              "detail": null,
+              "effect": null,
               "itemKey": "service:XblAuthManager",
               "key": "service:XblAuthManager",
               "label": "Login Xbox Live (XblAuthManager)",
               "new": "Manual",
               "note": "Sudah sesuai",
               "optional": false,
+              "source": null,
               "targetText": "Service XblAuthManager",
               "willChange": false
             },
             {
               "current": "Manual",
+              "detail": null,
+              "effect": null,
               "itemKey": "service:Fax",
               "key": "service:Fax",
               "label": "Fax (Fax)",
               "new": "Manual",
               "note": "Sudah sesuai",
               "optional": false,
+              "source": null,
               "targetText": "Service Fax",
               "willChange": false
             },
             {
               "current": "Dimatikan",
+              "detail": null,
+              "effect": null,
               "itemKey": "service:RemoteRegistry",
               "key": "service:RemoteRegistry",
               "label": "Remote Registry (akses registry dari jarak jauh) (RemoteRegistry)",
               "new": "Manual",
               "note": "Sudah sesuai",
               "optional": false,
+              "source": null,
               "targetText": "Service RemoteRegistry",
               "willChange": false
             },
             {
               "current": "Otomatis (tertunda)",
+              "detail": null,
+              "effect": null,
               "itemKey": "service:MapsBroker",
               "key": "service:MapsBroker",
               "label": "Peta offline (Downloaded Maps Manager) (MapsBroker)",
               "new": "Manual",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "Service MapsBroker",
               "willChange": true
             },
             {
               "current": "Tidak ada di PC ini",
+              "detail": null,
+              "effect": null,
               "itemKey": "service:WMPNetworkSvc",
               "key": "service:WMPNetworkSvc",
               "label": "Berbagi media Windows Media Player (WMPNetworkSvc)",
               "new": "Manual",
               "note": "Tidak ada di PC ini",
               "optional": false,
+              "source": null,
               "targetText": "Service WMPNetworkSvc",
               "willChange": false
             }
@@ -7877,12 +9490,15 @@
           "changes": [
             {
               "current": "Power saver",
+              "detail": null,
+              "effect": null,
               "itemKey": "power",
               "key": "power",
               "label": "Power plan aktif",
               "new": "High performance",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "Power plan aktif",
               "willChange": true
             }
@@ -7908,12 +9524,15 @@
           "changes": [
             {
               "current": "Biar Windows yang memilih",
+              "detail": null,
+              "effect": null,
               "itemKey": "default:visual-best-performance:VisualFXSetting",
               "key": "default:visual-best-performance:VisualFXSetting",
               "label": "Pilihan di Performance Options: \"Adjust for best performance\"",
               "new": "Biar Windows yang memilih",
               "note": "Sudah sesuai",
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects → VisualFXSetting",
               "willChange": false
             }
@@ -7927,12 +9546,15 @@
           "changes": [
             {
               "current": "Nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "default:transparency-off:EnableTransparency",
               "key": "default:transparency-off:EnableTransparency",
               "label": "Efek transparan taskbar & menu Start",
               "new": "Nyala",
               "note": "Sudah sesuai",
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize → EnableTransparency",
               "willChange": false
             }
@@ -7946,12 +9568,15 @@
           "changes": [
             {
               "current": "Nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "default:animations-off:MinAnimate",
               "key": "default:animations-off:MinAnimate",
               "label": "Animasi jendela saat dikecilkan/dibesarkan",
               "new": "Nyala",
               "note": "Sudah sesuai",
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Control Panel\\Desktop\\WindowMetrics → MinAnimate",
               "willChange": false
             }
@@ -7965,34 +9590,43 @@
           "changes": [
             {
               "current": "Nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "default:game-dvr-off:GameDVR_Enabled",
               "key": "default:game-dvr-off:GameDVR_Enabled",
               "label": "Perekam game (Game DVR)",
               "new": "Nyala",
               "note": "Sudah sesuai",
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\System\\GameConfigStore → GameDVR_Enabled",
               "willChange": false
             },
             {
               "current": "Belum diatur (bawaan Windows)",
+              "detail": null,
+              "effect": null,
               "itemKey": "default:game-dvr-off:AppCaptureEnabled",
               "key": "default:game-dvr-off:AppCaptureEnabled",
               "label": "Rekam klip & screenshot lewat Game Bar",
               "new": "Nyala",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR → AppCaptureEnabled",
               "willChange": true
             },
             {
               "current": "Tidak diatur (bawaan)",
+              "detail": null,
+              "effect": null,
               "itemKey": "default:game-dvr-off:AllowGameDVR",
               "key": "default:game-dvr-off:AllowGameDVR",
               "label": "Kebijakan Game DVR untuk semua pengguna PC",
               "new": "Tidak diatur (bawaan)",
               "note": "Sudah sesuai",
               "optional": false,
+              "source": null,
               "targetText": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR → AllowGameDVR",
               "willChange": false
             }
@@ -8006,12 +9640,15 @@
           "changes": [
             {
               "current": "Power saver",
+              "detail": null,
+              "effect": null,
               "itemKey": "default:power",
               "key": "default:power",
               "label": "Power plan aktif",
               "new": "Balanced",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "Power plan aktif",
               "willChange": true
             }
@@ -8038,12 +9675,15 @@
           "changes": [
             {
               "current": "Nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "transparency-off:EnableTransparency",
               "key": "transparency-off:EnableTransparency",
               "label": "Efek transparan taskbar & menu Start",
               "new": "Mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize → EnableTransparency",
               "willChange": true
             }
@@ -8057,12 +9697,15 @@
           "changes": [
             {
               "current": "Nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "animations-off:MinAnimate",
               "key": "animations-off:MinAnimate",
               "label": "Animasi jendela saat dikecilkan/dibesarkan",
               "new": "Mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Control Panel\\Desktop\\WindowMetrics → MinAnimate",
               "willChange": true
             }
@@ -8076,34 +9719,43 @@
           "changes": [
             {
               "current": "Nyala",
+              "detail": null,
+              "effect": null,
               "itemKey": "game-dvr-off:GameDVR_Enabled",
               "key": "game-dvr-off:GameDVR_Enabled",
               "label": "Perekam game (Game DVR)",
               "new": "Mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\System\\GameConfigStore → GameDVR_Enabled",
               "willChange": true
             },
             {
               "current": "Belum diatur (bawaan Windows)",
+              "detail": null,
+              "effect": null,
               "itemKey": "game-dvr-off:AppCaptureEnabled",
               "key": "game-dvr-off:AppCaptureEnabled",
               "label": "Rekam klip & screenshot lewat Game Bar",
               "new": "Mati",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR → AppCaptureEnabled",
               "willChange": true
             },
             {
               "current": "Tidak diatur (bawaan)",
+              "detail": null,
+              "effect": null,
               "itemKey": "game-dvr-off:AllowGameDVR",
               "key": "game-dvr-off:AllowGameDVR",
               "label": "Kebijakan Game DVR untuk semua pengguna PC",
               "new": "Dilarang",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR → AllowGameDVR",
               "willChange": true
             }
@@ -8117,12 +9769,15 @@
           "changes": [
             {
               "current": "Power saver",
+              "detail": null,
+              "effect": null,
               "itemKey": "power",
               "key": "power",
               "label": "Power plan aktif",
               "new": "Balanced",
               "note": null,
               "optional": false,
+              "source": null,
               "targetText": "Power plan aktif",
               "willChange": true
             }

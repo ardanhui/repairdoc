@@ -52,7 +52,6 @@ export function finishedText(ms: number, durationMs: number): string {
 
 // ---------------------------------------------------------------- Mode Performa
 
-
 export const modeName: Record<PresetMode, string> = {
   kentang: 'Kentang',
   seimbang: 'Seimbang',
@@ -67,4 +66,27 @@ export const effectText: Record<Effect, string> = {
 
 export function waktuText(ms: number): string {
   return new Date(ms).toLocaleString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+}
+
+// ---------------------------------------------------------------- Bersihkan File Sampah
+
+const angka = (n: number, digits: number) => n.toLocaleString('id-ID', { maximumFractionDigits: digits })
+
+/** Ukuran untuk pengguna awam: "1,3 GB", "640 MB", "12 KB". */
+export function sizeText(bytes: number): string {
+  const KB = 1024
+  const MB = KB * 1024
+  const GB = MB * 1024
+  if (bytes >= GB) return `${angka(bytes / GB, 1)} GB`
+  if (bytes >= MB) return `${angka(bytes / MB, bytes >= 100 * MB ? 0 : 1)} MB`
+  if (bytes >= KB) return `${angka(bytes / KB, 0)} KB`
+  return `${bytes} byte`
+}
+
+export function countText(n: number): string {
+  return angka(n, 0)
+}
+
+export function tanggalText(ms: number): string {
+  return new Date(ms).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
 }

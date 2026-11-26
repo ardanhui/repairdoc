@@ -5,7 +5,7 @@ import Icon from './Icon.vue'
 import StatusOrb from './StatusOrb.vue'
 
 defineProps<{ report: ScanReport }>()
-defineEmits<{ rescan: [] }>()
+defineEmits<{ rescan: []; performa: [] }>()
 </script>
 
 <template>
@@ -15,10 +15,16 @@ defineEmits<{ rescan: [] }>()
     <p class="detail">{{ report.verdict.detail }}</p>
     <p v-if="report.verdict.topPriority" class="priority">{{ report.verdict.topPriority }}</p>
     <p class="when">{{ finishedText(report.finishedAtMs, report.durationMs) }}</p>
-    <button type="button" class="btn" @click="$emit('rescan')">
-      <Icon name="refresh" />
-      Scan ulang
-    </button>
+    <div class="actions">
+      <button type="button" class="btn" @click="$emit('rescan')">
+        <Icon name="refresh" />
+        Scan ulang
+      </button>
+      <button type="button" class="btn btn-primary" @click="$emit('performa')">
+        <Icon name="gauge" />
+        Buka Mode Performa
+      </button>
+    </div>
   </section>
 </template>
 
@@ -69,7 +75,10 @@ h2 {
   color: var(--ink-soft);
 }
 
-.btn {
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 6px;
 }
 </style>

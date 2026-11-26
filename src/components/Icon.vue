@@ -1,6 +1,8 @@
 <script setup lang="ts">
 // Ikon garis sederhana (tanpa library, supaya jalan offline dari flashdisk).
-defineProps<{ name: 'hardware' | 'windows' | 'cleanup' | 'security' | 'network' | 'check' | 'alert' | 'cross' | 'shield' | 'refresh' }>()
+defineProps<{
+  name: 'hardware' | 'windows' | 'cleanup' | 'security' | 'network' | 'check' | 'alert' | 'cross' | 'shield' | 'refresh' | 'bolt' | 'balance' | 'back' | 'undo' | 'arrow' | 'gauge'
+}>()
 </script>
 
 <template>
@@ -42,6 +44,28 @@ defineProps<{ name: 'hardware' | 'windows' | 'cleanup' | 'security' | 'network' 
     <template v-else-if="name === 'shield'">
       <path d="M12 2.8l7.5 3v5.6c0 4.6-3.1 8.4-7.5 9.8-4.4-1.4-7.5-5.2-7.5-9.8V5.8z" />
       <path d="M8.5 12l2.4 2.4 4.6-4.8" />
+    </template>
+    <template v-else-if="name === 'bolt'">
+      <path d="M13.5 2.5L5 13.5h6l-1 8 8.5-11h-6z" />
+    </template>
+    <template v-else-if="name === 'balance'">
+      <path d="M12 3v18M7 21h10M5 7h14" />
+      <path d="M5 7l-2.5 6a3 3 0 0 0 5 0zM19 7l-2.5 6a3 3 0 0 0 5 0z" />
+    </template>
+    <template v-else-if="name === 'back'">
+      <path d="M15 5l-7 7 7 7" stroke-width="2.6" />
+    </template>
+    <template v-else-if="name === 'undo'">
+      <path d="M9 14L4 9l5-5" />
+      <path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" />
+    </template>
+    <template v-else-if="name === 'arrow'">
+      <path d="M5 12h13M13 6l6 6-6 6" />
+    </template>
+    <template v-else-if="name === 'gauge'">
+      <path d="M4.5 17.5a9 9 0 1 1 15 0" />
+      <path d="M12 13.5l4-5" stroke-width="2.4" />
+      <circle cx="12" cy="13.5" r="1.4" fill="currentColor" stroke="none" />
     </template>
     <template v-else-if="name === 'refresh'">
       <path d="M20 11a8 8 0 1 0-2.3 5.7" />

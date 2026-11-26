@@ -3,7 +3,9 @@
 # Daftar perubahan dikirim RepairDoc lewat variabel lingkungan REPAIRDOC_OPS
 # (JSON dalam base64). Tiap perubahan: { key, target, value }.
 #   target.kind = 'registry' (hive, path, name) | 'service' (name) | 'powerPlan'
-#   value.type  = 'absent' | 'dword' | 'string' | 'binary' | 'service' | 'power'
+#               | 'scheduledTask' (path, name)   (tahap 4)
+#   value.type  = 'absent' | 'dword' | 'string' | 'binary' | 'service' | 'power' | 'task' (enabled)
+#   Shortcut di folder Startup TIDAK lewat skrip ini — dipindah oleh RepairDoc sendiri.
 #
 # -DryRun  : HANYA membaca nilai sekarang dan melaporkan apa yang AKAN berubah.
 #            Tidak menulis apa pun.
@@ -12,7 +14,9 @@
 # Pengaman (selalu aktif, juga saat -DryRun):
 #   - registry hanya boleh ditulis di bawah kunci di $Allowed;
 #   - service di $Protected selalu ditolak;
-#   - nilai registry berjenis selain DWORD/String/Binary tidak diubah (supaya bisa dikembalikan persis).
+#   - nilai registry berjenis selain DWORD/String/Binary tidak diubah (supaya bisa dikembalikan persis);
+#   - tugas terjadwal di folder \Microsoft\ ($TaskForbidden) selalu ditolak; tugas hanya
+#     DINONAKTIFKAN / DIAKTIFKAN, tidak pernah dihapus.
 # Keluaran: JSON berisi daftar { key, before, after, status, error }.
 #   status = changed | same | planned | notpresent | refused | failed
 param([switch]$DryRun, [string]$OpsBase64 = $env:REPAIRDOC_OPS)
@@ -32,6 +36,7 @@ $Allowed = @(
   'HKCU\Software\RepairDocTest'
 )
 $Protected = @('wuauserv','WinDefend','MpsSvc','WlanSvc','Audiosrv','Spooler','WSearch','SysMain','BITS','Dhcp','Dnscache','EventLog','PlugPlay','Power','RpcSs','AudioEndpointBuilder','SecurityHealthService','wscsvc','Winmgmt','TrustedInstaller','UsoSvc','WaaSMedicSvc')
+$TaskForbidden = @('\Microsoft\')
 $Sc = Join-Path $env:SystemRoot 'System32\sc.exe'
 $PowerCfg = Join-Path $env:SystemRoot 'System32\powercfg.exe'
 
@@ -137,6 +142,33 @@ function Test-PowerExists([string]$guid) {
   return ($list.ToLowerInvariant().Contains($guid.ToLowerInvariant()))
 }
 
+function Test-TaskAllowed($t) {
+  $p = ([string]$t.path).ToLowerInvariant()
+  if (-not $p.StartsWith('\') -or -not $p.EndsWith('\') -or -not [string]$t.name) { return $false }
+  foreach ($f in $TaskForbidden) { if ($p.StartsWith($f.ToLowerInvariant())) { return $false } }
+  return $true
+}
+
+# Cari SATU tugas dengan folder & nama persis (Get-ScheduledTask menganggap [ ] * sebagai pola).
+function Get-ExactTask($t) {
+  $all = @(Get-ScheduledTask -TaskPath ([string]$t.path) -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -eq [string]$t.name -and $_.TaskPath -eq [string]$t.path })
+  if ($all.Count -eq 1) { return $all[0] }
+  return $null
+}
+
+function Read-Task($t) {
+  $task = Get-ExactTask $t
+  if ($null -eq $task) { return @{ type = 'missing' } }
+  return @{ type = 'task'; enabled = ([string]$task.State -ne 'Disabled') }
+}
+
+function Write-Task($t, [bool]$enabled) {
+  $task = Get-ExactTask $t
+  if ($null -eq $task) { throw 'Tugas terjadwal tidak ditemukan.' }
+  if ($enabled) { $task | Enable-ScheduledTask -ErrorAction Stop | Out-Null }
+  else { $task | Disable-ScheduledTask -ErrorAction Stop | Out-Null }
+}
+
 function Test-Same($a, $b) {
   if ($null -eq $a -or $null -eq $b) { return $false }
   if ([string]$a.type -ne [string]$b.type) { return $false }
@@ -148,6 +180,7 @@ function Test-Same($a, $b) {
     'binary'  { return (([string]$a.hex).ToLowerInvariant() -eq ([string]$b.hex).ToLowerInvariant()) }
     'service' { return ([string]$a.start -eq [string]$b.start) }
     'power'   { return (([string]$a.guid).ToLowerInvariant() -eq ([string]$b.guid).ToLowerInvariant()) }
+    'task'    { return ([bool]$a.enabled -eq [bool]$b.enabled) }
   }
   return $false
 }
@@ -197,6 +230,17 @@ foreach ($op in $ops) {
         $r.after = Read-Power
         if (Test-Same $r.after $want) { $r.status = 'changed' } else { $r.error = 'Power plan tidak berubah.' }
       }
+      'scheduledTask' {
+        if (-not (Test-TaskAllowed $t)) { $r.status = 'refused'; $r.error = 'Tugas terjadwal ini milik Windows atau tidak sah, jadi tidak boleh diubah.'; break }
+        $r.before = Read-Task $t
+        if ($r.before.type -eq 'missing') { $r.status = 'notpresent'; $r.error = 'Tugas terjadwal ini tidak ada di PC ini.'; break }
+        if (Test-Same $r.before $want) { $r.status = 'same'; break }
+        if ($DryRun) { $r.status = 'planned'; break }
+        Write-Task $t ([bool]$want.enabled)
+        $r.after = Read-Task $t
+        if (Test-Same $r.after $want) { $r.status = 'changed' } else { $r.error = 'Status tugas setelah diubah tidak sesuai.' }
+      }
+      'startupFile' { $r.status = 'refused'; $r.error = 'Shortcut startup dipindah oleh RepairDoc sendiri, bukan skrip ini.' }
       default { $r.error = "Jenis perubahan '$($t.kind)' tidak dikenal." }
     }
   } catch {

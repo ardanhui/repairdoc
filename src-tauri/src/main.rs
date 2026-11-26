@@ -3,6 +3,7 @@
 
 use std::path::{Path, PathBuf};
 
+use repairdoc_core::preset::{self, exec::PowerShellBackend, Mode, Outcome, PlanOptions, PresetEvent, PresetError, PresetStatus, Preview};
 use repairdoc_core::{platform, scan, ScanEvent, ScanReport};
 use serde::Serialize;
 use tauri::ipc::Channel;
@@ -88,6 +89,74 @@ async fn relaunch_as_admin(app: AppHandle) -> Result<(), String> {
     Ok(())
 }
 
+// ---------------------------------------------------------------- Mode Performa (tahap 3)
+
+#[derive(serde::Deserialize, Default)]
+#[serde(rename_all = "camelCase", default)]
+struct PresetRequest {
+    disabled_tweaks: Vec<String>,
+    skip_items: Vec<String>,
+}
+
+impl PresetRequest {
+    fn options(self) -> PlanOptions {
+        PlanOptions { disabled_tweaks: self.disabled_tweaks, skip_items: self.skip_items }
+    }
+}
+
+/// Status Mode Performa: mode aktif, catatan terakhir, izin admin. Hanya membaca.
+#[tauri::command]
+async fn preset_status() -> Result<PresetStatus, String> {
+    tauri::async_runtime::spawn_blocking(|| preset::status(&PowerShellBackend, &preset::log::default_path()))
+        .await
+        .map_err(|e| e.to_string())
+}
+
+/// Jawaban pratinjau: salah satu dari `preview` atau `error` terisi.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct PreviewAnswer {
+    preview: Option<Preview>,
+    error: Option<PresetError>,
+}
+
+/// Pratinjau (simulasi): apa yang akan berubah. Tidak mengubah apa pun.
+#[tauri::command]
+async fn preset_preview(mode: Mode, request: Option<PresetRequest>) -> Result<PreviewAnswer, String> {
+    let opts = request.unwrap_or_default().options();
+    tauri::async_runtime::spawn_blocking(move || match preset::preview(&PowerShellBackend, &preset::log::default_path(), mode, &opts, preset::now_ms()) {
+        Ok(p) => PreviewAnswer { preview: Some(p), error: None },
+        Err(e) => PreviewAnswer { preview: None, error: Some(e) },
+    })
+    .await
+    .map_err(|e| e.to_string())
+}
+
+/// Terapkan mode: restore point → terapkan → catat. Langkah dikabarkan lewat `on_event`.
+#[tauri::command]
+async fn preset_apply(mode: Mode, request: Option<PresetRequest>, on_event: Channel<PresetEvent>) -> Result<Outcome, String> {
+    let opts = request.unwrap_or_default().options();
+    tauri::async_runtime::spawn_blocking(move || {
+        preset::apply(&PowerShellBackend, &preset::log::default_path(), mode, &opts, preset::now_ms(), &mut |ev| {
+            let _ = on_event.send(ev);
+        })
+    })
+    .await
+    .map_err(|e| e.to_string())
+}
+
+/// Kembalikan Semua: batalkan penerapan terakhir di PC ini ke nilai lamanya.
+#[tauri::command]
+async fn preset_revert_all(on_event: Channel<PresetEvent>) -> Result<Outcome, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        preset::revert_last(&PowerShellBackend, &preset::log::default_path(), preset::now_ms(), &mut |ev| {
+            let _ = on_event.send(ev);
+        })
+    })
+    .await
+    .map_err(|e| e.to_string())
+}
+
 fn main() {
     use_bundled_webview2();
     let is_admin = platform::is_elevated();
@@ -95,7 +164,15 @@ fn main() {
 
     tauri::Builder::default()
         .manage(info)
-        .invoke_handler(tauri::generate_handler![app_info, start_scan, relaunch_as_admin])
+        .invoke_handler(tauri::generate_handler![
+            app_info,
+            start_scan,
+            relaunch_as_admin,
+            preset_status,
+            preset_preview,
+            preset_apply,
+            preset_revert_all
+        ])
         .setup(move |app| {
             WebviewWindowBuilder::new(app, "main", WebviewUrl::App("index.html".into()))
                 .title("RepairDoc — Dokter PC")

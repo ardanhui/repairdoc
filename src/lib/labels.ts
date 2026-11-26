@@ -1,4 +1,4 @@
-import type { Category, Group, Severity, Status } from './types'
+import type { Category, Effect, Group, PresetMode, Severity, Status } from './types'
 
 /** Kategori halus (urutan = urutan scan di backend). */
 export const categoryOrder: Category[] = ['cpu', 'memory', 'storage', 'gpu', 'battery', 'system', 'programs', 'cleanup', 'security', 'network']
@@ -48,4 +48,23 @@ export function finishedText(ms: number, durationMs: number): string {
   const jam = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
   const detik = Math.max(1, Math.round(durationMs / 1000))
   return `Diperiksa pukul ${jam}, selesai dalam ${detik} detik.`
+}
+
+// ---------------------------------------------------------------- Mode Performa
+
+
+export const modeName: Record<PresetMode, string> = {
+  kentang: 'Kentang',
+  seimbang: 'Seimbang',
+  normal: 'Normal',
+}
+
+export const effectText: Record<Effect, string> = {
+  langsung: 'Terasa langsung',
+  setelahSignOut: 'Terasa setelah sign out',
+  setelahRestart: 'Terasa setelah restart',
+}
+
+export function waktuText(ms: number): string {
+  return new Date(ms).toLocaleString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 }

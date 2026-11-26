@@ -14,8 +14,9 @@ import HealthyList from './components/HealthyList.vue'
 import TechInfo from './components/TechInfo.vue'
 import StatusOrb from './components/StatusOrb.vue'
 import Icon from './components/Icon.vue'
+import PerformaView from './components/PerformaView.vue'
 
-type Phase = 'idle' | 'scanning' | 'done' | 'error'
+type Phase = 'idle' | 'scanning' | 'done' | 'error' | 'performa'
 
 const info = ref<AppInfo | null>(null)
 const phase = ref<Phase>('idle')
@@ -105,6 +106,18 @@ async function scan() {
   }
 }
 
+// Mode Performa (tahap 3): layar penuh, kembali ke layar sebelumnya.
+const beforePerforma = ref<Phase>('idle')
+function openPerforma() {
+  beforePerforma.value = phase.value === 'performa' ? 'idle' : phase.value
+  phase.value = 'performa'
+  window.scrollTo({ top: 0 })
+}
+function closePerforma() {
+  phase.value = beforePerforma.value === 'done' && !report.value ? 'idle' : beforePerforma.value
+  window.scrollTo({ top: 0 })
+}
+
 async function elevate() {
   elevating.value = true
   elevateMsg.value = null
@@ -139,11 +152,18 @@ async function elevate() {
     <p class="step" :class="{ hidden: phase !== 'scanning' }" aria-hidden="true">{{ stepLabel }}</p>
 
     <CategoryRow :states="states" :scanning="phase === 'scanning'" />
+
+    <button v-if="phase === 'idle'" type="button" class="btn performa-link" @click="openPerforma">
+      <Icon name="gauge" />
+      Mode Performa: buat Windows lebih ringan
+    </button>
   </main>
+
+  <PerformaView v-else-if="phase === 'performa'" :elevating="elevating" :elevate-msg="elevateMsg" @back="closePerforma" @elevate="elevate" />
 
   <main v-else-if="phase === 'done' && report" class="results">
     <div class="side">
-      <VerdictPanel :report="report" @rescan="scan" />
+      <VerdictPanel :report="report" @rescan="scan" @performa="openPerforma" />
       <AdminNote v-if="showAdminNote && report" :items="report.needsAdmin" :busy="elevating" :message="elevateMsg" @elevate="elevate" />
     </div>
 
@@ -225,6 +245,11 @@ h1 {
 
 .step.hidden {
   visibility: hidden;
+}
+
+.performa-link svg {
+  width: 20px;
+  height: 20px;
 }
 
 .results {

@@ -3,6 +3,7 @@
 
 use std::path::{Path, PathBuf};
 
+use repairdoc_core::cleaner::{self, exec::SystemCleanBackend, CleanEvent, CleanOutcome, CleanPreview, CleanRequest, CleanStatus};
 use repairdoc_core::preset::{self, exec::PowerShellBackend, Mode, Outcome, PlanOptions, PresetEvent, PresetError, PresetStatus, Preview};
 use repairdoc_core::{platform, scan, ScanEvent, ScanReport};
 use serde::Serialize;
@@ -157,6 +158,47 @@ async fn preset_revert_all(on_event: Channel<PresetEvent>) -> Result<Outcome, St
     .map_err(|e| e.to_string())
 }
 
+// ---------------------------------------------------------------- Bersihkan File Sampah (tahap 4)
+
+/// Status: izin admin dan pembersihan terakhir di PC ini. Hanya membaca.
+#[tauri::command]
+async fn cleanup_status() -> Result<CleanStatus, String> {
+    tauri::async_runtime::spawn_blocking(|| cleaner::status(&SystemCleanBackend, &cleaner::log::default_path()))
+        .await
+        .map_err(|e| e.to_string())
+}
+
+/// Jawaban pratinjau pembersihan: salah satu dari `preview` atau `error` terisi.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct CleanPreviewAnswer {
+    preview: Option<CleanPreview>,
+    error: Option<PresetError>,
+}
+
+/// Ukur sampah per jenis (sama dengan scan). Tidak menghapus apa pun.
+#[tauri::command]
+async fn cleanup_preview() -> Result<CleanPreviewAnswer, String> {
+    tauri::async_runtime::spawn_blocking(|| match cleaner::preview(&SystemCleanBackend) {
+        Ok(p) => CleanPreviewAnswer { preview: Some(p), error: None },
+        Err(e) => CleanPreviewAnswer { preview: None, error: Some(e) },
+    })
+    .await
+    .map_err(|e| e.to_string())
+}
+
+/// Hapus jenis yang dicentang, satu per satu, lalu catat. Langkah dikabarkan lewat `on_event`.
+#[tauri::command]
+async fn cleanup_apply(request: CleanRequest, on_event: Channel<CleanEvent>) -> Result<CleanOutcome, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        cleaner::apply(&SystemCleanBackend, &cleaner::log::default_path(), &request, preset::now_ms(), &mut |ev| {
+            let _ = on_event.send(ev);
+        })
+    })
+    .await
+    .map_err(|e| e.to_string())
+}
+
 fn main() {
     use_bundled_webview2();
     let is_admin = platform::is_elevated();
@@ -171,7 +213,10 @@ fn main() {
             preset_status,
             preset_preview,
             preset_apply,
-            preset_revert_all
+            preset_revert_all,
+            cleanup_status,
+            cleanup_preview,
+            cleanup_apply
         ])
         .setup(move |app| {
             WebviewWindowBuilder::new(app, "main", WebviewUrl::App("index.html".into()))

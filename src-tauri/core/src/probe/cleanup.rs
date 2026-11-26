@@ -140,7 +140,7 @@ pub fn folder_size(root: &Path, deadline: Instant) -> FolderSize {
 
 /// Daftar lokasi sampah di PC ini (Windows). Folder yang tidak ada dilewati.
 #[cfg(windows)]
-fn locations() -> Vec<(JunkKind, PathBuf)> {
+pub fn locations() -> Vec<(JunkKind, PathBuf)> {
     use JunkKind::*;
     let env = |k: &str| std::env::var_os(k).map(PathBuf::from);
     let mut v: Vec<(JunkKind, PathBuf)> = Vec::new();
@@ -196,7 +196,7 @@ fn locations() -> Vec<(JunkKind, PathBuf)> {
 }
 
 #[cfg(not(windows))]
-fn locations() -> Vec<(JunkKind, PathBuf)> {
+pub fn locations() -> Vec<(JunkKind, PathBuf)> {
     vec![(JunkKind::Temp, std::env::temp_dir())].into_iter().filter(|(_, p)| p.is_dir()).collect()
 }
 

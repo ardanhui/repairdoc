@@ -15,8 +15,9 @@ import TechInfo from './components/TechInfo.vue'
 import StatusOrb from './components/StatusOrb.vue'
 import Icon from './components/Icon.vue'
 import PerformaView from './components/PerformaView.vue'
+import CleanupView from './components/CleanupView.vue'
 
-type Phase = 'idle' | 'scanning' | 'done' | 'error' | 'performa'
+type Phase = 'idle' | 'scanning' | 'done' | 'error' | 'performa' | 'bersihkan'
 
 const info = ref<AppInfo | null>(null)
 const phase = ref<Phase>('idle')
@@ -106,13 +107,16 @@ async function scan() {
   }
 }
 
-// Mode Performa (tahap 3): layar penuh, kembali ke layar sebelumnya.
+// Mode Performa (tahap 3) dan Bersihkan File Sampah (tahap 4): layar penuh,
+// tombol Kembali membawa ke layar sebelumnya (layar awal atau hasil scan).
 const beforePerforma = ref<Phase>('idle')
-function openPerforma() {
-  beforePerforma.value = phase.value === 'performa' ? 'idle' : phase.value
-  phase.value = 'performa'
+function openTool(tool: 'performa' | 'bersihkan') {
+  if (phase.value !== 'performa' && phase.value !== 'bersihkan') beforePerforma.value = phase.value
+  phase.value = tool
   window.scrollTo({ top: 0 })
 }
+const openPerforma = () => openTool('performa')
+const openBersihkan = () => openTool('bersihkan')
 function closePerforma() {
   phase.value = beforePerforma.value === 'done' && !report.value ? 'idle' : beforePerforma.value
   window.scrollTo({ top: 0 })
@@ -153,17 +157,25 @@ async function elevate() {
 
     <CategoryRow :states="states" :scanning="phase === 'scanning'" />
 
-    <button v-if="phase === 'idle'" type="button" class="btn performa-link" @click="openPerforma">
-      <Icon name="gauge" />
-      Mode Performa: buat Windows lebih ringan
-    </button>
+    <div v-if="phase === 'idle'" class="tools">
+      <button type="button" class="btn performa-link" @click="openPerforma">
+        <Icon name="gauge" />
+        Mode Performa: buat Windows lebih ringan
+      </button>
+      <button type="button" class="btn performa-link" @click="openBersihkan">
+        <Icon name="cleanup" />
+        Bersihkan File Sampah
+      </button>
+    </div>
   </main>
 
   <PerformaView v-else-if="phase === 'performa'" :elevating="elevating" :elevate-msg="elevateMsg" @back="closePerforma" @elevate="elevate" />
 
+  <CleanupView v-else-if="phase === 'bersihkan'" :elevating="elevating" :elevate-msg="elevateMsg" @back="closePerforma" @elevate="elevate" />
+
   <main v-else-if="phase === 'done' && report" class="results">
     <div class="side">
-      <VerdictPanel :report="report" @rescan="scan" @performa="openPerforma" />
+      <VerdictPanel :report="report" @rescan="scan" @performa="openPerforma" @bersihkan="openBersihkan" />
       <AdminNote v-if="showAdminNote && report" :items="report.needsAdmin" :busy="elevating" :message="elevateMsg" @elevate="elevate" />
     </div>
 
@@ -171,7 +183,7 @@ async function elevate() {
       <section aria-labelledby="todo-title" class="group">
         <h2 id="todo-title" class="section-title">Yang perlu dibereskan</h2>
         <div v-if="urgent.length" class="cards">
-          <FindingCard v-for="(f, i) in urgent" :key="f.id" :finding="f" :default-open="f.status === 'bermasalah' || i === 0" />
+          <FindingCard v-for="(f, i) in urgent" :key="f.id" :finding="f" :default-open="f.status === 'bermasalah' || i === 0" @bersihkan="openBersihkan" />
         </div>
         <p v-else class="empty glass">Tidak ada yang mendesak. Semua yang diperiksa dalam kondisi baik atau hanya butuh perhatian kecil.</p>
       </section>
@@ -179,7 +191,7 @@ async function elevate() {
       <section v-if="minor.length" aria-labelledby="minor-title" class="group">
         <h2 id="minor-title" class="section-title">Hal kecil yang bisa dirapikan nanti</h2>
         <div class="cards">
-          <FindingCard v-for="f in minor" :key="f.id" :finding="f" />
+          <FindingCard v-for="f in minor" :key="f.id" :finding="f" @bersihkan="openBersihkan" />
         </div>
       </section>
 
@@ -245,6 +257,13 @@ h1 {
 
 .step.hidden {
   visibility: hidden;
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
 
 .performa-link svg {

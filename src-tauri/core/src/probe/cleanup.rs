@@ -226,22 +226,39 @@ pub fn measure(locations: Vec<(JunkKind, PathBuf)>, deadline: Instant) -> Cleanu
 mod tests {
     use super::*;
 
-    fn fixture() -> PathBuf {
-        let dir = std::env::temp_dir().join(format!("repairdoc-cleanup-test-{}", std::process::id()));
+    use std::sync::atomic::{AtomicU32, Ordering};
+
+    /// Folder uji sementara. Namanya unik per tes (nama tes + PID + nomor urut),
+    /// karena tes Rust berjalan paralel: folder bersama bisa dihapus satu tes
+    /// sementara tes lain masih mengukurnya. Folder dihapus otomatis saat selesai,
+    /// termasuk bila tesnya gagal.
+    struct Fixture {
+        dir: PathBuf,
+    }
+
+    impl Drop for Fixture {
+        fn drop(&mut self) {
+            let _ = std::fs::remove_dir_all(&self.dir);
+        }
+    }
+
+    fn fixture(test: &str) -> Fixture {
+        static NEXT: AtomicU32 = AtomicU32::new(0);
+        let n = NEXT.fetch_add(1, Ordering::Relaxed);
+        let dir = std::env::temp_dir().join(format!("repairdoc-cleanup-test-{test}-{}-{n}", std::process::id()));
         let _ = std::fs::remove_dir_all(&dir);
-        std::fs::create_dir_all(dir.join("a/b")).unwrap();
-        std::fs::write(dir.join("a/x.tmp"), vec![0u8; 1000]).unwrap();
-        std::fs::write(dir.join("a/b/y.tmp"), vec![0u8; 2500]).unwrap();
+        std::fs::create_dir_all(dir.join("a").join("b")).unwrap();
+        std::fs::write(dir.join("a").join("x.tmp"), vec![0u8; 1000]).unwrap();
+        std::fs::write(dir.join("a").join("b").join("y.tmp"), vec![0u8; 2500]).unwrap();
         std::fs::write(dir.join("z.tmp"), vec![0u8; 500]).unwrap();
-        dir
+        Fixture { dir }
     }
 
     #[test]
     fn sums_recursively() {
-        let dir = fixture();
-        let s = folder_size(&dir, Instant::now() + Duration::from_secs(5));
+        let f = fixture("sums_recursively");
+        let s = folder_size(&f.dir, Instant::now() + Duration::from_secs(5));
         assert_eq!((s.bytes, s.files, s.denied, s.truncated), (4000, 3, 0, false));
-        let _ = std::fs::remove_dir_all(&dir);
     }
 
     #[test]
@@ -253,22 +270,31 @@ mod tests {
 
     #[test]
     fn deadline_truncates() {
-        let dir = fixture();
+        let f = fixture("deadline_truncates");
         for i in 0..300 {
-            std::fs::write(dir.join(format!("f{i}")), b"x").unwrap();
+            std::fs::write(f.dir.join(format!("f{i}")), b"x").unwrap();
         }
-        let s = folder_size(&dir, Instant::now() - Duration::from_secs(1));
+        let s = folder_size(&f.dir, Instant::now() - Duration::from_secs(1));
         assert!(s.truncated);
-        let _ = std::fs::remove_dir_all(&dir);
     }
 
     #[test]
     fn totals_by_kind() {
-        let dir = fixture();
-        let raw = measure(vec![(JunkKind::Temp, dir.clone()), (JunkKind::WindowsOld, dir.join("a"))], Instant::now() + Duration::from_secs(5));
+        let f = fixture("totals_by_kind");
+        let raw = measure(vec![(JunkKind::Temp, f.dir.clone()), (JunkKind::WindowsOld, f.dir.join("a"))], Instant::now() + Duration::from_secs(5));
         assert_eq!(raw.total(JunkKind::Temp).bytes, 4000);
         assert_eq!(raw.total(JunkKind::WindowsOld).bytes, 3500);
         assert_eq!(raw.safe_total().bytes, 4000);
-        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn fixtures_are_unique() {
+        let a = fixture("sama");
+        let b = fixture("sama");
+        assert_ne!(a.dir, b.dir);
+        let kept = a.dir.clone();
+        drop(a);
+        assert!(!kept.exists(), "folder uji harus terhapus otomatis");
+        assert!(b.dir.join("z.tmp").exists(), "menghapus satu fixture tidak boleh mengganggu yang lain");
     }
 }

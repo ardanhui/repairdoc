@@ -5,6 +5,9 @@ import type { Finding } from '../lib/types'
 import StatusOrb from './StatusOrb.vue'
 
 const props = withDefaults(defineProps<{ finding: Finding; defaultOpen?: boolean }>(), { defaultOpen: false })
+defineEmits<{ bersihkan: [] }>()
+/** Temuan kebersihan (file sampah, Windows.old) punya tombol ke layar Bersihkan (tahap 4). */
+const cleanable = props.finding.category === 'cleanup' && props.finding.status !== 'sehat'
 const open = ref(props.defaultOpen)
 const bodyId = `detail-${props.finding.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
 const hasBody = !!props.finding.why || props.finding.steps.length > 0
@@ -41,10 +44,16 @@ const hasBody = !!props.finding.why || props.finding.steps.length > 0
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5L10 8l-5 4.5" /></svg>
       {{ open ? 'Sembunyikan penjelasan' : 'Lihat penjelasan dan cara memperbaiki' }}
     </button>
+    <button v-if="cleanable" type="button" class="btn btn-primary clean" @click="$emit('bersihkan')">Bersihkan</button>
   </article>
 </template>
 
 <style scoped>
+.clean {
+  justify-self: start;
+  margin: 0 0 6px;
+}
+
 .finding {
   display: grid;
   gap: 12px;

@@ -5,7 +5,7 @@ import Icon from './Icon.vue'
 import StatusOrb from './StatusOrb.vue'
 
 defineProps<{ report: ScanReport }>()
-defineEmits<{ rescan: []; performa: [] }>()
+defineEmits<{ rescan: []; performa: []; bersihkan: [] }>()
 </script>
 
 <template>
@@ -23,6 +23,10 @@ defineEmits<{ rescan: []; performa: [] }>()
       <button type="button" class="btn btn-primary" @click="$emit('performa')">
         <Icon name="gauge" />
         Buka Mode Performa
+      </button>
+      <button type="button" class="btn" @click="$emit('bersihkan')">
+        <Icon name="cleanup" />
+        Bersihkan File Sampah
       </button>
     </div>
   </section>

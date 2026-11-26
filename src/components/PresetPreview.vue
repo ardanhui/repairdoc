@@ -12,10 +12,21 @@ function uniqueItems(changes: PreviewChange[]): PreviewChange[] {
   return changes.filter((c) => (seen.has(c.itemKey) ? false : (seen.add(c.itemKey), true)))
 }
 
+/** Sumber program startup (tahap 4), dalam urutan tampil. */
+const SOURCES: { key: string; hint: string }[] = [
+  { key: 'Registry', hint: 'daftar startup Windows, sama dengan tab Startup di Task Manager' },
+  { key: 'Folder Startup', hint: 'shortcut dipindah ke folder cadangan RepairDoc, tidak dihapus' },
+  { key: 'Tugas Terjadwal', hint: 'tugas yang jalan saat masuk Windows; dinonaktifkan, tidak dihapus' },
+]
+
 const groups = computed(() =>
   props.preview.groups.map((g) => {
     const items = uniqueItems(g.changes)
-    return { ...g, changing: items.filter((c) => c.willChange), unchanged: items.filter((c) => !c.willChange) }
+    const changing = items.filter((c) => c.willChange)
+    const bySource = changing.some((c) => c.source)
+      ? SOURCES.map((s) => ({ ...s, items: changing.filter((c) => c.source === s.key) })).filter((s) => s.items.length)
+      : []
+    return { ...g, changing, bySource, hasEffects: changing.some((c) => c.effect), unchanged: items.filter((c) => !c.willChange) }
   }),
 )
 
@@ -55,7 +66,41 @@ function toggleItem(key: string) {
         </h3>
         <p v-if="g.description" class="desc">{{ g.description }}</p>
 
-        <ul v-if="g.changing.length" class="rows">
+        <p v-if="g.hasEffects" class="vendor">
+          <Icon name="info" />
+          Untuk aplikasi tambahan vendor (suara, touchpad, kartu grafis, tombol Fn): yang dimatikan hanya aplikasi pembuka atau ikon
+          tray-nya, bukan drivernya. Driver tetap jalan sebagai bagian dari Windows, jadi suara, touchpad dasar, dan tampilan tetap
+          berfungsi. Semuanya bisa dikembalikan.
+        </p>
+
+        <template v-if="g.bySource.length">
+          <div v-for="src in g.bySource" :key="src.key" class="source">
+            <h4>
+              {{ src.key }} <span class="hint">— {{ src.hint }}</span>
+            </h4>
+            <ul class="rows">
+              <li v-for="c in src.items" :key="c.itemKey" class="row" :class="{ excluded: skipItems.includes(c.itemKey) }">
+                <label v-if="c.optional" class="pick">
+                  <input type="checkbox" :checked="!skipItems.includes(c.itemKey)" @change="toggleItem(c.itemKey)" />
+                  <span class="sr-only">Matikan {{ c.label }}</span>
+                </label>
+                <span v-else class="pick-space" aria-hidden="true" />
+                <span class="label">
+                  <span :title="c.targetText">{{ c.label }}</span>
+                  <span v-if="c.detail" class="detail" :title="c.detail">{{ c.detail }}</span>
+                  <span v-if="c.effect" class="effect">{{ c.effect }}</span>
+                </span>
+                <span class="values">
+                  <span class="now">{{ c.current }}</span>
+                  <Icon name="arrow" />
+                  <span class="new">{{ c.new }}</span>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </template>
+
+        <ul v-else-if="g.changing.length" class="rows">
           <li v-for="c in g.changing" :key="c.itemKey" class="row" :class="{ excluded: skipItems.includes(c.itemKey) }">
             <label v-if="c.optional" class="pick">
               <input type="checkbox" :checked="!skipItems.includes(c.itemKey)" @change="toggleItem(c.itemKey)" />
@@ -207,7 +252,64 @@ h3 {
 }
 
 .label {
+  display: grid;
+  gap: 1px;
   overflow-wrap: anywhere;
+}
+
+.detail {
+  font-size: 12px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.effect {
+  margin-top: 2px;
+  padding: 3px 9px;
+  border-radius: 8px;
+  background: rgba(255, 246, 214, 0.9);
+  color: var(--warn-ink);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.vendor {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 2px 0 8px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: rgba(225, 243, 255, 0.85);
+  border: 1px solid rgba(64, 150, 205, 0.25);
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+.vendor svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  color: var(--aqua-deep);
+}
+
+.source {
+  margin-top: 8px;
+}
+
+.source h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--aqua-ink);
+  padding: 2px 0 2px 36px;
+}
+
+.source .hint {
+  font-weight: 400;
+  color: var(--ink-soft);
 }
 
 .values {

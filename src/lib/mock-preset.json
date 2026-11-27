@@ -819,7 +819,7 @@
             ],
             "description": "Prosesor dibiarkan bekerja penuh, tidak ditahan untuk hemat daya.",
             "skippedByUser": false,
-            "title": "Power plan: High performance",
+            "title": "Power plan (pengaturan daya Windows): High performance",
             "tweakId": "power-high-performance"
           },
           {
@@ -3511,7 +3511,7 @@
               "Aplikasi latar dibatasi",
               "Program startup dikurangi",
               "Service tidak penting jadi Manual",
-              "Power plan: High performance"
+              "Power plan (pengaturan daya Windows): High performance"
             ],
             "forWhom": "PC sangat lemot, RAM kecil, atau masih pakai HDD",
             "level": "Low",
@@ -3534,7 +3534,7 @@
               "Efek transparan mati",
               "Animasi jendela mati",
               "Perekam game (Game Bar) mati",
-              "Power plan: Balanced"
+              "Power plan (pengaturan daya Windows): Balanced"
             ],
             "forWhom": "PC menengah yang ingin terasa lebih ringan",
             "level": "Medium",
@@ -3551,7 +3551,7 @@
           {
             "bullets": [
               "Membatalkan semua perubahan RepairDoc yang tercatat, ke nilai aslinya",
-              "Kalau belum ada catatan: efek visual, transparansi, animasi, Game Bar, aplikasi latar, dan power plan kembali ke bawaan Windows"
+              "Kalau belum ada catatan: efek visual, transparansi, animasi, perekam game (Game Bar), aplikasi latar, dan power plan (pengaturan daya) kembali ke bawaan Windows"
             ],
             "forWhom": "Membatalkan semua perubahan RepairDoc",
             "level": "High",
@@ -4420,7 +4420,7 @@
             "modes": [
               "kentang"
             ],
-            "title": "Power plan: High performance"
+            "title": "Power plan (pengaturan daya Windows): High performance"
           },
           {
             "description": "Windows mengatur kecepatan prosesor sesuai kebutuhan (bawaan Windows).",
@@ -4429,7 +4429,7 @@
             "modes": [
               "seimbang"
             ],
-            "title": "Power plan: Balanced"
+            "title": "Power plan (pengaturan daya Windows): Balanced"
           }
         ]
       },
@@ -5868,7 +5868,7 @@
               "Aplikasi latar dibatasi",
               "Program startup dikurangi",
               "Service tidak penting jadi Manual",
-              "Power plan: High performance"
+              "Power plan (pengaturan daya Windows): High performance"
             ],
             "forWhom": "PC sangat lemot, RAM kecil, atau masih pakai HDD",
             "level": "Low",
@@ -5891,7 +5891,7 @@
               "Efek transparan mati",
               "Animasi jendela mati",
               "Perekam game (Game Bar) mati",
-              "Power plan: Balanced"
+              "Power plan (pengaturan daya Windows): Balanced"
             ],
             "forWhom": "PC menengah yang ingin terasa lebih ringan",
             "level": "Medium",
@@ -5908,7 +5908,7 @@
           {
             "bullets": [
               "Membatalkan semua perubahan RepairDoc yang tercatat, ke nilai aslinya",
-              "Kalau belum ada catatan: efek visual, transparansi, animasi, Game Bar, aplikasi latar, dan power plan kembali ke bawaan Windows"
+              "Kalau belum ada catatan: efek visual, transparansi, animasi, perekam game (Game Bar), aplikasi latar, dan power plan (pengaturan daya) kembali ke bawaan Windows"
             ],
             "forWhom": "Membatalkan semua perubahan RepairDoc",
             "level": "High",
@@ -5993,7 +5993,7 @@
             "modes": [
               "kentang"
             ],
-            "title": "Power plan: High performance"
+            "title": "Power plan (pengaturan daya Windows): High performance"
           },
           {
             "description": "Windows mengatur kecepatan prosesor sesuai kebutuhan (bawaan Windows).",
@@ -6002,7 +6002,7 @@
             "modes": [
               "seimbang"
             ],
-            "title": "Power plan: Balanced"
+            "title": "Power plan (pengaturan daya Windows): Balanced"
           }
         ]
       }
@@ -6207,7 +6207,7 @@
             ],
             "description": "Windows mengatur kecepatan prosesor sesuai kebutuhan (bawaan Windows).",
             "skippedByUser": false,
-            "title": "Power plan: Balanced",
+            "title": "Power plan (pengaturan daya Windows): Balanced",
             "tweakId": "power-balanced"
           },
           {
@@ -6644,7 +6644,7 @@
               "Aplikasi latar dibatasi",
               "Program startup dikurangi",
               "Service tidak penting jadi Manual",
-              "Power plan: High performance"
+              "Power plan (pengaturan daya Windows): High performance"
             ],
             "forWhom": "PC sangat lemot, RAM kecil, atau masih pakai HDD",
             "level": "Low",
@@ -6667,7 +6667,7 @@
               "Efek transparan mati",
               "Animasi jendela mati",
               "Perekam game (Game Bar) mati",
-              "Power plan: Balanced"
+              "Power plan (pengaturan daya Windows): Balanced"
             ],
             "forWhom": "PC menengah yang ingin terasa lebih ringan",
             "level": "Medium",
@@ -6684,7 +6684,7 @@
           {
             "bullets": [
               "Membatalkan semua perubahan RepairDoc yang tercatat, ke nilai aslinya",
-              "Kalau belum ada catatan: efek visual, transparansi, animasi, Game Bar, aplikasi latar, dan power plan kembali ke bawaan Windows"
+              "Kalau belum ada catatan: efek visual, transparansi, animasi, perekam game (Game Bar), aplikasi latar, dan power plan (pengaturan daya) kembali ke bawaan Windows"
             ],
             "forWhom": "Membatalkan semua perubahan RepairDoc",
             "level": "High",
@@ -6934,7 +6934,7 @@
             "modes": [
               "kentang"
             ],
-            "title": "Power plan: High performance"
+            "title": "Power plan (pengaturan daya Windows): High performance"
           },
           {
             "description": "Windows mengatur kecepatan prosesor sesuai kebutuhan (bawaan Windows).",
@@ -6943,7 +6943,7 @@
             "modes": [
               "seimbang"
             ],
-            "title": "Power plan: Balanced"
+            "title": "Power plan (pengaturan daya Windows): Balanced"
           }
         ]
       },
@@ -7173,7 +7173,7 @@
               "Aplikasi latar dibatasi",
               "Program startup dikurangi",
               "Service tidak penting jadi Manual",
-              "Power plan: High performance"
+              "Power plan (pengaturan daya Windows): High performance"
             ],
             "forWhom": "PC sangat lemot, RAM kecil, atau masih pakai HDD",
             "level": "Low",
@@ -7196,7 +7196,7 @@
               "Efek transparan mati",
               "Animasi jendela mati",
               "Perekam game (Game Bar) mati",
-              "Power plan: Balanced"
+              "Power plan (pengaturan daya Windows): Balanced"
             ],
             "forWhom": "PC menengah yang ingin terasa lebih ringan",
             "level": "Medium",
@@ -7213,7 +7213,7 @@
           {
             "bullets": [
               "Membatalkan semua perubahan RepairDoc yang tercatat, ke nilai aslinya",
-              "Kalau belum ada catatan: efek visual, transparansi, animasi, Game Bar, aplikasi latar, dan power plan kembali ke bawaan Windows"
+              "Kalau belum ada catatan: efek visual, transparansi, animasi, perekam game (Game Bar), aplikasi latar, dan power plan (pengaturan daya) kembali ke bawaan Windows"
             ],
             "forWhom": "Membatalkan semua perubahan RepairDoc",
             "level": "High",
@@ -7298,7 +7298,7 @@
             "modes": [
               "kentang"
             ],
-            "title": "Power plan: High performance"
+            "title": "Power plan (pengaturan daya Windows): High performance"
           },
           {
             "description": "Windows mengatur kecepatan prosesor sesuai kebutuhan (bawaan Windows).",
@@ -7307,7 +7307,7 @@
             "modes": [
               "seimbang"
             ],
-            "title": "Power plan: Balanced"
+            "title": "Power plan (pengaturan daya Windows): Balanced"
           }
         ]
       }
@@ -7490,7 +7490,7 @@
             ],
             "description": "Windows mengatur kecepatan prosesor sesuai kebutuhan (bawaan Windows).",
             "skippedByUser": false,
-            "title": "Power plan: Balanced",
+            "title": "Power plan (pengaturan daya Windows): Balanced",
             "tweakId": "power-balanced"
           },
           {
@@ -8044,7 +8044,7 @@
               "Aplikasi latar dibatasi",
               "Program startup dikurangi",
               "Service tidak penting jadi Manual",
-              "Power plan: High performance"
+              "Power plan (pengaturan daya Windows): High performance"
             ],
             "forWhom": "PC sangat lemot, RAM kecil, atau masih pakai HDD",
             "level": "Low",
@@ -8067,7 +8067,7 @@
               "Efek transparan mati",
               "Animasi jendela mati",
               "Perekam game (Game Bar) mati",
-              "Power plan: Balanced"
+              "Power plan (pengaturan daya Windows): Balanced"
             ],
             "forWhom": "PC menengah yang ingin terasa lebih ringan",
             "level": "Medium",
@@ -8084,7 +8084,7 @@
           {
             "bullets": [
               "Membatalkan semua perubahan RepairDoc yang tercatat, ke nilai aslinya",
-              "Kalau belum ada catatan: efek visual, transparansi, animasi, Game Bar, aplikasi latar, dan power plan kembali ke bawaan Windows"
+              "Kalau belum ada catatan: efek visual, transparansi, animasi, perekam game (Game Bar), aplikasi latar, dan power plan (pengaturan daya) kembali ke bawaan Windows"
             ],
             "forWhom": "Membatalkan semua perubahan RepairDoc",
             "level": "High",
@@ -8312,7 +8312,7 @@
             "modes": [
               "kentang"
             ],
-            "title": "Power plan: High performance"
+            "title": "Power plan (pengaturan daya Windows): High performance"
           },
           {
             "description": "Windows mengatur kecepatan prosesor sesuai kebutuhan (bawaan Windows).",
@@ -8321,7 +8321,7 @@
             "modes": [
               "seimbang"
             ],
-            "title": "Power plan: Balanced"
+            "title": "Power plan (pengaturan daya Windows): Balanced"
           }
         ]
       },
@@ -8617,7 +8617,7 @@
               "Aplikasi latar dibatasi",
               "Program startup dikurangi",
               "Service tidak penting jadi Manual",
-              "Power plan: High performance"
+              "Power plan (pengaturan daya Windows): High performance"
             ],
             "forWhom": "PC sangat lemot, RAM kecil, atau masih pakai HDD",
             "level": "Low",
@@ -8640,7 +8640,7 @@
               "Efek transparan mati",
               "Animasi jendela mati",
               "Perekam game (Game Bar) mati",
-              "Power plan: Balanced"
+              "Power plan (pengaturan daya Windows): Balanced"
             ],
             "forWhom": "PC menengah yang ingin terasa lebih ringan",
             "level": "Medium",
@@ -8657,7 +8657,7 @@
           {
             "bullets": [
               "Membatalkan semua perubahan RepairDoc yang tercatat, ke nilai aslinya",
-              "Kalau belum ada catatan: efek visual, transparansi, animasi, Game Bar, aplikasi latar, dan power plan kembali ke bawaan Windows"
+              "Kalau belum ada catatan: efek visual, transparansi, animasi, perekam game (Game Bar), aplikasi latar, dan power plan (pengaturan daya) kembali ke bawaan Windows"
             ],
             "forWhom": "Membatalkan semua perubahan RepairDoc",
             "level": "High",
@@ -8742,7 +8742,7 @@
             "modes": [
               "kentang"
             ],
-            "title": "Power plan: High performance"
+            "title": "Power plan (pengaturan daya Windows): High performance"
           },
           {
             "description": "Windows mengatur kecepatan prosesor sesuai kebutuhan (bawaan Windows).",
@@ -8751,7 +8751,7 @@
             "modes": [
               "seimbang"
             ],
-            "title": "Power plan: Balanced"
+            "title": "Power plan (pengaturan daya Windows): Balanced"
           }
         ]
       }
@@ -9505,7 +9505,7 @@
           ],
           "description": "Prosesor dibiarkan bekerja penuh, tidak ditahan untuk hemat daya.",
           "skippedByUser": false,
-          "title": "Power plan: High performance",
+          "title": "Power plan (pengaturan daya Windows): High performance",
           "tweakId": "power-high-performance"
         }
       ],
@@ -9655,7 +9655,7 @@
           ],
           "description": "Windows mengatur kecepatan prosesor sesuai kebutuhan (bawaan Windows).",
           "skippedByUser": false,
-          "title": "Power plan: Balanced",
+          "title": "Power plan (pengaturan daya Windows): Balanced",
           "tweakId": "power-balanced"
         }
       ],
@@ -9784,7 +9784,7 @@
           ],
           "description": "Windows mengatur kecepatan prosesor sesuai kebutuhan (bawaan Windows).",
           "skippedByUser": false,
-          "title": "Power plan: Balanced",
+          "title": "Power plan (pengaturan daya Windows): Balanced",
           "tweakId": "power-balanced"
         }
       ],
@@ -9837,7 +9837,7 @@
           "Aplikasi latar dibatasi",
           "Program startup dikurangi",
           "Service tidak penting jadi Manual",
-          "Power plan: High performance"
+          "Power plan (pengaturan daya Windows): High performance"
         ],
         "forWhom": "PC sangat lemot, RAM kecil, atau masih pakai HDD",
         "level": "Low",
@@ -9860,7 +9860,7 @@
           "Efek transparan mati",
           "Animasi jendela mati",
           "Perekam game (Game Bar) mati",
-          "Power plan: Balanced"
+          "Power plan (pengaturan daya Windows): Balanced"
         ],
         "forWhom": "PC menengah yang ingin terasa lebih ringan",
         "level": "Medium",
@@ -9877,7 +9877,7 @@
       {
         "bullets": [
           "Membatalkan semua perubahan RepairDoc yang tercatat, ke nilai aslinya",
-          "Kalau belum ada catatan: efek visual, transparansi, animasi, Game Bar, aplikasi latar, dan power plan kembali ke bawaan Windows"
+          "Kalau belum ada catatan: efek visual, transparansi, animasi, perekam game (Game Bar), aplikasi latar, dan power plan (pengaturan daya) kembali ke bawaan Windows"
         ],
         "forWhom": "Membatalkan semua perubahan RepairDoc",
         "level": "High",
@@ -9962,7 +9962,7 @@
         "modes": [
           "kentang"
         ],
-        "title": "Power plan: High performance"
+        "title": "Power plan (pengaturan daya Windows): High performance"
       },
       {
         "description": "Windows mengatur kecepatan prosesor sesuai kebutuhan (bawaan Windows).",
@@ -9971,7 +9971,7 @@
         "modes": [
           "seimbang"
         ],
-        "title": "Power plan: Balanced"
+        "title": "Power plan (pengaturan daya Windows): Balanced"
       }
     ]
   }

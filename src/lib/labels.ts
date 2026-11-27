@@ -20,11 +20,12 @@ export const categoryInfo: Record<Category, { name: string; doing: string; group
 export const groupOrder: Group[] = ['hardware', 'windows', 'cleanup', 'security', 'network']
 
 export const groupInfo: Record<Group, { name: string; hint: string }> = {
-  hardware: { name: 'Hardware', hint: 'Prosesor, memori, penyimpanan, grafis, baterai' },
-  windows: { name: 'Windows', hint: 'Versi, update, driver, program saat menyala' },
-  cleanup: { name: 'Kebersihan', hint: 'File sampah dan sisa-sisa' },
-  security: { name: 'Keamanan', hint: 'Antivirus, firewall, program mencurigakan' },
-  network: { name: 'Jaringan', hint: 'Internet, Wi-Fi, kecepatan unduh' },
+  // Pendek supaya muat utuh (tanpa "…") di kartu kategori layar awal.
+  hardware: { name: 'Hardware', hint: 'Prosesor, RAM, disk, baterai' },
+  windows: { name: 'Windows', hint: 'Versi, update, driver' },
+  cleanup: { name: 'Kebersihan', hint: 'File sampah' },
+  security: { name: 'Keamanan', hint: 'Antivirus & firewall' },
+  network: { name: 'Jaringan', hint: 'Internet & Wi-Fi' },
 }
 
 export const categoriesOf = (g: Group): Category[] => categoryOrder.filter((c) => categoryInfo[c].group === g)

@@ -224,8 +224,8 @@ fn main() {
                 .inner_size(1120.0, 780.0)
                 .min_inner_size(900.0, 620.0)
                 .center()
-                // Warna langit, supaya tidak ada kilatan putih saat membuka di PC lambat.
-                .background_color(Color(199, 233, 250, 255))
+                // Warna latar (putih kebiruan), supaya tidak ada kilatan warna lain saat membuka di PC lambat.
+                .background_color(Color(244, 251, 255, 255))
                 .data_directory(webview_data_dir(is_admin))
                 .build()?;
             Ok(())

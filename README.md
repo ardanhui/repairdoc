@@ -44,6 +44,19 @@ Stack: Tauri 2 (Rust) + Vue 3 + TypeScript. Tema: Frutiger Aero.
   tugas terjadwal, dan aplikasi tambahan vendor hardware (Realtek, NVIDIA, Synaptics, tombol Fn, …)
   boleh ikut dimatikan. Yang tetap tidak pernah disentuh: Microsoft, Windows, keamanan, antivirus.
 
+- **Tampilan dirapikan mengikuti audit UI** (setelah v0.3): kontras tombol utama ≥ 4,5:1,
+  semua target klik ≥ 32 px, teks isi ≥ 13 px, tidak ada teks terpotong "…", hanya kartu
+  temuan pertama yang langsung terbuka, label & istilah dalam bahasa Indonesia, dan status
+  "tidak dipilih" tidak lagi ditandai dengan teks yang dipudarkan. Aturan mainnya ditulis di
+  awal `src/styles/aero.css`.
+- **Latar "bersih"** putih & biru muda dengan gelembung kaca dan ombak air (dipilih dari tiga
+  alternatif), tetap statis tanpa animasi supaya ringan.
+- **Musik latar orisinal** (lagu santai 35 detik yang berulang tanpa jeda). Mulai setelah klik
+  pertama, volume pelan, bisa dimatikan lewat tombol **Musik** di kanan atas (pilihan diingat),
+  dan berhenti sendiri saat jendela diminimize. Lagu ini dibuat khusus untuk RepairDoc dari nol
+  — bukan lagu pihak lain; asal-usul dan cara membuat ulangnya ada di
+  `src/assets/LISENSI-MUSIK.md`.
+
 **Belum (tahap berikutnya)**
 
 - Tahap 5: export laporan (simpan hasil scan ke flashdisk sebagai HTML/PDF).
@@ -398,6 +411,8 @@ repairdoc/
 │   ├── lib/labels.ts             ← nama kategori/kelompok yang tampil
 │   ├── lib/mock-report.json      ← data contoh, dihasilkan dari logika Rust yang asli
 │   ├── lib/mock-preset.json      ← data contoh Mode Performa + Bersihkan (dari logika Rust)
+│   ├── lib/music.ts              ← pemutar musik latar (Web Audio, loop tanpa jeda)
+│   ├── assets/musik-latar.ogg    ← musik latar orisinal (lihat assets/LISENSI-MUSIK.md)
 │   └── styles/aero.css           ← warna & gaya Frutiger Aero
 ├── src-tauri/
 │   ├── src/main.rs               ← jendela aplikasi, perintah scan, izin admin, Mode Performa,
@@ -425,6 +440,7 @@ repairdoc/
 │           ├── platform/         ← PowerShell, cek admin, dsb.
 │           ├── scan.rs           ← urutan scan & kabar progres
 │           └── model.rs          ← struktur temuan, kategori, kelompok
+├── tools/musik-latar/            ← skrip Python pembuat musik latar (tidak ikut ke aplikasi)
 └── .github/workflows/            ← build otomatis di GitHub (opsional)
 ```
 

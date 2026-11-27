@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { getAppInfo, isTauri, relaunchAsAdmin, startScan } from './lib/api'
-import { categoryInfo, categoryOrder } from './lib/labels'
+import { setupMusic } from './lib/music'
+import { categoriesOf, categoryInfo, categoryOrder, groupOrder } from './lib/labels'
 import type { AppInfo, Category, CategoryState, ScanReport } from './lib/types'
 import AeroBackground from './components/AeroBackground.vue'
 import AppHeader from './components/AppHeader.vue'
@@ -39,8 +40,13 @@ const minor = computed(() => report.value?.findings.filter((f) => f.status === '
 const healthy = computed(() => report.value?.findings.filter((f) => f.status === 'sehat') ?? [])
 const showAdminNote = computed(() => !!report.value && !report.value.isAdmin && report.value.needsAdmin.length > 0 && (info.value?.isWindows || preview))
 const stepLabel = computed(() => (current.value ? `${categoryInfo[current.value].doing}…` : 'Bersiap…'))
+// Kemajuan yang bisa dihitung: berapa dari 5 kelompok (Hardware, Windows, …) yang sudah selesai.
+const groupsDone = computed(
+  () => groupOrder.filter((g) => categoriesOf(g).every((c) => states[c] !== 'menunggu' && states[c] !== 'berjalan')).length,
+)
 
 onMounted(async () => {
+  setupMusic()
   try {
     info.value = await getAppInfo()
   } catch {
@@ -153,18 +159,21 @@ async function elevate() {
     </div>
 
     <ScanBubble :scanning="phase === 'scanning'" :level="level" :label="stepLabel" @start="scan" />
-    <p class="step" :class="{ hidden: phase !== 'scanning' }" aria-hidden="true">{{ stepLabel }}</p>
+    <div class="step" :class="{ hidden: phase !== 'scanning' }" aria-hidden="true">
+      <p>{{ stepLabel }}</p>
+      <p class="progress-count">{{ groupsDone }} dari {{ groupOrder.length }} kelompok selesai</p>
+    </div>
 
     <CategoryRow :states="states" :scanning="phase === 'scanning'" />
 
     <div v-if="phase === 'idle'" class="tools">
-      <button type="button" class="btn performa-link" @click="openPerforma">
+      <button type="button" class="btn tool-btn" @click="openPerforma">
         <Icon name="gauge" />
-        Mode Performa: buat Windows lebih ringan
+        <span><strong>Mode Performa</strong><small>Buat Windows lebih ringan</small></span>
       </button>
-      <button type="button" class="btn performa-link" @click="openBersihkan">
+      <button type="button" class="btn tool-btn" @click="openBersihkan">
         <Icon name="cleanup" />
-        Bersihkan File Sampah
+        <span><strong>Bersihkan File Sampah</strong><small>Kosongkan ruang di drive</small></span>
       </button>
     </div>
   </main>
@@ -183,7 +192,8 @@ async function elevate() {
       <section aria-labelledby="todo-title" class="group">
         <h2 id="todo-title" class="section-title">Yang perlu dibereskan</h2>
         <div v-if="urgent.length" class="cards">
-          <FindingCard v-for="(f, i) in urgent" :key="f.id" :finding="f" :default-open="f.status === 'bermasalah' || i === 0" @bersihkan="openBersihkan" />
+          <!-- Hanya kartu pertama (yang terberat) yang langsung terbuka; sisanya cukup ringkasannya. -->
+          <FindingCard v-for="(f, i) in urgent" :key="f.id" :finding="f" :default-open="i === 0" @bersihkan="openBersihkan" />
         </div>
         <p v-else class="empty glass">Tidak ada yang mendesak. Semua yang diperiksa dalam kondisi baik atau hanya butuh perhatian kecil.</p>
       </section>
@@ -248,11 +258,18 @@ h1 {
 }
 
 .step {
-  min-height: 1.5em;
+  display: grid;
+  gap: 2px;
   margin-top: -4px;
   font-size: 17px;
   font-weight: 600;
   color: var(--aqua-ink);
+}
+
+.progress-count {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink-soft);
 }
 
 .step.hidden {
@@ -263,12 +280,36 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 16px;
+  width: min(100%, 696px);
 }
 
-.performa-link svg {
-  width: 20px;
-  height: 20px;
+/* Dua tombol alat sama lebar (simetris), judul + keterangan singkat. */
+.tool-btn {
+  flex: 1 1 0;
+  min-width: 260px;
+  max-width: 340px;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 10px 22px;
+  border-radius: 18px;
+  text-align: left;
+}
+
+.tool-btn span {
+  display: grid;
+  line-height: 1.3;
+}
+
+.tool-btn small {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.tool-btn svg {
+  width: 22px;
+  height: 22px;
 }
 
 .results {

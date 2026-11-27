@@ -5,6 +5,20 @@
  * - Ringan untuk PC kentang: tidak ada backdrop-filter (blur) dan tidak ada animasi
  *   latar yang terus berjalan. Efek kaca dibuat dari gradasi dan garis tepi saja.
  * - Animasi mati otomatis bila Windows di-set "tanpa animasi" (prefers-reduced-motion).
+ *
+ * Aturan main (dari audit UI v0.3, supaya tidak terulang):
+ * - Jarak pakai skala 4 / 8 / 16 / 24 / 32 / 48. Jarak antar-grup selalu lebih besar dari
+ *   jarak di dalam grup.
+ * - Teks isi minimal 13 px (body 15 px). 12 px hanya untuk metadata.
+ * - Semua target klik minimal 24×24 px, idealnya 32 px; tombol 40 px.
+ * - Kontras teks ≥ 4,5:1, grafis bermakna ≥ 3:1 — cek ulang setiap menambah gradasi,
+ *   terutama teks putih di atas biru. Status "tidak dipilih / mati" TIDAK boleh
+ *   ditandai dengan memudarkan teks; pakai checkbox/saklar + label.
+ * - Kartu yang berjajar: elemen bersyarat (badge, baris jumlah) dicadangkan ruangnya di
+ *   semua kartu, supaya isinya mulai di garis yang sama.
+ * - Dekorasi latar (gelembung, kilau) tidak boleh menyentuh judul atau tombol.
+ * - Semua label berbahasa Indonesia; istilah teknis dijelaskan saat pertama muncul.
+ * - Tombol yang bisa diklik tidak boleh terlihat nonaktif.
  */
 
 :root {
@@ -58,7 +72,7 @@ body {
 }
 
 body {
-  background: var(--sky-4);
+  background: #f4fbff;
   overflow-x: hidden;
 }
 
@@ -97,7 +111,8 @@ button {
 
 .glass {
   position: relative;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.86) 45%, rgba(238, 249, 255, 0.86) 100%);
+  /* Cukup pekat supaya ombak & gelembung di latar tidak "bocor" ke dalam kartu. */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(255, 255, 255, 0.975) 45%, rgba(242, 250, 255, 0.98) 100%);
   border: 1px solid rgba(255, 255, 255, 0.95);
   border-radius: var(--radius-card);
   box-shadow:
@@ -165,12 +180,14 @@ button {
   flex: none;
 }
 
-/* Tombol utama: air biru mengkilap. Dipakai hemat (satu per panel). */
+/* Tombol utama: air biru mengkilap. Dipakai hemat (satu per panel).
+ * Kilau hanya di 30% atas (di atas huruf), dan birunya cukup gelap: teks putih ≥ 4,9:1
+ * di titik terburuknya (dulu ±2:1 karena kilau setengah tombol menutupi huruf). */
 .btn-primary {
-  border-color: #0a6cae;
+  border-color: #0a5c9e;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.15) 49%, rgba(255, 255, 255, 0) 50%),
-    linear-gradient(180deg, #2fb0ee, #0b74bf);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.16) 29%, rgba(255, 255, 255, 0) 30%),
+    linear-gradient(180deg, #1479c0, #0a5c9e);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
     inset 0 -4px 8px rgba(140, 230, 255, 0.45),

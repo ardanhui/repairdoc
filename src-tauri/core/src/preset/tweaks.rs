@@ -554,7 +554,7 @@ pub static TWEAKS: &[TweakDef] = &[
     },
     TweakDef {
         id: "power-high-performance",
-        title: "Power plan: High performance",
+        title: "Power plan (pengaturan daya Windows): High performance",
         description: "Prosesor dibiarkan bekerja penuh, tidak ditahan untuk hemat daya.",
         modes: &[Mode::Kentang],
         kind: TweakKind::Power(SCHEME_MIN),
@@ -564,7 +564,7 @@ pub static TWEAKS: &[TweakDef] = &[
     },
     TweakDef {
         id: "power-balanced",
-        title: "Power plan: Balanced",
+        title: "Power plan (pengaturan daya Windows): Balanced",
         description: "Windows mengatur kecepatan prosesor sesuai kebutuhan (bawaan Windows).",
         modes: &[Mode::Seimbang],
         kind: TweakKind::Power(SCHEME_BALANCED),

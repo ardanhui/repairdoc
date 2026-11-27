@@ -77,7 +77,7 @@ pub fn mode_infos() -> Vec<ModeInfo> {
             let bullets = match m {
                 Mode::Normal => vec![
                     "Membatalkan semua perubahan RepairDoc yang tercatat, ke nilai aslinya".to_string(),
-                    "Kalau belum ada catatan: efek visual, transparansi, animasi, Game Bar, aplikasi latar, dan power plan kembali ke bawaan Windows".to_string(),
+                    "Kalau belum ada catatan: efek visual, transparansi, animasi, perekam game (Game Bar), aplikasi latar, dan power plan (pengaturan daya) kembali ke bawaan Windows".to_string(),
                 ],
                 _ => defs.iter().map(|d| d.title.to_string()).collect(),
             };

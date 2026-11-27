@@ -90,6 +90,8 @@ h3 {
 }
 
 .severity {
+  /* Sejajar baris pertama judul, juga saat judulnya dua baris. */
+  align-self: start;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -161,8 +163,9 @@ li::marker {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-left: 44px;
-  padding: 4px 8px;
+  min-height: 32px;
+  margin-left: 40px;
+  padding: 6px 10px;
   border: 0;
   border-radius: 8px;
   background: none;

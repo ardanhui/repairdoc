@@ -12,6 +12,15 @@ const meters: Record<PresetMode, { ringan: number; tampilan: number }> = {
   normal: { ringan: 1, tampilan: 3 },
 }
 const icons = { kentang: 'bolt', seimbang: 'balance', normal: 'refresh' } as const
+
+// Label tingkat dalam bahasa Indonesia (data dari Rust tetap "Low/Medium/High").
+const levelText: Record<string, string> = { Low: 'Ringan', Medium: 'Sedang', High: 'Penuh' }
+
+/** Label tombol menjelaskan aksinya; tombol kartu aktif tetap tombol utama, bukan "pucat". */
+function actionLabel(mode: PresetMode, active: boolean): string {
+  if (mode === 'normal') return active ? 'Pasang setelan bawaan Windows' : 'Kembalikan ke Normal'
+  return active ? 'Terapkan lagi' : 'Terapkan'
+}
 </script>
 
 <template>
@@ -19,22 +28,29 @@ const icons = { kentang: 'bolt', seimbang: 'balance', normal: 'refresh' } as con
     <header class="top">
       <span class="mode-orb" aria-hidden="true"><Icon :name="icons[info.mode]" /></span>
       <h3>{{ info.title }}</h3>
-      <span class="level">{{ info.level }}</span>
+      <span class="level" :title="`Tingkat tampilan: ${levelText[info.level] ?? info.level}`">{{ levelText[info.level] ?? info.level }}</span>
     </header>
-    <p v-if="active" class="badge">Aktif</p>
+    <!-- Ruang badge dicadangkan di semua kartu supaya isi ketiga kartu mulai di garis yang sama. -->
+    <p class="badge" :class="{ ghost: !active }" :aria-hidden="active ? undefined : 'true'">Aktif</p>
     <p class="tagline">{{ info.tagline }}</p>
 
     <dl class="meters">
       <div>
         <dt>Ringan</dt>
-        <dd :aria-label="`${meters[info.mode].ringan} dari 3`">
-          <span v-for="n in 3" :key="n" class="bar" :class="{ on: n <= meters[info.mode].ringan }" />
+        <dd>
+          <span class="bars" aria-hidden="true">
+            <span v-for="n in 3" :key="n" class="bar" :class="{ on: n <= meters[info.mode].ringan }" />
+          </span>
+          <span class="score">{{ meters[info.mode].ringan }}/3</span>
         </dd>
       </div>
       <div>
         <dt>Tampilan</dt>
-        <dd :aria-label="`${meters[info.mode].tampilan} dari 3`">
-          <span v-for="n in 3" :key="n" class="bar look" :class="{ on: n <= meters[info.mode].tampilan }" />
+        <dd>
+          <span class="bars" aria-hidden="true">
+            <span v-for="n in 3" :key="n" class="bar look" :class="{ on: n <= meters[info.mode].tampilan }" />
+          </span>
+          <span class="score">{{ meters[info.mode].tampilan }}/3</span>
         </dd>
       </div>
     </dl>
@@ -45,7 +61,7 @@ const icons = { kentang: 'bolt', seimbang: 'balance', normal: 'refresh' } as con
     </ul>
     <p v-if="info.mode !== 'normal'" class="count">{{ enabledCount }} dari {{ info.tweakIds.length }} pengaturan dipakai</p>
 
-    <button type="button" class="btn" :class="{ 'btn-primary': !active }" :disabled="disabled" @click="$emit('apply')">Terapkan</button>
+    <button type="button" class="btn btn-primary" :disabled="disabled" @click="$emit('apply')">{{ actionLabel(info.mode, active) }}</button>
   </article>
 </template>
 
@@ -126,6 +142,10 @@ h3 {
   font-weight: 600;
 }
 
+.badge.ghost {
+  visibility: hidden;
+}
+
 .badge {
   align-self: flex-start;
   padding: 3px 12px;
@@ -163,22 +183,40 @@ dt {
 
 dd {
   display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bars {
+  display: flex;
   gap: 4px;
 }
 
+/* Batang kosong tetap terlihat (garis tepi ≥ 3:1), batang isi bergaris tepi gelap. */
 .bar {
   width: 26px;
-  height: 8px;
+  height: 10px;
   border-radius: 999px;
-  background: rgba(64, 150, 205, 0.18);
+  border: 1.5px solid #5b8db3;
+  background: rgba(255, 255, 255, 0.6);
 }
 
 .bar.on {
+  border-color: #0a5c9e;
   background: linear-gradient(180deg, #7fd8ff, #129bdb);
 }
 
 .bar.look.on {
+  border-color: #2e7d2a;
   background: linear-gradient(180deg, #a6e98a, #34a33b);
+}
+
+.score {
+  min-width: 2.2em;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-align: right;
 }
 
 .for {

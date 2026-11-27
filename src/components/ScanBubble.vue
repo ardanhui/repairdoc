@@ -45,7 +45,8 @@ const pct = () => Math.round(Math.min(1, Math.max(0, props.level)) * 100)
   place-items: center;
   border: 3px solid rgba(255, 255, 255, 0.95);
   cursor: pointer;
-  background: radial-gradient(circle at 50% 118%, #8eeaff 0%, #2aa9ea 40%, #0b72bd 78%, #075896 100%);
+  /* Biru di belakang tulisan cukup gelap: teks putih ≥ 3:1 (teks besar) di titik terburuk. */
+  background: radial-gradient(circle at 50% 118%, #8eeaff 0%, #1c98de 34%, #0a6ab3 72%, #075291 100%);
   box-shadow:
     0 0 0 8px rgba(255, 255, 255, 0.4),
     0 22px 44px -14px rgba(6, 80, 145, 0.7),
@@ -93,7 +94,9 @@ const pct = () => Math.round(Math.min(1, Math.max(0, props.level)) * 100)
 .bubble-text {
   position: relative;
   z-index: 1;
-  margin-top: 26px;
+  /* Sedikit di bawah pusat lingkaran (kilau besar di atas menggeser pusat visual),
+     tapi tidak sejauh dulu (26 px) yang membuatnya tampak turun. */
+  margin-top: 18px;
   color: #fff;
   font-size: 26px;
   font-weight: 600;

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { musicOn, toggleMusic } from '../lib/music'
+import Icon from './Icon.vue'
 import LogoDrop from './LogoDrop.vue'
 
 defineProps<{ preview: boolean }>()
@@ -10,9 +12,21 @@ defineProps<{ preview: boolean }>()
       <LogoDrop :size="38" />
       <p class="wordmark"><span class="name">RepairDoc</span> <span class="tag">Dokter PC</span></p>
     </div>
-    <p v-if="preview" class="preview" title="Dibuka di browser biasa, bukan aplikasi Windows. Hasil scan memakai data contoh.">
-      Mode pratinjau: data contoh
-    </p>
+    <div class="right">
+      <button
+        type="button"
+        class="music"
+        :aria-pressed="musicOn"
+        :title="musicOn ? 'Matikan musik latar' : 'Nyalakan musik latar'"
+        @click="toggleMusic"
+      >
+        <Icon :name="musicOn ? 'music-on' : 'music-off'" />
+        {{ musicOn ? 'Musik nyala' : 'Musik mati' }}
+      </button>
+      <p v-if="preview" class="preview" title="Dibuka di browser biasa, bukan aplikasi Windows. Hasil scan memakai data contoh.">
+        Mode pratinjau: data contoh
+      </p>
+    </div>
   </header>
 </template>
 
@@ -54,6 +68,47 @@ defineProps<{ preview: boolean }>()
   font-size: 16px;
   font-weight: 300;
   margin-left: 4px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Tombol musik: kaca putih di atas kepala biru; area klik ≥ 32 px. */
+.music {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 5px 14px 5px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--aqua-ink);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.music:hover {
+  background: #fff;
+}
+
+.music[aria-pressed="false"] {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink-soft);
+}
+
+.music svg {
+  width: 17px;
+  height: 17px;
+}
+
+.music:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
 }
 
 .preview {

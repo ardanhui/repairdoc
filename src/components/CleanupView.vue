@@ -274,6 +274,7 @@ const statusWord: Record<string, string> = { berhasil: 'Bersih', sebagian: 'Seba
               <div class="size">
                 <strong>{{ k.approximate ? '±' : '' }}{{ sizeText(k.bytes) }}</strong>
                 <span>{{ countText(k.files) }} file</span>
+                <em v-if="!selected.includes(k.jenis) && k.bytes > 0" class="not-picked">Tidak dipilih</em>
               </div>
             </li>
           </ul>
@@ -491,31 +492,47 @@ h1 {
 
 .kind {
   display: grid;
-  grid-template-columns: 30px minmax(0, 1fr) auto;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
   gap: 12px;
   align-items: start;
   padding: 14px 0;
   border-bottom: 1px solid rgba(64, 150, 205, 0.18);
 }
 
-.kind.off .info,
-.kind.off .size {
-  opacity: 0.6;
+/* Jenis yang tidak dicentang: ditandai checkbox kosong + label "Tidak dipilih".
+   Angka & teksnya TIDAK dipudarkan, supaya tetap terbaca. */
+.not-picked {
+  margin-top: 4px;
+  padding: 1px 9px;
+  border-radius: 999px;
+  background: #eef4f8;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
 }
 
 .kind.empty .size strong {
   color: var(--ink-soft);
 }
 
+/* Area klik 32×32 px (kotak centangnya sendiri 20 px). */
 .pick {
-  padding-top: 3px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-top: -2px;
+  cursor: pointer;
 }
 
 .pick input,
 .wo-pick input {
-  width: 19px;
-  height: 19px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
   accent-color: var(--aqua-deep);
+  cursor: pointer;
 }
 
 .info h3 {
@@ -543,6 +560,7 @@ h1 {
 .where summary {
   display: inline-flex;
   align-items: center;
+  min-height: 32px;
   gap: 6px;
   cursor: pointer;
   color: var(--aqua-ink);
@@ -628,7 +646,8 @@ h1 {
 .wo-pick {
   display: flex;
   align-items: center;
-  gap: 8px;
+  min-height: 36px;
+  gap: 10px;
   margin-top: 4px;
   font-weight: 600;
   cursor: pointer;
@@ -804,7 +823,7 @@ h1 {
 .chip {
   padding: 1px 9px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 13px;
   background: var(--ok-soft);
   color: var(--ok-ink);
 }
@@ -856,7 +875,7 @@ h1 {
 }
 
 .logpath {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--ink-soft);
   overflow-wrap: anywhere;
 }

@@ -350,7 +350,8 @@ h1 {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(300px, 1fr);
   gap: 16px;
-  align-items: start;
+  /* Dua panel berdampingan sama tinggi, supaya terasa setara. */
+  align-items: stretch;
 }
 
 .running {

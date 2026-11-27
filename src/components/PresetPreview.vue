@@ -54,7 +54,10 @@ function toggleItem(key: string) {
       </ul>
       <p v-if="effectiveCount" class="rp">
         <Icon name="shield" />
-        Sebelum mengubah apa pun, RepairDoc membuat restore point: <strong>{{ preview.restorePointName }}</strong>
+        <span>
+          Sebelum mengubah apa pun, RepairDoc membuat restore point (titik pemulihan Windows, untuk mengembalikan PC kalau ada masalah):
+          <strong>{{ preview.restorePointName }}</strong>
+        </span>
       </p>
     </header>
 
@@ -86,7 +89,7 @@ function toggleItem(key: string) {
                 </label>
                 <span v-else class="pick-space" aria-hidden="true" />
                 <span class="label">
-                  <span :title="c.targetText">{{ c.label }}</span>
+                  <span :title="c.targetText">{{ c.label }} <em v-if="skipItems.includes(c.itemKey)" class="skip-tag">Tidak diubah</em></span>
                   <span v-if="c.detail" class="detail" :title="c.detail">{{ c.detail }}</span>
                   <span v-if="c.effect" class="effect">{{ c.effect }}</span>
                 </span>
@@ -107,7 +110,7 @@ function toggleItem(key: string) {
               <span class="sr-only">Ubah {{ c.label }}</span>
             </label>
             <span v-else class="pick-space" aria-hidden="true" />
-            <span class="label" :title="c.targetText">{{ c.label }}</span>
+            <span class="label" :title="c.targetText">{{ c.label }} <em v-if="skipItems.includes(c.itemKey)" class="skip-tag">Tidak diubah</em></span>
             <span class="values">
               <span class="now">{{ c.current }}</span>
               <Icon name="arrow" />
@@ -211,12 +214,15 @@ h3 {
   font-weight: 600;
 }
 
-.tag {
+.tag,
+.skip-tag {
   padding: 1px 9px;
   border-radius: 999px;
   background: var(--warn-soft);
   color: var(--warn-ink);
-  font-size: 12px;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
 }
 
 .desc {
@@ -232,23 +238,38 @@ h3 {
 
 .row {
   display: grid;
-  grid-template-columns: 26px minmax(0, 1fr) auto;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
   padding: 5px 0;
   font-size: 14px;
 }
 
-.row.excluded .label,
+/* Item yang tidak dicentang: ditandai label "Tidak diubah" + nilai baru dicoret.
+   Teksnya TIDAK dipudarkan supaya tetap terbaca. */
 .row.excluded .values {
   text-decoration: line-through;
-  opacity: 0.55;
+}
+
+.row.excluded .new {
+  color: var(--ink-soft);
+}
+
+/* Area klik 32×32 px (kotak centangnya sendiri 20 px). */
+.pick {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
 }
 
 .pick input {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
   accent-color: var(--aqua-deep);
+  cursor: pointer;
 }
 
 .label {
@@ -258,7 +279,7 @@ h3 {
 }
 
 .detail {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-soft);
   white-space: nowrap;
   overflow: hidden;
@@ -271,7 +292,7 @@ h3 {
   border-radius: 8px;
   background: rgba(255, 246, 214, 0.9);
   color: var(--warn-ink);
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.4;
 }
 
@@ -304,7 +325,7 @@ h3 {
   font-size: 14px;
   font-weight: 600;
   color: var(--aqua-ink);
-  padding: 2px 0 2px 36px;
+  padding: 2px 0 2px 42px;
 }
 
 .source .hint {
@@ -346,10 +367,11 @@ h3 {
 }
 
 .same summary {
+  /* Tinggi area klik ±36 px; tetap list-item supaya segitiga buka/tutup tampil. */
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--aqua-ink);
-  padding: 4px 0 2px 36px;
+  padding: 7px 0 6px 42px;
 }
 
 .actions {

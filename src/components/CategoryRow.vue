@@ -103,7 +103,7 @@ const views = computed<GroupView[]>(() =>
 }
 
 .cat-text span {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-soft);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -112,9 +112,10 @@ const views = computed<GroupView[]>(() =>
   -webkit-box-orient: vertical;
 }
 
-/* Status saat scan */
-.cat.menunggu {
-  opacity: 0.6;
+/* Status saat scan. Yang menunggu: hanya bolanya yang dipudarkan — teksnya tetap
+   terbaca penuh (status tidak boleh ditandai dengan memudarkan teks). */
+.cat.menunggu .cat-orb {
+  opacity: 0.5;
 }
 
 .cat.berjalan .cat-orb::after {
@@ -141,9 +142,16 @@ const views = computed<GroupView[]>(() =>
   }
 }
 
+/* Jendela sempit: 3 + 2 rata tengah (simetris), bukan 4 + 1 yang menyisakan satu kartu sendirian. */
 @media (max-width: 1040px) {
   .cats {
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cat {
+    flex: 0 1 240px;
   }
 }
 </style>

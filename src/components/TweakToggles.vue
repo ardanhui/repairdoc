@@ -14,17 +14,25 @@ function toggle(id: string) {
 <template>
   <details class="tweaks glass">
     <summary>
-      Atur satu per satu
-      <span v-if="disabled.length" class="off-count">{{ disabled.length }} dimatikan</span>
+      <span class="sum-head">
+        <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5L10 8l-5 4.5" /></svg>
+        Atur satu per satu
+        <span v-if="disabled.length" class="off-count">{{ disabled.length }} dimatikan</span>
+      </span>
+      <span class="sum-desc">Pilih pengaturan mana yang boleh diubah RepairDoc. Semuanya dipakai, kecuali yang kamu matikan di sini.</span>
+      <span class="sum-state">
+        {{ disabled.length ? `${disabled.length} dari ${tweaks.length} pengaturan dimatikan.` : `Semua ${tweaks.length} pengaturan dipakai.` }}
+      </span>
+      <span class="btn sum-btn" aria-hidden="true">Tampilkan daftar pengaturan</span>
     </summary>
-    <p class="note">Matikan pengaturan yang tidak kamu mau. Pilihan ini berlaku saat menerapkan Mode Kentang dan Mode Seimbang.</p>
+    <p class="note">Pilihan ini berlaku saat menerapkan Mode Kentang dan Mode Seimbang.</p>
     <ul>
       <li v-for="t in tweaks" :key="t.id">
         <label class="row" :class="{ off: disabled.includes(t.id) }">
           <input type="checkbox" role="switch" :checked="!disabled.includes(t.id)" @change="toggle(t.id)" />
           <span class="switch" aria-hidden="true" />
           <span class="text">
-            <strong>{{ t.title }}</strong>
+            <strong>{{ t.title }} <em v-if="disabled.includes(t.id)" class="off-tag">Tidak dipakai</em></strong>
             <span>{{ t.description }}</span>
           </span>
           <span class="meta">
@@ -45,21 +53,70 @@ function toggle(id: string) {
 }
 
 summary {
+  display: grid;
+  gap: 4px;
+  cursor: pointer;
+  padding: 16px 0;
+}
+
+.sum-head {
   display: flex;
   align-items: center;
   gap: 10px;
-  cursor: pointer;
-  padding: 15px 0;
   font-weight: 600;
   color: var(--aqua-ink);
 }
 
-.off-count {
+.chev {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.15s;
+}
+
+.tweaks[open] .chev {
+  transform: rotate(90deg);
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+.sum-state {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Penanda aksi yang jelas (seluruh judul tetap bisa diklik). Disembunyikan saat terbuka. */
+.sum-btn {
+  justify-self: start;
+  margin-top: 8px;
+  pointer-events: none;
+}
+
+.tweaks[open] .sum-btn {
+  display: none;
+}
+
+.sum-desc {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.off-count,
+.off-tag {
   padding: 1px 10px;
   border-radius: 999px;
   background: var(--warn-soft);
   color: var(--warn-ink);
-  font-size: 12px;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
 }
 
 .tweaks[open] {
@@ -104,8 +161,8 @@ li + li {
   width: 46px;
   height: 26px;
   border-radius: 999px;
-  border: 1px solid #7fc3e8;
-  background: linear-gradient(180deg, #2fb0ee, #0b74bf);
+  border: 1px solid #0a5c9e;
+  background: linear-gradient(180deg, #167fc6, #0a5c9e);
   box-shadow: inset 0 2px 4px rgba(0, 40, 90, 0.25);
   transition: background 0.15s;
 }
@@ -151,9 +208,7 @@ li + li {
   color: var(--ink-soft);
 }
 
-.row.off .text {
-  opacity: 0.6;
-}
+/* Saklar mati ditandai lewat saklar + label "Tidak dipakai", bukan teks yang dipudarkan. */
 
 .meta {
   display: grid;
@@ -172,12 +227,12 @@ li + li {
   background: #eaf7ff;
   border: 1px solid #b9dff3;
   color: var(--aqua-ink);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
 }
 
 .when {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-soft);
   white-space: nowrap;
 }

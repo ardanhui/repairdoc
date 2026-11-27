@@ -79,10 +79,15 @@ h2 {
   color: var(--ink-soft);
 }
 
+/* Tiga tombol satu kelompok: segaris dan sama lebar. */
 .actions {
-  display: flex;
-  flex-wrap: wrap;
+  justify-self: stretch;
+  display: grid;
   gap: 8px;
-  margin-top: 6px;
+  margin-top: 8px;
+}
+
+.actions .btn {
+  width: 100%;
 }
 </style>

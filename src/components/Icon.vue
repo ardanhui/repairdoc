@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Ikon garis sederhana (tanpa library, supaya jalan offline dari flashdisk).
 defineProps<{
-  name: 'hardware' | 'windows' | 'cleanup' | 'security' | 'network' | 'check' | 'alert' | 'cross' | 'shield' | 'refresh' | 'bolt' | 'balance' | 'back' | 'undo' | 'arrow' | 'gauge' | 'info' | 'folder' | 'trash'
+  name: 'hardware' | 'windows' | 'cleanup' | 'security' | 'network' | 'check' | 'alert' | 'cross' | 'shield' | 'refresh' | 'bolt' | 'balance' | 'back' | 'undo' | 'arrow' | 'gauge' | 'info' | 'folder' | 'trash' | 'music-on' | 'music-off'
 }>()
 </script>
 
@@ -77,6 +77,14 @@ defineProps<{
     <template v-else-if="name === 'trash'">
       <path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l.9 12.2a1.6 1.6 0 0 0 1.6 1.5h6a1.6 1.6 0 0 0 1.6-1.5L17.5 7" />
       <path d="M10 11v6M14 11v6" />
+    </template>
+    <template v-else-if="name === 'music-on'">
+      <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
+      <path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" />
+    </template>
+    <template v-else-if="name === 'music-off'">
+      <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
+      <path d="M16 9.5l5 5M21 9.5l-5 5" />
     </template>
     <template v-else-if="name === 'refresh'">
       <path d="M20 11a8 8 0 1 0-2.3 5.7" />

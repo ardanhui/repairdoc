@@ -71,9 +71,9 @@ const target = () => props.status.revertTarget
     </div>
 
     <details class="rp-help">
-      <summary>Jaring pengaman kedua: System Restore</summary>
+      <summary>Jaring pengaman kedua: System Restore (pemulihan sistem Windows)</summary>
       <p>
-        Setiap kali Mode Performa diterapkan, RepairDoc membuat restore point lebih dulu. Kalau Windows bermasalah dan tombol di atas tidak bisa
+        Setiap kali Mode Performa diterapkan, RepairDoc membuat restore point (titik pemulihan Windows) lebih dulu. Kalau Windows bermasalah dan tombol di atas tidak bisa
         dipakai:
       </p>
       <ol>
@@ -163,10 +163,11 @@ h2 {
 }
 
 .rp-help summary {
+  /* Tinggi area klik ±36 px; tetap list-item supaya segitiga buka/tutup tampil. */
   cursor: pointer;
   font-weight: 600;
   color: var(--aqua-ink);
-  padding: 4px 0;
+  padding: 7px 0 6px;
 }
 
 .rp-help ol {
